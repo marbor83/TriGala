@@ -1,11 +1,11 @@
 CREATE TABLE [dbo].[GALA_ANAGRAFICA_CLIENTI] (
-    [Id]                       INT           NOT NULL,
+    [Id]                       INT           NOT NULL IDENTITY,
     [ID_AZIENDA]               VARCHAR (10)  DEFAULT ((1)) NOT NULL,
     [ID_CLIENTE]               VARCHAR (30)  NOT NULL,
-	[ID_MASTER]               VARCHAR (30)  NOT NULL,
+    [ID_MASTER]                VARCHAR (30)  NOT NULL,
     [ID_TIPO_CLIENTE]          VARCHAR (10)  NULL,
     [DESCR_TIPO_CLIENTE]       VARCHAR (50)  NULL,
-    [DESC_STATO_CLIENTE]       CHAR (1)      NOT NULL,
+    [DESC_STATO_CLIENTE]       VARCHAR(10)      NOT NULL,
     [STATO_LAVORAZIONE]        VARCHAR (50)  NULL,
     [ID_Tipo_persona]          CHAR (1)      NULL,
     [Descrizione_tipo_persone] VARCHAR (50)  NULL,
@@ -33,7 +33,7 @@ CREATE TABLE [dbo].[GALA_ANAGRAFICA_CLIENTI] (
     [COGNOME]                  VARCHAR (100) NULL,
     [Classe_di_rischio]        VARCHAR (250) NULL,
     [Descrizione_del_rischio]  VARCHAR (250) NULL,
-    [FIDO]					   VARCHAR (250) DEFAULT ((0)) NULL,
+    [FIDO]                     VARCHAR (250) DEFAULT ((0)) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC, [ID_AZIENDA] ASC, [ID_CLIENTE] ASC)
 );
 
