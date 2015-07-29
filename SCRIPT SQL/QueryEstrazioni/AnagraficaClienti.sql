@@ -1,7 +1,19 @@
 select  'IT10' as IDAzienda,
 		a.IDAnagrafica IdCliente,		
 		a.IDAnagrafica as id_master, -- per ora impostato ad idcliente poichè sono tutti master / oppure rimuovere dal tracciato
-		af.IDAnaForma IDTipoCliente,
+		CASE 
+			WHEN  
+				(select count(*)
+				from dbo.Contratti c, dbo.ContrattiRighe cr, dbo.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+				where c.IDContratto = cr.IDContratto_cnt 
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDProdotto = gsc.IDProdotto
+				and gsc.[SEGMENTO_CLIENTE] ='PA') > 0				
+			THEN 
+				'PA'  			
+			ELSE  
+				'NO PA'
+		END	 IDTipoCliente,		
 		af.Descrizione DescrizioneTipoCliente,
 		CASE 
 	    WHEN  
