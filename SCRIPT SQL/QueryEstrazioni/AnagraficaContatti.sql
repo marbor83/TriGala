@@ -8,16 +8,16 @@ select	--distinct capire motivo distinct
 		ac.TipoPersonaContatto,
 		case when ac.TipoPersonaContatto='G' then ac.RagSoc  else '' end RagSoc,
 		ac.CFisc,
-		ac.Indirizzo,
-		ac.CAP,
-		ac.Localita,
-		ac.Provincia,
-		ac.Nazione,
-		ac.Fax,
-		ac.EMail,
-		ac.Telefono1 Telefono,
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.indirizzo ELSE a.Indirizzo END indirizzo,
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.CAP ELSE a.CAP END CAP,
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.Localita ELSE a.Localita END Localita,
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.Provincia ELSE a.Provincia END Provincia,
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.Nazione ELSE a.Nazione END Nazione,
+		ac.Fax Fax,
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.EMail ELSE a.EMail END EMail,
+		isnull(ac.Telefono1, a.NumeroTelefonico) Telefono,
 		ac.Pec,
-		ac.Cellulare,					
+		CASE WHEN t.IDTipoContatto = 6 THEN ac.Cellulare ELSE a.NumeroCellulare END Cellulare,					
 		ac.PIVA,
 		t.IDTipoContatto
 from	dbo.AnaContatti ac
@@ -25,6 +25,7 @@ inner join dbo.Anagrafica a on ac.IDAnagrafica=a.IDAnagrafica
 inner join dbo.AnaContattiTipoMatch m on ac.IDContatto=m.IDContatto
 inner join dbo.AnaContattiTipo t on m.IDTipoCOntatto=t.IDTipoContatto
 where	a.IDStatoAnagrafica=1
+		and t.IDTipoContatto IN (5, 6, 1004)  -- Rappresentante Legale, NS Referente, Referente Aziendale
 		and a.IDAnagrafica!='100001'
 		and exists (select	1 
 					from	dbo.Contratti c

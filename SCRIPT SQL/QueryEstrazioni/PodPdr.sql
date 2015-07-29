@@ -5,8 +5,8 @@ select	'IT10' idAzienda,
 		c.IDContratto,
 		cr.IDRigaContratto,
 		ecs.POD CodiceDispositivo,
-		'TRILANCE_EMPTY' as vol_qta, -- da capire meglio il calcolo del volume
-		'TRILANCE_EMPTY' as commodity, -- da capire dove recuperarlo
+		0 as vol_qta, -- da capire meglio il calcolo del volume
+		'E' as commodity, -- da capire dove recuperarlo
 		ans.Indirizzo,
 		ans.CAP,
 		ans.Localita,
@@ -17,7 +17,7 @@ select	'IT10' idAzienda,
 		null as CIG,
 		null as CUP,
 		null as ODA,
-		'TRILANCE_EMPTY' as componenteTariffaria, -- da capire come recuperarlo		
+		null as componenteTariffaria, -- da capire come recuperarlo		
 		cr.DataInizioValidita as DataInizio,
 		cr.DataFineValidita as DataFine,
 		cr.DataCessazione as DataCessazione, -- da rivedere la logica cessazione
@@ -42,8 +42,8 @@ select	'IT10' idAzienda,
 		c.IDContratto,
 		cr.IDRigaContratto,
 		gcs.CodPDR CodiceDispositivo,
-		'TRILANCE_EMPTY' as vol_qta, -- da capire meglio il calcolo del volume
-		'TRILANCE_EMPTY' as commodity, -- da capire dove recuperarlo
+		0 as vol_qta, -- da capire meglio il calcolo del volume
+		'G' as commodity, -- da capire dove recuperarlo
 		ans.Indirizzo,
 		ans.CAP,
 		ans.Localita,
@@ -54,7 +54,7 @@ select	'IT10' idAzienda,
 		null as CIG,
 		null as CUP,
 		null as ODA,
-		'TRILANCE_EMPTY' as componenteTariffaria, -- da capire come recuperarlo		
+		null as componenteTariffaria, -- non valorizzarla per il gas	
 		cr.DataInizioValidita as DataInizio,
 		cr.DataFineValidita as DataFine,
 		cr.DataCessazione as DataCessazione, -- da rivedere la logica cessazione

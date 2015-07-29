@@ -1,9 +1,58 @@
 select	c.IDContratto,
 		'IT10' as idAzienda,
 		c.IDAnagrafica IdCliente,
-		CASE WHEN (select COUNT(*) from ContrattiRighe cr where c.IDContratto = cr.IDContratto_cnt )= 0 THEN 'PROSPECT'  ELSE 
-			CASE WHEN (select COUNT(*) from ContrattiRighe cr where c.IDContratto = cr.IDContratto_cnt and cr.IDStatoRiga=4 )>0 THEN 'ATTIVO'  ELSE 'CESSATO' END
-		END as Stato, -- Da verificare logica , ora: nessuna riga contrastto = 'PROSPECT', almeno 1 attiva ='ATTIVA' else 'CESSATO'		
+		CASE 
+	    WHEN  
+			(select count(*) 
+			from dbo.Contratti c, dbo.ContrattiRighe cr		
+			where c.IDContratto = cr.IDContratto_cnt 
+			and c.IDAnagrafica=a.IDAnagrafica
+			and cr.IDStatoRiga = 4) > 0   --Attivo
+			
+	    THEN 'ATTIVO'  
+	    
+	    ELSE  
+		CASE 
+			WHEN  
+				(select count(*) 
+				from dbo.Contratti c, dbo.ContrattiRighe cr		
+				where c.IDContratto = cr.IDContratto_cnt 
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 9000, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Moroso, Moroso ExFornitore, Disalimentato
+				and cr.dataCessazione > getdate()-30 ) > 0
+				
+			THEN 'ATTIVO'  
+		    
+			ELSE  			
+			CASE 
+				WHEN  
+					(select count(*) 
+					from dbo.Contratti c, dbo.ContrattiRighe cr		
+					where c.IDContratto = cr.IDContratto_cnt 
+					and c.IDAnagrafica=a.IDAnagrafica
+					and cr.IDStatoRiga in (3006, 3099) --Scaduto, Sfilato
+					and cr.dataCessazione > getdate()-30 
+					and cr.dataCessazione > cr.dataFineValidita) > 0
+					
+				THEN 'ATTIVO'  
+			    
+				ELSE  
+					CASE 
+						WHEN  
+							(select count(*) 
+							from dbo.Contratti c, dbo.ContrattiRighe cr		
+							where c.IDContratto = cr.IDContratto_cnt 
+							and c.IDAnagrafica=a.IDAnagrafica) = 0  -- Se non sono presenti contratti
+							
+						THEN 'NON ATTIVO'  
+					    
+						ELSE  
+							'NON ATTIVO' -- CESSATO ? 
+					END							
+			END				
+		    
+		END	    
+	END Stato,	
 		null as DataInizio,
 		null as DataFine,
 		null as DataCessazione,
