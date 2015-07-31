@@ -16,23 +16,35 @@ select	 m.idMovimento as Id_Record,
 		CASE WHEN c.idCausale in (1,7) THEN c.descrizione  ELSE null END as Descr_Pag_Mod,
 		null as idPagTer,
 		null as DescPagTer,
-		null as comodity, --comodity EE o GG da capire come recuperare il valore 
+		(CASE	WHEN s.SiglaRegIVA In ('E','T') THEN 'EE'
+				WHEN s.SiglaRegIVA In ('G','S') THEN 'GAS'
+				WHEN s.SiglaRegIVA In ('C','I','N','O') THEN 'SERV'
+				ELSE 'EE' END) as comodity, 
 		m.idFattura as codicePartita,
 		null as Factor,
 		s.TipoDoc as tipologia_fattura,		
-		null descrizione_tipologia_fattura,-- descrizione tipologia fattura	 da capire come recuperare
-		null as url,	
-		a.IDTERP CLienteSAP,		
-		year(s.DataDoc) AnnoDoc,		
-		s.Saldo,
-		s.Importo ImportoFattura,
-		m.Importo,		
-		m.DataIncasso		
+		gdf.descrizione as  descrizione_tipologia_fattura,
+		('\\VMTRIMP\Fatture\Attive\' +
+			(CASE	WHEN s.SiglaRegIVA In ('E','T') THEN 'EE'
+					WHEN s.SiglaRegIVA In ('G','S') THEN 'GAS'
+					WHEN s.SiglaRegIVA In ('C','I','N','O') THEN 'SERV'
+					ELSE 'EE' END) +
+			'\' + s.IDAnagrafica + '\' + CONVERT(VARCHAR(4),bill.AnnoDoc) + '_' +
+					(CASE	WHEN LEN(s.NumeroDoc) = 1 THEN '0000000'
+							WHEN LEN(s.NumeroDoc) = 2 THEN '000000'
+							WHEN LEN(s.NumeroDoc) = 3 THEN '00000'
+							WHEN LEN(s.NumeroDoc) = 4 THEN '0000'
+							WHEN LEN(s.NumeroDoc) = 5 THEN '000'
+							WHEN LEN(s.NumeroDoc) = 6 THEN '00'
+							WHEN LEN(s.NumeroDoc) = 7 THEN '0'
+							ELSE '' END) +	s.NumeroDoc + s.SiglaRegIVA + '.pdf') as URL	
 from	dbo.Anagrafica a
 inner join Scadenzario s on a.IDAnagrafica=s.IDAnagrafica
 inner join Tes.Movimenti m on s.IDFattura=m.IDFattura
 inner join tes.causali c on m.idCausale = c.idCausale
 left join dbo.TipiPagamento tp on tp.IDTipoPagamento = s.modPag
+LEFT JOIN	BillingTGALA.dbo.DocT bill	ON s.IDTBilling = bill.IDDocT
+left join dbo.GALA_DESCRIZIONE_TIPO_FATTURA gdf on s.TipoDoc = gdf.IdTipoDOC
 where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and m.IDStato>=0

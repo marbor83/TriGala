@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[GALA_POD_PDR] (
     [ID_RIGA_CONTRATTI]     INT             NULL,
     [CODICE_DISPOSITIVO]    VARCHAR (100)   NOT NULL,
     [VOL_QTA]               NUMERIC (18, 2) NOT NULL,
-    [COMMODITY]             CHAR (1)        NOT NULL,
+    [COMMODITY]             VARCHAR (10)    NOT NULL,
     [INDIRIZZO]             VARCHAR (100)   NOT NULL,
     [CAP]                   VARCHAR (10)    NOT NULL,
     [COMUNE]                VARCHAR (100)   NOT NULL,

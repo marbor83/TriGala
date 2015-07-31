@@ -18,7 +18,7 @@ select	c.IDContratto,
 				from dbo.Contratti c, dbo.ContrattiRighe cr		
 				where c.IDContratto = cr.IDContratto_cnt 
 				and c.IDAnagrafica=a.IDAnagrafica
-				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 9000, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Moroso, Moroso ExFornitore, Disalimentato
+				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Morosità, Disalimentato
 				and cr.dataCessazione > getdate()-30 ) > 0
 				
 			THEN 'ATTIVO'  
@@ -47,7 +47,7 @@ select	c.IDContratto,
 						THEN 'NON ATTIVO'  
 					    
 						ELSE  
-							'NON ATTIVO' -- CESSATO ? 
+							'CESSATO' 
 					END							
 			END				
 		    

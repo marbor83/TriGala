@@ -1,20 +1,42 @@
 select  'IT10' as IDAzienda,
 		a.IDAnagrafica IdCliente,		
 		a.IDAnagrafica as id_master, -- per ora impostato ad idcliente poichè sono tutti master / oppure rimuovere dal tracciato
+		null IDTipoCliente,
 		CASE 
 			WHEN  
 				(select count(*)
-				from dbo.Contratti c, dbo.ContrattiRighe cr, dbo.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+				from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
 				where c.IDContratto = cr.IDContratto_cnt 
 				and c.IDAnagrafica=a.IDAnagrafica
 				and cr.IDProdotto = gsc.IDProdotto
-				and gsc.[SEGMENTO_CLIENTE] ='PA') > 0				
+				and gsc.[IdSegmentoCliente] = 1) > 0 --'PA'			
 			THEN 
 				'PA'  			
 			ELSE  
-				'NO PA'
-		END	 IDTipoCliente,		
-		af.Descrizione DescrizioneTipoCliente,
+				CASE 
+					WHEN  
+						(select count(*)
+						from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+						where c.IDContratto = cr.IDContratto_cnt 
+						and c.IDAnagrafica=a.IDAnagrafica
+						and cr.IDProdotto = gsc.IDProdotto
+						and gsc.[IdSegmentoCliente] = 2) > 0 --'NO PA'			
+					THEN 
+						'NO PA'  			
+					ELSE  
+						CASE 
+							WHEN  
+								(select count(*)
+								from dbo.Contratti c, dbo.ContrattiRighe cr
+								where c.IDContratto = cr.IDContratto_cnt 
+								and c.IDAnagrafica=a.IDAnagrafica) = 0 --'PROSPECT'			
+							THEN 
+								'PROSPECT'  			
+							ELSE  
+								null  -- caso prodotti nè PA nè NO PA associati a prodotti da Escludere
+						END	
+				END	
+		END	 DescrizioneTipoCliente,	
 		CASE 
 	    WHEN  
 			(select count(*) 
@@ -32,7 +54,7 @@ select  'IT10' as IDAzienda,
 				from dbo.Contratti c, dbo.ContrattiRighe cr		
 				where c.IDContratto = cr.IDContratto_cnt 
 				and c.IDAnagrafica=a.IDAnagrafica
-				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 9000, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Moroso, Moroso ExFornitore, Disalimentato
+				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Morosità , Disalimentato
 				and cr.dataCessazione > getdate()-30 ) > 0
 				
 			THEN 'ATTIVO'  
@@ -93,8 +115,7 @@ select  'IT10' as IDAzienda,
 		case when a.TipoPersona='F' then a.Nome else null end NOME,
 		case when a.TipoPersona='F' then a.Cognome else null end COGNOME,
 		null as classeDiRischio,
-		null as descrizioneRischio,
-		0 as fido
+		null as descrizioneRischio
 from	dbo.Anagrafica a
 left outer join dbo.AnaForme af on a.IDAnaForma=af.IDAnaForma
 left outer join dbo.TipiCapogruppo cg on a.IDTipoCapogruppo=cg.IDTipoCapogruppo
@@ -108,5 +129,5 @@ where	a.IDStatoAnagrafica=1
 					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	c.IDAnagrafica=a.IDAnagrafica
 							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
+							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))							
 order by a.IDAnagrafica

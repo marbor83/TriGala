@@ -1,5 +1,4 @@
 CREATE TABLE [dbo].[GALA_ANAGRAFICA_MOVIMENTI] (
-    [Id]                             INT             IDENTITY (1, 1) NOT NULL,
     [ID_RECORD]                      VARCHAR (50)    NOT NULL,
     [ID_AZIENDA]                     VARCHAR (10)    NOT NULL,
     [ID_CLIENTE]                     VARCHAR (30)    NOT NULL,
@@ -24,6 +23,6 @@ CREATE TABLE [dbo].[GALA_ANAGRAFICA_MOVIMENTI] (
     [Tipologia_fattura]              VARCHAR (100)   NULL,
     [Desscrizione_tipologia_fattura] VARCHAR (200)   NULL,
     [URL] 							 VARCHAR(2048) 	 NULL, 
-    PRIMARY KEY CLUSTERED ([Id] ASC, [ID_RECORD] ASC)
+    PRIMARY KEY ([[ID_RECORD] ASC)
 );
 
