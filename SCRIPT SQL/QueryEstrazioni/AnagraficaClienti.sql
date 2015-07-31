@@ -9,6 +9,7 @@ select  'IT10' as IDAzienda,
 				where c.IDContratto = cr.IDContratto_cnt 
 				and c.IDAnagrafica=a.IDAnagrafica
 				and cr.IDProdotto = gsc.IDProdotto
+				and cr.IDStatoRiga != 11
 				and gsc.[IdSegmentoCliente] = 1) > 0 --'PA'			
 			THEN 
 				'PA'  			
@@ -20,6 +21,7 @@ select  'IT10' as IDAzienda,
 						where c.IDContratto = cr.IDContratto_cnt 
 						and c.IDAnagrafica=a.IDAnagrafica
 						and cr.IDProdotto = gsc.IDProdotto
+						and cr.IDStatoRiga != 11
 						and gsc.[IdSegmentoCliente] = 2) > 0 --'NO PA'			
 					THEN 
 						'NO PA'  			
@@ -29,6 +31,7 @@ select  'IT10' as IDAzienda,
 								(select count(*)
 								from dbo.Contratti c, dbo.ContrattiRighe cr
 								where c.IDContratto = cr.IDContratto_cnt 
+								and cr.IDStatoRiga != 11
 								and c.IDAnagrafica=a.IDAnagrafica) = 0 --'PROSPECT'			
 							THEN 
 								'PROSPECT'  			
@@ -77,7 +80,8 @@ select  'IT10' as IDAzienda,
 						WHEN  
 							(select count(*) 
 							from dbo.Contratti c, dbo.ContrattiRighe cr		
-							where c.IDContratto = cr.IDContratto_cnt 
+							where c.IDContratto = cr.IDContratto_cnt
+							and cr.IDStatoRiga != 11   -- StatoContratti - Annullato Non Attivo ID 11 (Usare in caso di inserimenti ERRATI su contratti ATTIVI)							
 							and c.IDAnagrafica=a.IDAnagrafica) = 0  -- Se non sono presenti contratti
 							
 						THEN 'PROSPECT'  
@@ -122,12 +126,27 @@ left outer join dbo.TipiCapogruppo cg on a.IDTipoCapogruppo=cg.IDTipoCapogruppo
 left outer join dbo.AgentiAnagrafica ag on a.IDAgente=ag.IDAgente
 left outer join dbo.AgentiAnagrafica ag1 on a.IDAgenzia=ag1.IDAgente
 left outer join dbo.Gala_AnagrafichePagamento995Perc perc995 on a.IDAnagrafica=perc995.IDAnagrafica and getdate() between perc995.ValidoDal and isnull(perc995.ValidoAl, '20501231')
-where	a.IDStatoAnagrafica=1
+where	a.IDStatoAnagrafica=1 -- Cliente Attivo (con 2 il cliente non è visualizzabile)
 		and a.IDAnagrafica!='100001'
-		and exists (select	1 
+		/*and exists (select	1 
 					from	dbo.Contratti c
 					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	c.IDAnagrafica=a.IDAnagrafica
 							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))							
+							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))	
+
+			*/		
+		and (exists (select	1 
+					from	dbo.Contratti c
+					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+					inner join GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc on cr.IDProdotto = gsc.IDProdotto
+					where	c.IDAnagrafica=a.IDAnagrafica
+							and gsc.idsegmentoCliente != 99 -- Da Escludere
+							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))		
+			or 	(select	count(*) 
+					from	dbo.Contratti c
+					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+					where	c.IDAnagrafica=a.IDAnagrafica
+							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')) = 0
+			)							
 order by a.IDAnagrafica

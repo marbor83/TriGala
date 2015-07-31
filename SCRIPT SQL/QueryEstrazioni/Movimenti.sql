@@ -11,9 +11,9 @@ select	 m.idMovimento as Id_Record,
 		'EUR' as Valuta,
 		m.importo,
 		m.IDCausale,
-		m.Descrizione,
-		CASE WHEN c.idCausale in (1,7) THEN s.modPag  ELSE null END as IdModalitaPagamento,
-		CASE WHEN c.idCausale in (1,7) THEN c.descrizione  ELSE null END as Descr_Pag_Mod,
+		c.descrizione DESCR_CAUSALE,		
+		CASE WHEN c.idCausale in (1,7) THEN doct.idMetodoPag  ELSE null END as IdModalitaPagamento,
+		CASE WHEN c.idCausale in (1,7) THEN tp.descrizione  ELSE null END as Descr_Pag_Mod,		
 		null as idPagTer,
 		null as DescPagTer,
 		(CASE	WHEN s.SiglaRegIVA In ('E','T') THEN 'EE'
@@ -42,9 +42,10 @@ from	dbo.Anagrafica a
 inner join Scadenzario s on a.IDAnagrafica=s.IDAnagrafica
 inner join Tes.Movimenti m on s.IDFattura=m.IDFattura
 inner join tes.causali c on m.idCausale = c.idCausale
-left join dbo.TipiPagamento tp on tp.IDTipoPagamento = s.modPag
 LEFT JOIN	BillingTGALA.dbo.DocT bill	ON s.IDTBilling = bill.IDDocT
-left join dbo.GALA_DESCRIZIONE_TIPO_FATTURA gdf on s.TipoDoc = gdf.IdTipoDOC
+LEFT JOIN	dbo.DocT doct	ON s.IDTBilling = doct.IDDocT
+left join dbo.TipiPagamento tp on tp.IDTipoPagamento = doct.idMetodoPag
+left join GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA gdf on s.TipoDoc = gdf.IdTipoDOC
 where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and m.IDStato>=0
@@ -56,3 +57,4 @@ where	a.IDStatoAnagrafica=1
 							and cr.IDStatoRiga != 11
 							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
 and year(m.DATPMO) = 2015 and MONTH(m.DATPMO) between 7 and 12
+

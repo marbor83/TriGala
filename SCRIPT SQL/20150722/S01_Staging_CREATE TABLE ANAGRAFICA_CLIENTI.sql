@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[GALA_ANAGRAFICA_CLIENTI] (
     [EMAIL]                    VARCHAR (500) NULL,
     [TELEFONO]                 VARCHAR (50)  NULL,
     [PEC]                      VARCHAR (100) NULL,
-    [CELLULARE]                VARCHAR (10)  NULL,
+    [CELLULARE]                VARCHAR (20)  NULL,
     [ID_AGENTE]                VARCHAR (10)  NULL,
     [DESCR_AGENTE]             VARCHAR (50)  NULL,
     [ID_AGENZIA]               VARCHAR (10)  NULL,

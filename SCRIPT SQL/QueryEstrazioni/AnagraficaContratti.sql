@@ -42,6 +42,7 @@ select	c.IDContratto,
 							(select count(*) 
 							from dbo.Contratti c, dbo.ContrattiRighe cr		
 							where c.IDContratto = cr.IDContratto_cnt 
+							and cr.IDStatoRiga != 11 -- StatoContratti - Annullato Non Attivo ID 11 (Usare in caso di inserimenti ERRATI su contratti ATTIVI)
 							and c.IDAnagrafica=a.IDAnagrafica) = 0  -- Se non sono presenti contratti
 							
 						THEN 'NON ATTIVO'  
@@ -70,10 +71,9 @@ select	c.IDContratto,
 		null as CUP,
 		null as ODA,
 		c.IDTipoContratto,
-		t.Descrizione TipoContratto,
+		t.Descrizione DescrizioneTipoContratto,
 		c.IDAgenzia,
-		ag1.Nome Agenzia,
-		c.DataStipula
+		ag1.Nome Agenzia
 from	dbo.Contratti c
 inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
 inner join [dbo].[TipoContratto] t on c.IDTipoContratto=t.IDTipoContratto
@@ -88,3 +88,7 @@ where	a.IDStatoAnagrafica=1
 							and cr.IDMacroStatoRiga in (2, 3)
 							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
 order by a.IDAnagrafica, c.IDContratto*/
+
+
+
+
