@@ -26,6 +26,7 @@ select	ac.IDContatto,
 		'IT10' as idAzienda,
 		case when ac.TipoPersonaContatto='F' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Nome ELSE a.Nome END  else null end Nome,
 		case when ac.TipoPersonaContatto='F' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Cognome ELSE a.Cognome END  else null end Cognome,						
+		t.IDTipoContatto as ID_TIPOCONTATTO,
 		t.Descrizione TipoContatto,	
 		ac.CFisc,
 		CASE WHEN t.IDTipoContatto = 6 THEN ac.indirizzo ELSE a.Indirizzo END indirizzo,
@@ -60,14 +61,15 @@ where	a.IDStatoAnagrafica=1
 					from	dbo.Contratti c
 					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	c.IDAnagrafica=a.IDAnagrafica
-							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))						
+							and cr.IDStatoRiga != 11)
+							--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))						
 union all 
 select	ac.IDContatto,
 		a.IDAnagrafica as idCliente,
 		'IT10' as idAzienda,
 		case when ac.TipoPersonaContatto='F' THEN ac.Nome else null end Nome,
-		case when ac.TipoPersonaContatto='F' THEN ac.Cognome else null end Cognome,						
+		case when ac.TipoPersonaContatto='F' THEN ac.Cognome else null end Cognome,	
+		t.IDTipoContatto as ID_TIPOCONTATTO,					
 		t.Descrizione TipoContatto,	
 		ac.CFisc,
 		a.Indirizzo,
@@ -107,6 +109,6 @@ where	a.IDStatoAnagrafica=1
 					from	dbo.Contratti c
 					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	c.IDAnagrafica=a.IDAnagrafica
-							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))							
+							and cr.IDStatoRiga != 11)
+							--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))							
 order by a.IDAnagrafica, ac.IDContatto		
