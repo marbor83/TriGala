@@ -18,20 +18,20 @@ INSERT INTO #TempPDRVolQta
 exec [GALA_CB].[ConsumoGASFatturatoUltimoAnno]
 
 
-select *
+select  *		
 from (
-select	'IT10' idAzienda,		
-		ans.IDAnagrafica as IdCliente,
-		c.IDContratto,
-		cr.IDRigaContratto,
-		ecs.POD CodiceDispositivo,
+select	'IT10' id_Azienda,		
+		ans.IDAnagrafica as Id_Cliente,
+		c.IDContratto as ID_CONTRATTO,
+		cr.IDRigaContratto as ID_RIGA_contratti,
+		ecs.POD as CODICE_DISPOSITIVO,
 		isnull(tvq.kWh_Fatturati_Ultimi_12_mesi,0) as VOL_QTA,
-		'EE' as commodity, -- da capire dove recuperarlo
-		ans.Indirizzo,
-		ans.CAP,
-		ans.Localita,
-		ans.Provincia,
-		ans.Nazione,	
+		'EE' as COMMODITY, -- da capire dove recuperarlo
+		ans.Indirizzo as INDIRIZZO,
+		ans.CAP as CAP,
+		ans.Localita as COMUNE,
+		ans.Provincia as PROVINCIA,
+		ans.Nazione as NAZIONE,	
 		null as riferimento,
 		null as convenzione,
 		(SELECT			B.Valore AS CIG
@@ -66,13 +66,12 @@ select	'IT10' idAzienda,
 			AND			B.Valore Is Not Null
 			AND			A.IDRigaContratto = cr.IDRigaContratto
 			GROUP BY	A.IDRigaContratto, B.Valore) as CIG_GARA,			
-		eot.nome + ' - ' + eot.Descrizione as componenteTariffaria, 	
-		cr.DataInizioValidita as DataInizio,
-		cr.DataFineValidita as DataFine,
-		cr.DataCessazione as DataCessazione, -- da rivedere la logica cessazione
-		cr.IDSede,
-		cr.IDTipoPagamento ID_Pag_Mod,
-		tp.Descrizione		
+		eot.nome + ' - ' + eot.Descrizione as COMPONENTE_TARIFFARIA, 	
+		cr.DataInizioValidita as DATA_INIZIO,
+		cr.DataFineValidita as DATA_FINE,
+		cr.DataCessazione as DATA_CESSAZIONE, 	
+		cr.IDTipoPagamento as  ID_PAG_MOD,
+		tp.Descrizione	as DESCR_PAG_MOD	
 from	dbo.Contratti c
 inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
 inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
@@ -137,8 +136,7 @@ select	'IT10' idAzienda,
 		null as componenteTariffaria, -- non valorizzarla per il gas	
 		cr.DataInizioValidita as DataInizio,
 		cr.DataFineValidita as DataFine,
-		cr.DataCessazione as DataCessazione, -- da rivedere la logica cessazione
-		cr.IDSede,
+		cr.DataCessazione as DataCessazione,
 		cr.IDTipoPagamento ID_Pag_Mod,
 		tp.Descrizione	
 from	dbo.Contratti c
@@ -155,7 +153,7 @@ where	a.IDStatoAnagrafica=1
 		and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')
 		and getdate() between gcs.validoDal and isnull(gcs.validoAl, '20501231')
 ) V
-order by IdCliente, IDContratto, IDRigaContratto
+order by Id_Cliente, ID_Contratto, ID_RIGA_contratti
 
 
 DROP TABLE #TempPODVolQta

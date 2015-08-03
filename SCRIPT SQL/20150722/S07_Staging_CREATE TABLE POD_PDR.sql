@@ -17,6 +17,7 @@ CREATE TABLE [dbo].[GALA_POD_PDR] (
     [CIG]                   VARCHAR (200)   NULL,
     [CUP]                   VARCHAR (200)   NULL,
     [ODA]                   VARCHAR (200)   NULL,
+	[CIG_GARA]				VARCHAR (200)   NULL,
     [COMPONENTE_TARIFFARIA] VARCHAR (50)    NULL,
 	[DATA_INIZIO]           DATETIME        NOT NULL,
     [DATA_FINE]         	DATETIME      	NOT NULL,
