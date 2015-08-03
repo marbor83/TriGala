@@ -1,6 +1,6 @@
-select	c.IDContratto,
-		'IT10' as idAzienda,
-		c.IDAnagrafica IdCliente,
+select	c.IDContratto as ID_CONTRATTO,
+		'IT10' as id_Azienda,
+		c.IDAnagrafica Id_Cliente,
 		CASE 
 	    WHEN  
 			(select count(*) 
@@ -54,26 +54,26 @@ select	c.IDContratto,
 		    
 		END	    
 	END Stato,	
-		null as DataInizio,
-		null as DataFine,
-		null as DataCessazione,
-		null as ConvAppartenenza,
+		null as Data_Inizio,
+		null as Data_Fine,
+		null as Data_Cessazione,
+		null as Conv_Appartenenza,
 		null ID_BU,
 		null DESCR_BU,
 		null ID_AREA,
 		null DESCR_AREA,		
-		c.IDAgente,
-		ag.Nome DescrizioneAgente,
-		null as centroCosto,
-		null as idPagMod,
-		null as DescrPagMod,
+		c.IDAgente as ID_AGENTE,
+		ag.Nome Descr_Agente,
+		null as centro_DI_Costo,
+		null as id_Pag_Mod,
+		null as Descr_Pag_Mod,
 		null as CIG,
 		null as CUP,
 		null as ODA,
 		c.IDTipoContratto,
 		t.Descrizione DescrizioneTipoContratto,
 		c.IDAgenzia,
-		ag1.Nome Agenzia
+		ag1.Nome as NomeAgenzia
 from	dbo.Contratti c
 inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
 inner join [dbo].[TipoContratto] t on c.IDTipoContratto=t.IDTipoContratto
