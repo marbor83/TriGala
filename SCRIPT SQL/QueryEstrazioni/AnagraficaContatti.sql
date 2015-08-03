@@ -21,14 +21,14 @@
 		END	 DescrizioneTipoCliente,
 */
 
-select	ac.IDContatto,
-		a.IDAnagrafica as idCliente,
-		'IT10' as idAzienda,
+select	ac.IDContatto as ID_Contatto,
+		a.IDAnagrafica as id_Cliente,
+		'IT10' as id_Azienda,
 		case when ac.TipoPersonaContatto='F' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Nome ELSE a.Nome END  else null end Nome,
 		case when ac.TipoPersonaContatto='F' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Cognome ELSE a.Cognome END  else null end Cognome,						
 		t.IDTipoContatto as ID_TIPOCONTATTO,
 		t.Descrizione TipoContatto,	
-		ac.CFisc,
+		ac.CFisc as CODFISC,
 		CASE WHEN t.IDTipoContatto = 6 THEN ac.indirizzo ELSE a.Indirizzo END indirizzo,
 		CASE WHEN t.IDTipoContatto = 6 THEN ac.CAP ELSE a.CAP END CAP,
 		CASE WHEN t.IDTipoContatto = 6 THEN ac.Localita ELSE a.Localita END Localita,
@@ -41,8 +41,8 @@ select	ac.IDContatto,
 		CASE WHEN t.IDTipoContatto = 6 THEN ac.Cellulare ELSE a.NumeroCellulare END Cellulare,
 		case when ac.TipoPersonaContatto='G' then CASE WHEN t.IDTipoContatto = 6 THEN ac.RagSoc ELSE a.RagSoc END  else null end RagioneSociale,
 		case when ac.TipoPersonaContatto='G' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Piva ELSE a.Piva END  else null end PartitaIva	,
-		ac.TipoPersonaContatto as idTipoPersona,
-		CASE WHEN ac.TipoPersonaContatto = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as DescrizioneTipoPersona		
+		ac.TipoPersonaContatto as ID_Tipo_persona,
+		CASE WHEN ac.TipoPersonaContatto = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as Descrizione_tipo_persona		
 from	dbo.AnaContatti ac
 inner join dbo.Anagrafica a on ac.IDAnagrafica=a.IDAnagrafica
 inner join dbo.AnaContattiTipoMatch m on ac.IDContatto=m.IDContatto
@@ -64,14 +64,14 @@ where	a.IDStatoAnagrafica=1
 							and cr.IDStatoRiga != 11)
 							--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))						
 union all 
-select	ac.IDContatto,
-		a.IDAnagrafica as idCliente,
+select	ac.IDContatto as ID_Contatto,
+		a.IDAnagrafica as id_Cliente,
 		'IT10' as idAzienda,
 		case when ac.TipoPersonaContatto='F' THEN ac.Nome else null end Nome,
 		case when ac.TipoPersonaContatto='F' THEN ac.Cognome else null end Cognome,	
 		t.IDTipoContatto as ID_TIPOCONTATTO,					
 		t.Descrizione TipoContatto,	
-		ac.CFisc,
+		ac.CFisc  as CODFISC,
 		a.Indirizzo,
 		a.CAP,
 		a.Localita,
@@ -84,8 +84,8 @@ select	ac.IDContatto,
 		a.NumeroCellulare,
 		case when ac.TipoPersonaContatto='G' THEN a.RagSoc else null end RagioneSociale,
 		case when ac.TipoPersonaContatto='G' THEN a.Piva else null end PartitaIva,
-		ac.TipoPersonaContatto as idTipoPersona,
-		CASE WHEN ac.TipoPersonaContatto = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as DescrizioneTipoPersona		
+		ac.TipoPersonaContatto as ID_Tipo_persona,
+		CASE WHEN ac.TipoPersonaContatto = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as Descrizione_tipo_persona		
 from	dbo.AnaContatti ac
 inner join dbo.Anagrafica a on ac.IDAnagrafica=a.IDAnagrafica
 inner join dbo.AnaContattiTipoMatch m on ac.IDContatto=m.IDContatto
