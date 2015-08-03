@@ -19,7 +19,7 @@ select	 m.idMovimento as Id_Record,
 		(CASE	WHEN s.SiglaRegIVA In ('E','T') THEN 'EE'
 				WHEN s.SiglaRegIVA In ('G','S') THEN 'GAS'
 				WHEN s.SiglaRegIVA In ('C','I','N','O') THEN 'SERV'
-				ELSE 'EE' END) as comodity, 
+				ELSE 'EE' END) as COMMODITY, 
 		m.idFattura as CODICE_PARTITA,
 		null as Factor,
 		s.TipoDoc as Tipologia_fattura,		
