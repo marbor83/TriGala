@@ -1,6 +1,6 @@
 ﻿namespace TriGala
 {
-    partial class Form1
+    partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -28,12 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.btn_Start = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // btn_Start
+            // 
+            this.btn_Start.Location = new System.Drawing.Point(12, 44);
+            this.btn_Start.Name = "btn_Start";
+            this.btn_Start.Size = new System.Drawing.Size(97, 23);
+            this.btn_Start.TabIndex = 0;
+            this.btn_Start.Text = "Avvia Processo";
+            this.btn_Start.UseVisualStyleBackColor = true;
+            this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);
+            // 
+            // frmMain
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(768, 210);
+            this.Controls.Add(this.btn_Start);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MinimizeBox = false;
+            this.Name = "frmMain";
+            this.Text = "TriGala";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btn_Start;
     }
 }
 

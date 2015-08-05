@@ -1,0 +1,646 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Trilance_CBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="Trilance_CBModelStoreContainer">
+          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="Trilance_CBModel.Store.GALA_ANAGRAFICA_CLIENTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="Trilance_CBModel.Store.GALA_ANAGRAFICA_CONTRATTI" store:Type="Tables" store:Schema="dbo" store:Name="GALA_ANAGRAFICA_CONTRATTI">
+            <DefiningQuery>SELECT 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_CONTRATTO] AS [ID_CONTRATTO], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_AZIENDA] AS [ID_AZIENDA], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_CLIENTE] AS [ID_CLIENTE], 
+      [GALA_ANAGRAFICA_CONTRATTI].[STATO] AS [STATO], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DATA_INIZIO] AS [DATA_INIZIO], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DATA_FINE] AS [DATA_FINE], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DATA_CESSAZIONE] AS [DATA_CESSAZIONE], 
+      [GALA_ANAGRAFICA_CONTRATTI].[CONV_APPARTENENZA] AS [CONV_APPARTENENZA], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_BU] AS [ID_BU], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DESCR_BU] AS [DESCR_BU], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_AREA] AS [ID_AREA], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DESCR_AREA] AS [DESCR_AREA], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_AGENTE] AS [ID_AGENTE], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DESCR_AGENTE] AS [DESCR_AGENTE], 
+      [GALA_ANAGRAFICA_CONTRATTI].[CENTRO_DI_COSTO] AS [CENTRO_DI_COSTO], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ID_PAG_MOD] AS [ID_PAG_MOD], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DESCR_PAG_MOD] AS [DESCR_PAG_MOD], 
+      [GALA_ANAGRAFICA_CONTRATTI].[CIG] AS [CIG], 
+      [GALA_ANAGRAFICA_CONTRATTI].[CUP] AS [CUP], 
+      [GALA_ANAGRAFICA_CONTRATTI].[ODA] AS [ODA], 
+      [GALA_ANAGRAFICA_CONTRATTI].[IdTipoContratto] AS [IdTipoContratto], 
+      [GALA_ANAGRAFICA_CONTRATTI].[DescrizioneTipoContratto] AS [DescrizioneTipoContratto], 
+      [GALA_ANAGRAFICA_CONTRATTI].[IDAgenzia] AS [IDAgenzia], 
+      [GALA_ANAGRAFICA_CONTRATTI].[NomeAgenzia] AS [NomeAgenzia]
+      FROM [dbo].[GALA_ANAGRAFICA_CONTRATTI] AS [GALA_ANAGRAFICA_CONTRATTI]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="Trilance_CBModel.Store.GALA_ANAGRAFICA_MOVIMENTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_CONTATTI" EntityType="Trilance_CBModel.Store.GALA_CONTATTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="Trilance_CBModel.Store.GALA_ESPOSIZIONE" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="Trilance_CBModel.Store.GALA_GARANZIE_FACTOR" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_POD_PDR" EntityType="Trilance_CBModel.Store.GALA_POD_PDR" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="GALA_ANAGRAFICA_CLIENTI">
+          <Key>
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+          </Key>
+          <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ID_MASTER" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ID_TIPO_CLIENTE" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_TIPO_CLIENTE" Type="varchar" MaxLength="50" />
+          <Property Name="DESC_STATO_CLIENTE" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="STATO_LAVORAZIONE" Type="varchar" MaxLength="50" />
+          <Property Name="ID_Tipo_persona" Type="char" MaxLength="1" />
+          <Property Name="Descrizione_tipo_persone" Type="varchar" MaxLength="50" />
+          <Property Name="PIVA" Type="char" MaxLength="16" />
+          <Property Name="CODFISC" Type="char" MaxLength="16" />
+          <Property Name="RAGIONESOCIALE" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="INDIRIZZO" Type="varchar" MaxLength="255" />
+          <Property Name="CAP" Type="varchar" MaxLength="10" />
+          <Property Name="COMUNE" Type="varchar" MaxLength="100" />
+          <Property Name="PROVINCIA" Type="varchar" MaxLength="5" />
+          <Property Name="NAZIONE" Type="varchar" MaxLength="3" />
+          <Property Name="FAX" Type="varchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="500" />
+          <Property Name="TELEFONO" Type="varchar" MaxLength="50" />
+          <Property Name="PEC" Type="varchar" MaxLength="100" />
+          <Property Name="CELLULARE" Type="varchar" MaxLength="20" />
+          <Property Name="ID_AGENTE" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_AGENTE" Type="varchar" MaxLength="50" />
+          <Property Name="ID_AGENZIA" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_AGENZIA" Type="varchar" MaxLength="50" />
+          <Property Name="TRATTENUTA_0_5" Type="char" MaxLength="1" />
+          <Property Name="CONVENZIONE" Type="varchar" MaxLength="250" />
+          <Property Name="FORMA_GIURIDICA" Type="varchar" MaxLength="100" />
+          <Property Name="NOME" Type="varchar" MaxLength="100" />
+          <Property Name="COGNOME" Type="varchar" MaxLength="100" />
+          <Property Name="Classe_di_rischio" Type="varchar" MaxLength="250" />
+          <Property Name="Descrizione_del_rischio" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'D:\ERICSSON\TRIGALA\TRIGALA\TRIGALA\APP_DATA\TRILANCE_CB.MDF.dbo.GALA_ANAGRAFICA_CONTRATTI' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="GALA_ANAGRAFICA_CONTRATTI">
+          <Key>
+            <PropertyRef Name="ID_CONTRATTO" />
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="STATO" />
+          </Key>
+          <Property Name="ID_CONTRATTO" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="STATO" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="DATA_INIZIO" Type="datetime" />
+          <Property Name="DATA_FINE" Type="datetime" />
+          <Property Name="DATA_CESSAZIONE" Type="datetime" />
+          <Property Name="CONV_APPARTENENZA" Type="varchar" MaxLength="100" />
+          <Property Name="ID_BU" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_BU" Type="varchar" MaxLength="50" />
+          <Property Name="ID_AREA" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_AREA" Type="varchar" MaxLength="50" />
+          <Property Name="ID_AGENTE" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_AGENTE" Type="varchar" MaxLength="50" />
+          <Property Name="CENTRO_DI_COSTO" Type="varchar" MaxLength="50" />
+          <Property Name="ID_PAG_MOD" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_PAG_MOD" Type="varchar" MaxLength="50" />
+          <Property Name="CIG" Type="varchar" MaxLength="200" />
+          <Property Name="CUP" Type="varchar" MaxLength="200" />
+          <Property Name="ODA" Type="varchar" MaxLength="200" />
+          <Property Name="IdTipoContratto" Type="varchar" MaxLength="10" />
+          <Property Name="DescrizioneTipoContratto" Type="varchar" MaxLength="200" />
+          <Property Name="IDAgenzia" Type="varchar" MaxLength="10" />
+          <Property Name="NomeAgenzia" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="GALA_ANAGRAFICA_MOVIMENTI">
+          <Key>
+            <PropertyRef Name="ID_RECORD" />
+          </Key>
+          <Property Name="ID_RECORD" Type="int" Nullable="false" />
+          <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="N_DOC" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DATA_DOC" Type="datetime" Nullable="false" />
+          <Property Name="DATA_REG" Type="datetime" Nullable="false" />
+          <Property Name="DATA_ACQ" Type="datetime" Nullable="false" />
+          <Property Name="DATA_UPD" Type="datetime" />
+          <Property Name="DATA_SCAD" Type="datetime" Nullable="false" />
+          <Property Name="SEGNO" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="VALUTA" Type="char" Nullable="false" MaxLength="3" />
+          <Property Name="IMPORTO" Type="numeric" Nullable="false" Scale="2" />
+          <Property Name="ID_CAUSALE" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="DESCR_CAUSALE" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ID_PAG_MOD" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_PAG_MOD" Type="varchar" MaxLength="50" />
+          <Property Name="ID_PAG_TER" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_PAG_TER" Type="varchar" MaxLength="50" />
+          <Property Name="COMMODITY" Type="varchar" MaxLength="10" />
+          <Property Name="CODICE_PARTITA" Type="varchar" MaxLength="50" />
+          <Property Name="FACTOR" Type="varchar" MaxLength="50" />
+          <Property Name="Tipologia_fattura" Type="varchar" MaxLength="100" />
+          <Property Name="Desscrizione_tipologia_fattura" Type="varchar" MaxLength="200" />
+          <Property Name="URL" Type="varchar" MaxLength="2048" />
+        </EntityType>
+        <EntityType Name="GALA_CONTATTI">
+          <Key>
+            <PropertyRef Name="ID_contatto" />
+            <PropertyRef Name="ID_TIPOCONTATTO" />
+          </Key>
+          <Property Name="ID_contatto" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ID_azienda" Type="varchar" MaxLength="10" />
+          <Property Name="NOME" Type="varchar" MaxLength="100" />
+          <Property Name="COGNOME" Type="varchar" MaxLength="100" />
+          <Property Name="ID_TIPOCONTATTO" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TIPOCONTATTO" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="CODFISC" Type="varchar" MaxLength="16" />
+          <Property Name="INDIRIZZO" Type="varchar" MaxLength="255" />
+          <Property Name="CAP" Type="varchar" MaxLength="10" />
+          <Property Name="COMUNE" Type="varchar" MaxLength="100" />
+          <Property Name="PROVINCIA" Type="varchar" MaxLength="5" />
+          <Property Name="NAZIONE" Type="varchar" MaxLength="3" />
+          <Property Name="FAX" Type="varchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="500" />
+          <Property Name="TELEFONO" Type="varchar" MaxLength="50" />
+          <Property Name="PEC" Type="varchar" MaxLength="100" />
+          <Property Name="CELLULARE" Type="varchar" MaxLength="50" />
+          <Property Name="RagioneSociale" Type="varchar" MaxLength="110" />
+          <Property Name="PartitaIVa" Type="varchar" MaxLength="50" />
+          <Property Name="ID_Tipo_persona" Type="varchar" MaxLength="10" />
+          <Property Name="Descrizione_tipo_persona" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="GALA_ESPOSIZIONE">
+          <Key>
+            <PropertyRef Name="ID_CLIENTE" />
+          </Key>
+          <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SALDO" Type="numeric" Nullable="false" Scale="2" />
+        </EntityType>
+        <EntityType Name="GALA_GARANZIE_FACTOR">
+          <Key>
+            <PropertyRef Name="ID_COUNTRY" />
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="ID_GARANZIA" />
+          </Key>
+          <Property Name="ID_COUNTRY" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ID_GARANZIA" Type="numeric" Nullable="false" Precision="10" />
+          <Property Name="ID_GAR_ENTE" Type="numeric" Precision="9" />
+          <Property Name="DESCR_GAR_ENTE" Type="varchar" MaxLength="100" />
+          <Property Name="PLAFOND" Type="numeric" Nullable="false" Scale="2" />
+          <Property Name="DATA_INIZIO" Type="datetime" Nullable="false" />
+          <Property Name="DATA_FINE" Type="datetime" Nullable="false" />
+          <Property Name="DESC_GAR_TIPO" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ID_GAR_TIPO" Type="numeric" Nullable="false" Precision="9" />
+          <Property Name="PERSONALE" Type="char" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="GALA_POD_PDR">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ID_CONTRATTO" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ID_RIGA_CONTRATTI" Type="int" />
+          <Property Name="CODICE_DISPOSITIVO" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="VOL_QTA" Type="numeric" Nullable="false" Scale="2" />
+          <Property Name="COMMODITY" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="INDIRIZZO" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="CAP" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="COMUNE" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="PROVINCIA" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="NAZIONE" Type="varchar" Nullable="false" MaxLength="3" />
+          <Property Name="RIFERIMENTO" Type="varchar" MaxLength="200" />
+          <Property Name="CONVENZIONE" Type="varchar" MaxLength="100" />
+          <Property Name="CIG" Type="varchar" MaxLength="200" />
+          <Property Name="CUP" Type="varchar" MaxLength="200" />
+          <Property Name="ODA" Type="varchar" MaxLength="200" />
+          <Property Name="CIG_GARA" Type="varchar" MaxLength="200" />
+          <Property Name="COMPONENTE_TARIFFARIA" Type="varchar" MaxLength="50" />
+          <Property Name="DATA_INIZIO" Type="datetime" Nullable="false" />
+          <Property Name="DATA_FINE" Type="datetime" Nullable="false" />
+          <Property Name="DATA_CESSAZIONE" Type="datetime" />
+          <Property Name="ID_PAG_MOD" Type="varchar" MaxLength="10" />
+          <Property Name="DESCR_PAG_MOD" Type="varchar" MaxLength="50" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Trilance_CBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Trilance_CBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="Trilance_CBModel.GALA_ANAGRAFICA_CLIENTI" />
+          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="Trilance_CBModel.GALA_ANAGRAFICA_CONTRATTI" />
+          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="Trilance_CBModel.GALA_ANAGRAFICA_MOVIMENTI" />
+          <EntitySet Name="GALA_CONTATTI" EntityType="Trilance_CBModel.GALA_CONTATTI" />
+          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="Trilance_CBModel.GALA_ESPOSIZIONE" />
+          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="Trilance_CBModel.GALA_GARANZIE_FACTOR" />
+          <EntitySet Name="GALA_POD_PDR" EntityType="Trilance_CBModel.GALA_POD_PDR" />
+        </EntityContainer>
+        <EntityType Name="GALA_ANAGRAFICA_CLIENTI">
+          <Key>
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+          </Key>
+          <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ID_MASTER" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ID_TIPO_CLIENTE" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_TIPO_CLIENTE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DESC_STATO_CLIENTE" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="STATO_LAVORAZIONE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_Tipo_persona" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="Descrizione_tipo_persone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PIVA" Type="String" MaxLength="16" Unicode="false" FixedLength="true" />
+          <Property Name="CODFISC" Type="String" MaxLength="16" Unicode="false" FixedLength="true" />
+          <Property Name="RAGIONESOCIALE" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="INDIRIZZO" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="CAP" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="COMUNE" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="PROVINCIA" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="NAZIONE" Type="String" MaxLength="3" Unicode="false" FixedLength="false" />
+          <Property Name="FAX" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PEC" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CELLULARE" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AGENTE" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_AGENTE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AGENZIA" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_AGENZIA" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TRATTENUTA_0_5" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="CONVENZIONE" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="FORMA_GIURIDICA" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="NOME" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="COGNOME" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Classe_di_rischio" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Descrizione_del_rischio" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="GALA_ANAGRAFICA_CONTRATTI">
+          <Key>
+            <PropertyRef Name="ID_CONTRATTO" />
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="STATO" />
+          </Key>
+          <Property Name="ID_CONTRATTO" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="STATO" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DATA_INIZIO" Type="DateTime" Precision="3" />
+          <Property Name="DATA_FINE" Type="DateTime" Precision="3" />
+          <Property Name="DATA_CESSAZIONE" Type="DateTime" Precision="3" />
+          <Property Name="CONV_APPARTENENZA" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ID_BU" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_BU" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AREA" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_AREA" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AGENTE" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_AGENTE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="CENTRO_DI_COSTO" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_PAG_MOD" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_PAG_MOD" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="CIG" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="CUP" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="ODA" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="IdTipoContratto" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DescrizioneTipoContratto" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="IDAgenzia" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="NomeAgenzia" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="GALA_ANAGRAFICA_MOVIMENTI">
+          <Key>
+            <PropertyRef Name="ID_RECORD" />
+          </Key>
+          <Property Name="ID_RECORD" Type="Int32" Nullable="false" />
+          <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="N_DOC" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DATA_DOC" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DATA_REG" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DATA_ACQ" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DATA_UPD" Type="DateTime" Precision="3" />
+          <Property Name="DATA_SCAD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SEGNO" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="VALUTA" Type="String" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
+          <Property Name="IMPORTO" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ID_CAUSALE" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_CAUSALE" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_PAG_MOD" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_PAG_MOD" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_PAG_TER" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_PAG_TER" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="COMMODITY" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="CODICE_PARTITA" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="FACTOR" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Tipologia_fattura" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Desscrizione_tipologia_fattura" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="URL" Type="String" MaxLength="2048" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="GALA_CONTATTI">
+          <Key>
+            <PropertyRef Name="ID_contatto" />
+            <PropertyRef Name="ID_TIPOCONTATTO" />
+          </Key>
+          <Property Name="ID_contatto" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ID_azienda" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="NOME" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="COGNOME" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ID_TIPOCONTATTO" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="TIPOCONTATTO" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CODFISC" Type="String" MaxLength="16" Unicode="false" FixedLength="false" />
+          <Property Name="INDIRIZZO" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="CAP" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="COMUNE" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="PROVINCIA" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="NAZIONE" Type="String" MaxLength="3" Unicode="false" FixedLength="false" />
+          <Property Name="FAX" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PEC" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CELLULARE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="RagioneSociale" Type="String" MaxLength="110" Unicode="false" FixedLength="false" />
+          <Property Name="PartitaIVa" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_Tipo_persona" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Descrizione_tipo_persona" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="GALA_ESPOSIZIONE">
+          <Key>
+            <PropertyRef Name="ID_CLIENTE" />
+          </Key>
+          <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="SALDO" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="GALA_GARANZIE_FACTOR">
+          <Key>
+            <PropertyRef Name="ID_COUNTRY" />
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="ID_GARANZIA" />
+          </Key>
+          <Property Name="ID_COUNTRY" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ID_GARANZIA" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+          <Property Name="ID_GAR_ENTE" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="DESCR_GAR_ENTE" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="PLAFOND" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DATA_INIZIO" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DATA_FINE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DESC_GAR_TIPO" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ID_GAR_TIPO" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="PERSONALE" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="GALA_POD_PDR">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="ID_CONTRATTO" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ID_RIGA_CONTRATTI" Type="Int32" />
+          <Property Name="CODICE_DISPOSITIVO" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="VOL_QTA" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="COMMODITY" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="INDIRIZZO" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CAP" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="COMUNE" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="PROVINCIA" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="NAZIONE" Type="String" Nullable="false" MaxLength="3" Unicode="false" FixedLength="false" />
+          <Property Name="RIFERIMENTO" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="CONVENZIONE" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CIG" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="CUP" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="ODA" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="CIG_GARA" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="COMPONENTE_TARIFFARIA" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DATA_INIZIO" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DATA_FINE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DATA_CESSAZIONE" Type="DateTime" Precision="3" />
+          <Property Name="ID_PAG_MOD" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="DESCR_PAG_MOD" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Trilance_CBModelStoreContainer" CdmEntityContainer="Trilance_CBEntities">
+          <EntitySetMapping Name="GALA_ANAGRAFICA_CLIENTI">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ANAGRAFICA_CLIENTI">
+              <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_CLIENTI">
+                <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="ID_MASTER" ColumnName="ID_MASTER" />
+                <ScalarProperty Name="ID_TIPO_CLIENTE" ColumnName="ID_TIPO_CLIENTE" />
+                <ScalarProperty Name="DESCR_TIPO_CLIENTE" ColumnName="DESCR_TIPO_CLIENTE" />
+                <ScalarProperty Name="DESC_STATO_CLIENTE" ColumnName="DESC_STATO_CLIENTE" />
+                <ScalarProperty Name="STATO_LAVORAZIONE" ColumnName="STATO_LAVORAZIONE" />
+                <ScalarProperty Name="ID_Tipo_persona" ColumnName="ID_Tipo_persona" />
+                <ScalarProperty Name="Descrizione_tipo_persone" ColumnName="Descrizione_tipo_persone" />
+                <ScalarProperty Name="PIVA" ColumnName="PIVA" />
+                <ScalarProperty Name="CODFISC" ColumnName="CODFISC" />
+                <ScalarProperty Name="RAGIONESOCIALE" ColumnName="RAGIONESOCIALE" />
+                <ScalarProperty Name="INDIRIZZO" ColumnName="INDIRIZZO" />
+                <ScalarProperty Name="CAP" ColumnName="CAP" />
+                <ScalarProperty Name="COMUNE" ColumnName="COMUNE" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="NAZIONE" ColumnName="NAZIONE" />
+                <ScalarProperty Name="FAX" ColumnName="FAX" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="PEC" ColumnName="PEC" />
+                <ScalarProperty Name="CELLULARE" ColumnName="CELLULARE" />
+                <ScalarProperty Name="ID_AGENTE" ColumnName="ID_AGENTE" />
+                <ScalarProperty Name="DESCR_AGENTE" ColumnName="DESCR_AGENTE" />
+                <ScalarProperty Name="ID_AGENZIA" ColumnName="ID_AGENZIA" />
+                <ScalarProperty Name="DESCR_AGENZIA" ColumnName="DESCR_AGENZIA" />
+                <ScalarProperty Name="TRATTENUTA_0_5" ColumnName="TRATTENUTA_0_5" />
+                <ScalarProperty Name="CONVENZIONE" ColumnName="CONVENZIONE" />
+                <ScalarProperty Name="FORMA_GIURIDICA" ColumnName="FORMA_GIURIDICA" />
+                <ScalarProperty Name="NOME" ColumnName="NOME" />
+                <ScalarProperty Name="COGNOME" ColumnName="COGNOME" />
+                <ScalarProperty Name="Classe_di_rischio" ColumnName="Classe_di_rischio" />
+                <ScalarProperty Name="Descrizione_del_rischio" ColumnName="Descrizione_del_rischio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GALA_ANAGRAFICA_CONTRATTI">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ANAGRAFICA_CONTRATTI">
+              <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_CONTRATTI">
+                <ScalarProperty Name="ID_CONTRATTO" ColumnName="ID_CONTRATTO" />
+                <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="STATO" ColumnName="STATO" />
+                <ScalarProperty Name="DATA_INIZIO" ColumnName="DATA_INIZIO" />
+                <ScalarProperty Name="DATA_FINE" ColumnName="DATA_FINE" />
+                <ScalarProperty Name="DATA_CESSAZIONE" ColumnName="DATA_CESSAZIONE" />
+                <ScalarProperty Name="CONV_APPARTENENZA" ColumnName="CONV_APPARTENENZA" />
+                <ScalarProperty Name="ID_BU" ColumnName="ID_BU" />
+                <ScalarProperty Name="DESCR_BU" ColumnName="DESCR_BU" />
+                <ScalarProperty Name="ID_AREA" ColumnName="ID_AREA" />
+                <ScalarProperty Name="DESCR_AREA" ColumnName="DESCR_AREA" />
+                <ScalarProperty Name="ID_AGENTE" ColumnName="ID_AGENTE" />
+                <ScalarProperty Name="DESCR_AGENTE" ColumnName="DESCR_AGENTE" />
+                <ScalarProperty Name="CENTRO_DI_COSTO" ColumnName="CENTRO_DI_COSTO" />
+                <ScalarProperty Name="ID_PAG_MOD" ColumnName="ID_PAG_MOD" />
+                <ScalarProperty Name="DESCR_PAG_MOD" ColumnName="DESCR_PAG_MOD" />
+                <ScalarProperty Name="CIG" ColumnName="CIG" />
+                <ScalarProperty Name="CUP" ColumnName="CUP" />
+                <ScalarProperty Name="ODA" ColumnName="ODA" />
+                <ScalarProperty Name="IdTipoContratto" ColumnName="IdTipoContratto" />
+                <ScalarProperty Name="DescrizioneTipoContratto" ColumnName="DescrizioneTipoContratto" />
+                <ScalarProperty Name="IDAgenzia" ColumnName="IDAgenzia" />
+                <ScalarProperty Name="NomeAgenzia" ColumnName="NomeAgenzia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GALA_ANAGRAFICA_MOVIMENTI">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ANAGRAFICA_MOVIMENTI">
+              <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_MOVIMENTI">
+                <ScalarProperty Name="ID_RECORD" ColumnName="ID_RECORD" />
+                <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="N_DOC" ColumnName="N_DOC" />
+                <ScalarProperty Name="DATA_DOC" ColumnName="DATA_DOC" />
+                <ScalarProperty Name="DATA_REG" ColumnName="DATA_REG" />
+                <ScalarProperty Name="DATA_ACQ" ColumnName="DATA_ACQ" />
+                <ScalarProperty Name="DATA_UPD" ColumnName="DATA_UPD" />
+                <ScalarProperty Name="DATA_SCAD" ColumnName="DATA_SCAD" />
+                <ScalarProperty Name="SEGNO" ColumnName="SEGNO" />
+                <ScalarProperty Name="VALUTA" ColumnName="VALUTA" />
+                <ScalarProperty Name="IMPORTO" ColumnName="IMPORTO" />
+                <ScalarProperty Name="ID_CAUSALE" ColumnName="ID_CAUSALE" />
+                <ScalarProperty Name="DESCR_CAUSALE" ColumnName="DESCR_CAUSALE" />
+                <ScalarProperty Name="ID_PAG_MOD" ColumnName="ID_PAG_MOD" />
+                <ScalarProperty Name="DESCR_PAG_MOD" ColumnName="DESCR_PAG_MOD" />
+                <ScalarProperty Name="ID_PAG_TER" ColumnName="ID_PAG_TER" />
+                <ScalarProperty Name="DESCR_PAG_TER" ColumnName="DESCR_PAG_TER" />
+                <ScalarProperty Name="COMMODITY" ColumnName="COMMODITY" />
+                <ScalarProperty Name="CODICE_PARTITA" ColumnName="CODICE_PARTITA" />
+                <ScalarProperty Name="FACTOR" ColumnName="FACTOR" />
+                <ScalarProperty Name="Tipologia_fattura" ColumnName="Tipologia_fattura" />
+                <ScalarProperty Name="Desscrizione_tipologia_fattura" ColumnName="Desscrizione_tipologia_fattura" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GALA_CONTATTI">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_CONTATTI">
+              <MappingFragment StoreEntitySet="GALA_CONTATTI">
+                <ScalarProperty Name="ID_contatto" ColumnName="ID_contatto" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="ID_azienda" ColumnName="ID_azienda" />
+                <ScalarProperty Name="NOME" ColumnName="NOME" />
+                <ScalarProperty Name="COGNOME" ColumnName="COGNOME" />
+                <ScalarProperty Name="ID_TIPOCONTATTO" ColumnName="ID_TIPOCONTATTO" />
+                <ScalarProperty Name="TIPOCONTATTO" ColumnName="TIPOCONTATTO" />
+                <ScalarProperty Name="CODFISC" ColumnName="CODFISC" />
+                <ScalarProperty Name="INDIRIZZO" ColumnName="INDIRIZZO" />
+                <ScalarProperty Name="CAP" ColumnName="CAP" />
+                <ScalarProperty Name="COMUNE" ColumnName="COMUNE" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="NAZIONE" ColumnName="NAZIONE" />
+                <ScalarProperty Name="FAX" ColumnName="FAX" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="PEC" ColumnName="PEC" />
+                <ScalarProperty Name="CELLULARE" ColumnName="CELLULARE" />
+                <ScalarProperty Name="RagioneSociale" ColumnName="RagioneSociale" />
+                <ScalarProperty Name="PartitaIVa" ColumnName="PartitaIVa" />
+                <ScalarProperty Name="ID_Tipo_persona" ColumnName="ID_Tipo_persona" />
+                <ScalarProperty Name="Descrizione_tipo_persona" ColumnName="Descrizione_tipo_persona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GALA_ESPOSIZIONE">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ESPOSIZIONE">
+              <MappingFragment StoreEntitySet="GALA_ESPOSIZIONE">
+                <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="SALDO" ColumnName="SALDO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GALA_GARANZIE_FACTOR">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_GARANZIE_FACTOR">
+              <MappingFragment StoreEntitySet="GALA_GARANZIE_FACTOR">
+                <ScalarProperty Name="ID_COUNTRY" ColumnName="ID_COUNTRY" />
+                <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="ID_GARANZIA" ColumnName="ID_GARANZIA" />
+                <ScalarProperty Name="ID_GAR_ENTE" ColumnName="ID_GAR_ENTE" />
+                <ScalarProperty Name="DESCR_GAR_ENTE" ColumnName="DESCR_GAR_ENTE" />
+                <ScalarProperty Name="PLAFOND" ColumnName="PLAFOND" />
+                <ScalarProperty Name="DATA_INIZIO" ColumnName="DATA_INIZIO" />
+                <ScalarProperty Name="DATA_FINE" ColumnName="DATA_FINE" />
+                <ScalarProperty Name="DESC_GAR_TIPO" ColumnName="DESC_GAR_TIPO" />
+                <ScalarProperty Name="ID_GAR_TIPO" ColumnName="ID_GAR_TIPO" />
+                <ScalarProperty Name="PERSONALE" ColumnName="PERSONALE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GALA_POD_PDR">
+            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_POD_PDR">
+              <MappingFragment StoreEntitySet="GALA_POD_PDR">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
+                <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
+                <ScalarProperty Name="ID_CONTRATTO" ColumnName="ID_CONTRATTO" />
+                <ScalarProperty Name="ID_RIGA_CONTRATTI" ColumnName="ID_RIGA_CONTRATTI" />
+                <ScalarProperty Name="CODICE_DISPOSITIVO" ColumnName="CODICE_DISPOSITIVO" />
+                <ScalarProperty Name="VOL_QTA" ColumnName="VOL_QTA" />
+                <ScalarProperty Name="COMMODITY" ColumnName="COMMODITY" />
+                <ScalarProperty Name="INDIRIZZO" ColumnName="INDIRIZZO" />
+                <ScalarProperty Name="CAP" ColumnName="CAP" />
+                <ScalarProperty Name="COMUNE" ColumnName="COMUNE" />
+                <ScalarProperty Name="PROVINCIA" ColumnName="PROVINCIA" />
+                <ScalarProperty Name="NAZIONE" ColumnName="NAZIONE" />
+                <ScalarProperty Name="RIFERIMENTO" ColumnName="RIFERIMENTO" />
+                <ScalarProperty Name="CONVENZIONE" ColumnName="CONVENZIONE" />
+                <ScalarProperty Name="CIG" ColumnName="CIG" />
+                <ScalarProperty Name="CUP" ColumnName="CUP" />
+                <ScalarProperty Name="ODA" ColumnName="ODA" />
+                <ScalarProperty Name="CIG_GARA" ColumnName="CIG_GARA" />
+                <ScalarProperty Name="COMPONENTE_TARIFFARIA" ColumnName="COMPONENTE_TARIFFARIA" />
+                <ScalarProperty Name="DATA_INIZIO" ColumnName="DATA_INIZIO" />
+                <ScalarProperty Name="DATA_FINE" ColumnName="DATA_FINE" />
+                <ScalarProperty Name="DATA_CESSAZIONE" ColumnName="DATA_CESSAZIONE" />
+                <ScalarProperty Name="ID_PAG_MOD" ColumnName="ID_PAG_MOD" />
+                <ScalarProperty Name="DESCR_PAG_MOD" ColumnName="DESCR_PAG_MOD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

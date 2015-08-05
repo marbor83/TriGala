@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="DataMaxDBModelStoreContainer">
+          <EntitySet Name="CB_Elaborazioni" EntityType="DataMaxDBModel.Store.CB_Elaborazioni" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_Entita" EntityType="DataMaxDBModel.Store.CB_Entita" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_EntitaCampi" EntityType="DataMaxDBModel.Store.CB_EntitaCampi" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_EntitaCampiValoriAmmessi" EntityType="DataMaxDBModel.Store.CB_EntitaCampiValoriAmmessi" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_Esito" EntityType="DataMaxDBModel.Store.CB_Esito" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_TipoCampo" EntityType="DataMaxDBModel.Store.CB_TipoCampo" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_TipologiaElaborazione" EntityType="DataMaxDBModel.Store.CB_TipologiaElaborazione" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FKCB_Elabora281711" Association="DataMaxDBModel.Store.FKCB_Elabora281711">
+            <End Role="CB_Entita" EntitySet="CB_Entita" />
+            <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_Elabora72081" Association="DataMaxDBModel.Store.FKCB_Elabora72081">
+            <End Role="CB_TipologiaElaborazione" EntitySet="CB_TipologiaElaborazione" />
+            <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_Elabora877250" Association="DataMaxDBModel.Store.FKCB_Elabora877250">
+            <End Role="CB_Esito" EntitySet="CB_Esito" />
+            <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_EntitaC134717" Association="DataMaxDBModel.Store.FKCB_EntitaC134717">
+            <End Role="CB_EntitaCampi" EntitySet="CB_EntitaCampi" />
+            <End Role="CB_EntitaCampiValoriAmmessi" EntitySet="CB_EntitaCampiValoriAmmessi" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_EntitaC26772" Association="DataMaxDBModel.Store.FKCB_EntitaC26772">
+            <End Role="CB_TipoCampo" EntitySet="CB_TipoCampo" />
+            <End Role="CB_EntitaCampi" EntitySet="CB_EntitaCampi" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_EntitaC895445" Association="DataMaxDBModel.Store.FKCB_EntitaC895445">
+            <End Role="CB_Entita" EntitySet="CB_Entita" />
+            <End Role="CB_EntitaCampi" EntitySet="CB_EntitaCampi" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CB_Elaborazioni">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id_Entita" Type="int" Nullable="false" />
+          <Property Name="id_Tipologia" Type="int" Nullable="false" />
+          <Property Name="ParamDateInput" Type="datetime" Nullable="false" />
+          <Property Name="DataElaborazione" Type="datetime" Nullable="false" />
+          <Property Name="id_Esito" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CB_Entita">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="NomeTabellaDestinazione" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ProceduraEstrazione" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="PathCSV" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="PathCSVscarti" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="Attivo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CB_EntitaCampi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id_Entita" Type="int" Nullable="false" />
+          <Property Name="NomeCampoOrigine" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="NomeCampoDestinazione" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Descrizione" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Obbligatorio" Type="bit" Nullable="false" />
+          <Property Name="Lunghezza" Type="int" Nullable="false" />
+          <Property Name="id_TipoCampo" Type="int" Nullable="false" />
+          <Property Name="OrdineEstrazione" Type="int" Nullable="false" />
+          <Property Name="Attivo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CB_EntitaCampiValoriAmmessi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id_EntitaCampi" Type="int" Nullable="false" />
+          <Property Name="Valore" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Attivo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CB_Esito">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Descrizione" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="CB_TipoCampo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="CB_TipologiaElaborazione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Descrizione" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <Association Name="FKCB_Elabora281711">
+          <End Role="CB_Entita" Type="DataMaxDBModel.Store.CB_Entita" Multiplicity="1" />
+          <End Role="CB_Elaborazioni" Type="DataMaxDBModel.Store.CB_Elaborazioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_Entita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_Elaborazioni">
+              <PropertyRef Name="id_Entita" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_Elabora72081">
+          <End Role="CB_TipologiaElaborazione" Type="DataMaxDBModel.Store.CB_TipologiaElaborazione" Multiplicity="1" />
+          <End Role="CB_Elaborazioni" Type="DataMaxDBModel.Store.CB_Elaborazioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_TipologiaElaborazione">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_Elaborazioni">
+              <PropertyRef Name="id_Tipologia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_Elabora877250">
+          <End Role="CB_Esito" Type="DataMaxDBModel.Store.CB_Esito" Multiplicity="1" />
+          <End Role="CB_Elaborazioni" Type="DataMaxDBModel.Store.CB_Elaborazioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_Esito">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_Elaborazioni">
+              <PropertyRef Name="id_Esito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_EntitaC134717">
+          <End Role="CB_EntitaCampi" Type="DataMaxDBModel.Store.CB_EntitaCampi" Multiplicity="1" />
+          <End Role="CB_EntitaCampiValoriAmmessi" Type="DataMaxDBModel.Store.CB_EntitaCampiValoriAmmessi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_EntitaCampi">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_EntitaCampiValoriAmmessi">
+              <PropertyRef Name="id_EntitaCampi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_EntitaC26772">
+          <End Role="CB_TipoCampo" Type="DataMaxDBModel.Store.CB_TipoCampo" Multiplicity="1" />
+          <End Role="CB_EntitaCampi" Type="DataMaxDBModel.Store.CB_EntitaCampi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_TipoCampo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_EntitaCampi">
+              <PropertyRef Name="id_TipoCampo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_EntitaC895445">
+          <End Role="CB_Entita" Type="DataMaxDBModel.Store.CB_Entita" Multiplicity="1" />
+          <End Role="CB_EntitaCampi" Type="DataMaxDBModel.Store.CB_EntitaCampi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_Entita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_EntitaCampi">
+              <PropertyRef Name="id_Entita" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DataMaxDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DataMaxDBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="CB_Elaborazioni" EntityType="DataMaxDBModel.CB_Elaborazioni" />
+          <EntitySet Name="CB_Entita" EntityType="DataMaxDBModel.CB_Entita" />
+          <EntitySet Name="CB_EntitaCampi" EntityType="DataMaxDBModel.CB_EntitaCampi" />
+          <EntitySet Name="CB_EntitaCampiValoriAmmessi" EntityType="DataMaxDBModel.CB_EntitaCampiValoriAmmessi" />
+          <EntitySet Name="CB_Esito" EntityType="DataMaxDBModel.CB_Esito" />
+          <EntitySet Name="CB_TipoCampo" EntityType="DataMaxDBModel.CB_TipoCampo" />
+          <EntitySet Name="CB_TipologiaElaborazione" EntityType="DataMaxDBModel.CB_TipologiaElaborazione" />
+          <AssociationSet Name="FKCB_Elabora281711" Association="DataMaxDBModel.FKCB_Elabora281711">
+            <End Role="CB_Entita" EntitySet="CB_Entita" />
+            <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_Elabora72081" Association="DataMaxDBModel.FKCB_Elabora72081">
+            <End Role="CB_TipologiaElaborazione" EntitySet="CB_TipologiaElaborazione" />
+            <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_Elabora877250" Association="DataMaxDBModel.FKCB_Elabora877250">
+            <End Role="CB_Esito" EntitySet="CB_Esito" />
+            <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_EntitaC895445" Association="DataMaxDBModel.FKCB_EntitaC895445">
+            <End Role="CB_Entita" EntitySet="CB_Entita" />
+            <End Role="CB_EntitaCampi" EntitySet="CB_EntitaCampi" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_EntitaC134717" Association="DataMaxDBModel.FKCB_EntitaC134717">
+            <End Role="CB_EntitaCampi" EntitySet="CB_EntitaCampi" />
+            <End Role="CB_EntitaCampiValoriAmmessi" EntitySet="CB_EntitaCampiValoriAmmessi" />
+          </AssociationSet>
+          <AssociationSet Name="FKCB_EntitaC26772" Association="DataMaxDBModel.FKCB_EntitaC26772">
+            <End Role="CB_TipoCampo" EntitySet="CB_TipoCampo" />
+            <End Role="CB_EntitaCampi" EntitySet="CB_EntitaCampi" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CB_Elaborazioni">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="id_Entita" Type="Int32" Nullable="false" />
+          <Property Name="id_Tipologia" Type="Int32" Nullable="false" />
+          <Property Name="ParamDateInput" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataElaborazione" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_Esito" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CB_Entita" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Elaborazioni" ToRole="CB_Entita" />
+          <NavigationProperty Name="CB_TipologiaElaborazione" Relationship="DataMaxDBModel.FKCB_Elabora72081" FromRole="CB_Elaborazioni" ToRole="CB_TipologiaElaborazione" />
+          <NavigationProperty Name="CB_Esito" Relationship="DataMaxDBModel.FKCB_Elabora877250" FromRole="CB_Elaborazioni" ToRole="CB_Esito" />
+        </EntityType>
+        <EntityType Name="CB_Entita">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="NomeTabellaDestinazione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="ProceduraEstrazione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="PathCSV" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="PathCSVscarti" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="Attivo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CB_Elaborazioni" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Entita" ToRole="CB_Elaborazioni" />
+          <NavigationProperty Name="CB_EntitaCampi" Relationship="DataMaxDBModel.FKCB_EntitaC895445" FromRole="CB_Entita" ToRole="CB_EntitaCampi" />
+        </EntityType>
+        <EntityType Name="CB_EntitaCampi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="id_Entita" Type="Int32" Nullable="false" />
+          <Property Name="NomeCampoOrigine" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="NomeCampoDestinazione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Descrizione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Obbligatorio" Type="Boolean" Nullable="false" />
+          <Property Name="Lunghezza" Type="Int32" Nullable="false" />
+          <Property Name="id_TipoCampo" Type="Int32" Nullable="false" />
+          <Property Name="OrdineEstrazione" Type="Int32" Nullable="false" />
+          <Property Name="Attivo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CB_Entita" Relationship="DataMaxDBModel.FKCB_EntitaC895445" FromRole="CB_EntitaCampi" ToRole="CB_Entita" />
+          <NavigationProperty Name="CB_EntitaCampiValoriAmmessi" Relationship="DataMaxDBModel.FKCB_EntitaC134717" FromRole="CB_EntitaCampi" ToRole="CB_EntitaCampiValoriAmmessi" />
+          <NavigationProperty Name="CB_TipoCampo" Relationship="DataMaxDBModel.FKCB_EntitaC26772" FromRole="CB_EntitaCampi" ToRole="CB_TipoCampo" />
+        </EntityType>
+        <EntityType Name="CB_EntitaCampiValoriAmmessi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="id_EntitaCampi" Type="Int32" Nullable="false" />
+          <Property Name="Valore" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Attivo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CB_EntitaCampi" Relationship="DataMaxDBModel.FKCB_EntitaC134717" FromRole="CB_EntitaCampiValoriAmmessi" ToRole="CB_EntitaCampi" />
+        </EntityType>
+        <EntityType Name="CB_Esito">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Descrizione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="CB_Elaborazioni" Relationship="DataMaxDBModel.FKCB_Elabora877250" FromRole="CB_Esito" ToRole="CB_Elaborazioni" />
+        </EntityType>
+        <EntityType Name="CB_TipoCampo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="CB_EntitaCampi" Relationship="DataMaxDBModel.FKCB_EntitaC26772" FromRole="CB_TipoCampo" ToRole="CB_EntitaCampi" />
+        </EntityType>
+        <EntityType Name="CB_TipologiaElaborazione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Descrizione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="CB_Elaborazioni" Relationship="DataMaxDBModel.FKCB_Elabora72081" FromRole="CB_TipologiaElaborazione" ToRole="CB_Elaborazioni" />
+        </EntityType>
+        <Association Name="FKCB_Elabora281711">
+          <End Role="CB_Entita" Type="DataMaxDBModel.CB_Entita" Multiplicity="1" />
+          <End Role="CB_Elaborazioni" Type="DataMaxDBModel.CB_Elaborazioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_Entita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_Elaborazioni">
+              <PropertyRef Name="id_Entita" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_Elabora72081">
+          <End Role="CB_TipologiaElaborazione" Type="DataMaxDBModel.CB_TipologiaElaborazione" Multiplicity="1" />
+          <End Role="CB_Elaborazioni" Type="DataMaxDBModel.CB_Elaborazioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_TipologiaElaborazione">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_Elaborazioni">
+              <PropertyRef Name="id_Tipologia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_Elabora877250">
+          <End Role="CB_Esito" Type="DataMaxDBModel.CB_Esito" Multiplicity="1" />
+          <End Role="CB_Elaborazioni" Type="DataMaxDBModel.CB_Elaborazioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_Esito">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_Elaborazioni">
+              <PropertyRef Name="id_Esito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_EntitaC895445">
+          <End Role="CB_Entita" Type="DataMaxDBModel.CB_Entita" Multiplicity="1" />
+          <End Role="CB_EntitaCampi" Type="DataMaxDBModel.CB_EntitaCampi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_Entita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_EntitaCampi">
+              <PropertyRef Name="id_Entita" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_EntitaC134717">
+          <End Role="CB_EntitaCampi" Type="DataMaxDBModel.CB_EntitaCampi" Multiplicity="1" />
+          <End Role="CB_EntitaCampiValoriAmmessi" Type="DataMaxDBModel.CB_EntitaCampiValoriAmmessi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_EntitaCampi">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_EntitaCampiValoriAmmessi">
+              <PropertyRef Name="id_EntitaCampi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCB_EntitaC26772">
+          <End Role="CB_TipoCampo" Type="DataMaxDBModel.CB_TipoCampo" Multiplicity="1" />
+          <End Role="CB_EntitaCampi" Type="DataMaxDBModel.CB_EntitaCampi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CB_TipoCampo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CB_EntitaCampi">
+              <PropertyRef Name="id_TipoCampo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DataMaxDBModelStoreContainer" CdmEntityContainer="DataMaxDBEntities">
+          <EntitySetMapping Name="CB_Elaborazioni">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_Elaborazioni">
+              <MappingFragment StoreEntitySet="CB_Elaborazioni">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_Entita" ColumnName="id_Entita" />
+                <ScalarProperty Name="id_Tipologia" ColumnName="id_Tipologia" />
+                <ScalarProperty Name="ParamDateInput" ColumnName="ParamDateInput" />
+                <ScalarProperty Name="DataElaborazione" ColumnName="DataElaborazione" />
+                <ScalarProperty Name="id_Esito" ColumnName="id_Esito" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CB_Entita">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_Entita">
+              <MappingFragment StoreEntitySet="CB_Entita">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="NomeTabellaDestinazione" ColumnName="NomeTabellaDestinazione" />
+                <ScalarProperty Name="ProceduraEstrazione" ColumnName="ProceduraEstrazione" />
+                <ScalarProperty Name="PathCSV" ColumnName="PathCSV" />
+                <ScalarProperty Name="PathCSVscarti" ColumnName="PathCSVscarti" />
+                <ScalarProperty Name="Attivo" ColumnName="Attivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CB_EntitaCampi">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_EntitaCampi">
+              <MappingFragment StoreEntitySet="CB_EntitaCampi">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_Entita" ColumnName="id_Entita" />
+                <ScalarProperty Name="NomeCampoOrigine" ColumnName="NomeCampoOrigine" />
+                <ScalarProperty Name="NomeCampoDestinazione" ColumnName="NomeCampoDestinazione" />
+                <ScalarProperty Name="Descrizione" ColumnName="Descrizione" />
+                <ScalarProperty Name="Obbligatorio" ColumnName="Obbligatorio" />
+                <ScalarProperty Name="Lunghezza" ColumnName="Lunghezza" />
+                <ScalarProperty Name="id_TipoCampo" ColumnName="id_TipoCampo" />
+                <ScalarProperty Name="OrdineEstrazione" ColumnName="OrdineEstrazione" />
+                <ScalarProperty Name="Attivo" ColumnName="Attivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CB_EntitaCampiValoriAmmessi">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_EntitaCampiValoriAmmessi">
+              <MappingFragment StoreEntitySet="CB_EntitaCampiValoriAmmessi">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_EntitaCampi" ColumnName="id_EntitaCampi" />
+                <ScalarProperty Name="Valore" ColumnName="Valore" />
+                <ScalarProperty Name="Attivo" ColumnName="Attivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CB_Esito">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_Esito">
+              <MappingFragment StoreEntitySet="CB_Esito">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Descrizione" ColumnName="Descrizione" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CB_TipoCampo">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_TipoCampo">
+              <MappingFragment StoreEntitySet="CB_TipoCampo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CB_TipologiaElaborazione">
+            <EntityTypeMapping TypeName="DataMaxDBModel.CB_TipologiaElaborazione">
+              <MappingFragment StoreEntitySet="CB_TipologiaElaborazione">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Descrizione" ColumnName="Descrizione" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
