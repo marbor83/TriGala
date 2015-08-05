@@ -53,7 +53,7 @@ where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and exists(select 1
 			from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
-			where c.IDContratto = cr.IDContratto_cnt 
+			where c.IDContratto_Cnt=cr.IDContratto_Cnt
 			and c.IDAnagrafica=a.IDAnagrafica
 			and cr.IDProdotto = gsc.IDProdotto
 			and gsc.[IdSegmentoCliente] = 1) --'PA'
@@ -95,13 +95,13 @@ where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and not exists(select 1
 			from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
-			where c.IDContratto = cr.IDContratto_cnt 
+			where c.IDContratto_Cnt=cr.IDContratto_Cnt
 			and c.IDAnagrafica=a.IDAnagrafica
 			and cr.IDProdotto = gsc.IDProdotto
 			and gsc.[IdSegmentoCliente] = 1) -- PA
 		and exists(select 1
 			from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
-			where c.IDContratto = cr.IDContratto_cnt 
+			where c.IDContratto_Cnt=cr.IDContratto_Cnt
 			and c.IDAnagrafica=a.IDAnagrafica
 			and cr.IDProdotto = gsc.IDProdotto
 			and gsc.[IdSegmentoCliente] = 2) -- NO PA			

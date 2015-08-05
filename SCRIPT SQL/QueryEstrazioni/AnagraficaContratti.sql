@@ -5,7 +5,7 @@ select	c.IDContratto as ID_CONTRATTO,
 	    WHEN  
 			(select count(*) 
 			from dbo.Contratti c, dbo.ContrattiRighe cr		
-			where c.IDContratto = cr.IDContratto_cnt 
+			where c.IDContratto_Cnt=cr.IDContratto_Cnt
 			and c.IDAnagrafica=a.IDAnagrafica
 			and cr.IDStatoRiga = 4) > 0   --Attivo
 			
@@ -16,7 +16,7 @@ select	c.IDContratto as ID_CONTRATTO,
 			WHEN  
 				(select count(*) 
 				from dbo.Contratti c, dbo.ContrattiRighe cr		
-				where c.IDContratto = cr.IDContratto_cnt 
+				where c.IDContratto_Cnt=cr.IDContratto_Cnt
 				and c.IDAnagrafica=a.IDAnagrafica
 				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Morosità, Disalimentato
 				and cr.dataCessazione > getdate()-30 ) > 0
@@ -28,7 +28,7 @@ select	c.IDContratto as ID_CONTRATTO,
 				WHEN  
 					(select count(*) 
 					from dbo.Contratti c, dbo.ContrattiRighe cr		
-					where c.IDContratto = cr.IDContratto_cnt 
+					where c.IDContratto_Cnt=cr.IDContratto_Cnt
 					and c.IDAnagrafica=a.IDAnagrafica
 					and cr.IDStatoRiga in (3006, 3099) --Scaduto, Sfilato
 					and cr.dataCessazione > getdate()-30 
@@ -41,7 +41,7 @@ select	c.IDContratto as ID_CONTRATTO,
 						WHEN  
 							(select count(*) 
 							from dbo.Contratti c, dbo.ContrattiRighe cr		
-							where c.IDContratto = cr.IDContratto_cnt 
+							where c.IDContratto_Cnt=cr.IDContratto_Cnt
 							and cr.IDStatoRiga != 11 -- StatoContratti - Annullato Non Attivo ID 11 (Usare in caso di inserimenti ERRATI su contratti ATTIVI)
 							and c.IDAnagrafica=a.IDAnagrafica) = 0  -- Se non sono presenti contratti
 							
