@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="87fbc0cf78404a619b73636d63a9069a" Name="Diagram1">
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_ANAGRAFICA_CLIENTI" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_ANAGRAFICA_CONTRATTI" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_ANAGRAFICA_MOVIMENTI" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_CONTATTI" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_ESPOSIZIONE" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_GARANZIE_FACTOR" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Trilance_CBModel.GALA_POD_PDR" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="b0a1cf4709f44e53877511ab0f95c735" Name="Diagram1">
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_ANAGRAFICA_CLIENTI" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_ANAGRAFICA_CONTRATTI" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_ANAGRAFICA_MOVIMENTI" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_CONTATTI" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_ESPOSIZIONE" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_GARANZIE_FACTOR" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StagingGalaDBModel.GALA_POD_PDR" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="DataMaxDBModelStoreContainer">
           <EntitySet Name="CB_Elaborazioni" EntityType="DataMaxDBModel.Store.CB_Elaborazioni" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CB_Entita" EntityType="DataMaxDBModel.Store.CB_Entita" store:Type="Tables" Schema="dbo" />
@@ -45,7 +45,9 @@
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="id_Entita" Type="int" Nullable="false" />
           <Property Name="id_Tipologia" Type="int" Nullable="false" />
-          <Property Name="ParamDateInput" Type="datetime" Nullable="false" />
+          <Property Name="DataDa" Type="datetime" Nullable="false" />
+          <Property Name="DataA" Type="datetime" />
+          <Property Name="IdCliente" Type="int" />
           <Property Name="DataElaborazione" Type="datetime" Nullable="false" />
           <Property Name="id_Esito" Type="int" Nullable="false" />
         </EntityType>
@@ -178,8 +180,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataMaxDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -223,12 +224,14 @@
           <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="id_Entita" Type="Int32" Nullable="false" />
           <Property Name="id_Tipologia" Type="Int32" Nullable="false" />
-          <Property Name="ParamDateInput" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DataElaborazione" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_Esito" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CB_Entita" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Elaborazioni" ToRole="CB_Entita" />
           <NavigationProperty Name="CB_TipologiaElaborazione" Relationship="DataMaxDBModel.FKCB_Elabora72081" FromRole="CB_Elaborazioni" ToRole="CB_TipologiaElaborazione" />
           <NavigationProperty Name="CB_Esito" Relationship="DataMaxDBModel.FKCB_Elabora877250" FromRole="CB_Elaborazioni" ToRole="CB_Esito" />
+          <Property Type="DateTime" Name="DataDa" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="DataA" Precision="3" />
+          <Property Type="Int32" Name="IdCliente" />
         </EntityType>
         <EntityType Name="CB_Entita">
           <Key>
@@ -377,10 +380,12 @@
           <EntitySetMapping Name="CB_Elaborazioni">
             <EntityTypeMapping TypeName="DataMaxDBModel.CB_Elaborazioni">
               <MappingFragment StoreEntitySet="CB_Elaborazioni">
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="DataA" ColumnName="DataA" />
+                <ScalarProperty Name="DataDa" ColumnName="DataDa" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="id_Entita" ColumnName="id_Entita" />
                 <ScalarProperty Name="id_Tipologia" ColumnName="id_Tipologia" />
-                <ScalarProperty Name="ParamDateInput" ColumnName="ParamDateInput" />
                 <ScalarProperty Name="DataElaborazione" ColumnName="DataElaborazione" />
                 <ScalarProperty Name="id_Esito" ColumnName="id_Esito" />
               </MappingFragment>

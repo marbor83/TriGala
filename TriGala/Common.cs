@@ -10,9 +10,15 @@ namespace TriGala
     {
         public enum Esito_Elaborazione
         {
-            OK = 99,
+            OK = 10,
             TabellaPiena = -98,
             Errore = -99
+        }
+
+        public enum Tipo_Elaborazione
+        {
+            Automatica = 100,
+            Manulae = 200
         }
     }
 }

@@ -12,11 +12,16 @@ namespace TriGala
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            frmMain myForm = new frmMain(args);
+
+            if (args != null && args[0] == "-A")
+                Application.Run();
+            else
+                Application.Run(myForm);
         }
     }
 }

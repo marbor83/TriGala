@@ -4,10 +4,10 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Trilance_CBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="Trilance_CBModelStoreContainer">
-          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="Trilance_CBModel.Store.GALA_ANAGRAFICA_CLIENTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="Trilance_CBModel.Store.GALA_ANAGRAFICA_CONTRATTI" store:Type="Tables" store:Schema="dbo" store:Name="GALA_ANAGRAFICA_CONTRATTI">
+      <Schema Namespace="StagingGalaDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="StagingGalaDBModelStoreContainer">
+          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="StagingGalaDBModel.Store.GALA_ANAGRAFICA_CLIENTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="StagingGalaDBModel.Store.GALA_ANAGRAFICA_CONTRATTI" store:Type="Tables" store:Schema="dbo" store:Name="GALA_ANAGRAFICA_CONTRATTI">
             <DefiningQuery>SELECT 
       [GALA_ANAGRAFICA_CONTRATTI].[ID_CONTRATTO] AS [ID_CONTRATTO], 
       [GALA_ANAGRAFICA_CONTRATTI].[ID_AZIENDA] AS [ID_AZIENDA], 
@@ -35,11 +35,11 @@
       [GALA_ANAGRAFICA_CONTRATTI].[NomeAgenzia] AS [NomeAgenzia]
       FROM [dbo].[GALA_ANAGRAFICA_CONTRATTI] AS [GALA_ANAGRAFICA_CONTRATTI]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="Trilance_CBModel.Store.GALA_ANAGRAFICA_MOVIMENTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_CONTATTI" EntityType="Trilance_CBModel.Store.GALA_CONTATTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="Trilance_CBModel.Store.GALA_ESPOSIZIONE" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="Trilance_CBModel.Store.GALA_GARANZIE_FACTOR" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_POD_PDR" EntityType="Trilance_CBModel.Store.GALA_POD_PDR" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="StagingGalaDBModel.Store.GALA_ANAGRAFICA_MOVIMENTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_CONTATTI" EntityType="StagingGalaDBModel.Store.GALA_CONTATTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="StagingGalaDBModel.Store.GALA_ESPOSIZIONE" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="StagingGalaDBModel.Store.GALA_GARANZIE_FACTOR" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_POD_PDR" EntityType="StagingGalaDBModel.Store.GALA_POD_PDR" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="GALA_ANAGRAFICA_CLIENTI">
           <Key>
@@ -234,15 +234,15 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Trilance_CBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="Trilance_CBEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="Trilance_CBModel.GALA_ANAGRAFICA_CLIENTI" />
-          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="Trilance_CBModel.GALA_ANAGRAFICA_CONTRATTI" />
-          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="Trilance_CBModel.GALA_ANAGRAFICA_MOVIMENTI" />
-          <EntitySet Name="GALA_CONTATTI" EntityType="Trilance_CBModel.GALA_CONTATTI" />
-          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="Trilance_CBModel.GALA_ESPOSIZIONE" />
-          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="Trilance_CBModel.GALA_GARANZIE_FACTOR" />
-          <EntitySet Name="GALA_POD_PDR" EntityType="Trilance_CBModel.GALA_POD_PDR" />
+      <Schema Namespace="StagingGalaDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="StagingGalaDBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="StagingGalaDBModel.GALA_ANAGRAFICA_CLIENTI" />
+          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="StagingGalaDBModel.GALA_ANAGRAFICA_CONTRATTI" />
+          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="StagingGalaDBModel.GALA_ANAGRAFICA_MOVIMENTI" />
+          <EntitySet Name="GALA_CONTATTI" EntityType="StagingGalaDBModel.GALA_CONTATTI" />
+          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="StagingGalaDBModel.GALA_ESPOSIZIONE" />
+          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="StagingGalaDBModel.GALA_GARANZIE_FACTOR" />
+          <EntitySet Name="GALA_POD_PDR" EntityType="StagingGalaDBModel.GALA_POD_PDR" />
         </EntityContainer>
         <EntityType Name="GALA_ANAGRAFICA_CLIENTI">
           <Key>
@@ -435,9 +435,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Trilance_CBModelStoreContainer" CdmEntityContainer="Trilance_CBEntities">
+        <EntityContainerMapping StorageEntityContainer="StagingGalaDBModelStoreContainer" CdmEntityContainer="StagingGalaDBEntities">
           <EntitySetMapping Name="GALA_ANAGRAFICA_CLIENTI">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ANAGRAFICA_CLIENTI">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_ANAGRAFICA_CLIENTI">
               <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_CLIENTI">
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
@@ -476,7 +476,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_ANAGRAFICA_CONTRATTI">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ANAGRAFICA_CONTRATTI">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_ANAGRAFICA_CONTRATTI">
               <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_CONTRATTI">
                 <ScalarProperty Name="ID_CONTRATTO" ColumnName="ID_CONTRATTO" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
@@ -506,7 +506,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_ANAGRAFICA_MOVIMENTI">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ANAGRAFICA_MOVIMENTI">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_ANAGRAFICA_MOVIMENTI">
               <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_MOVIMENTI">
                 <ScalarProperty Name="ID_RECORD" ColumnName="ID_RECORD" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
@@ -536,7 +536,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_CONTATTI">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_CONTATTI">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_CONTATTI">
               <MappingFragment StoreEntitySet="GALA_CONTATTI">
                 <ScalarProperty Name="ID_contatto" ColumnName="ID_contatto" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
@@ -564,7 +564,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_ESPOSIZIONE">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_ESPOSIZIONE">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_ESPOSIZIONE">
               <MappingFragment StoreEntitySet="GALA_ESPOSIZIONE">
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
@@ -573,7 +573,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_GARANZIE_FACTOR">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_GARANZIE_FACTOR">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_GARANZIE_FACTOR">
               <MappingFragment StoreEntitySet="GALA_GARANZIE_FACTOR">
                 <ScalarProperty Name="ID_COUNTRY" ColumnName="ID_COUNTRY" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
@@ -591,7 +591,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_POD_PDR">
-            <EntityTypeMapping TypeName="Trilance_CBModel.GALA_POD_PDR">
+            <EntityTypeMapping TypeName="StagingGalaDBModel.GALA_POD_PDR">
               <MappingFragment StoreEntitySet="GALA_POD_PDR">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />

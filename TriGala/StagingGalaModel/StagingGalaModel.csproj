@@ -85,14 +85,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
     <EntityDeploy Include="StagingGalaModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>StagingGalaModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="packages.config" />
     <None Include="StagingGalaModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>StagingGalaModel.edmx</DependentUpon>
