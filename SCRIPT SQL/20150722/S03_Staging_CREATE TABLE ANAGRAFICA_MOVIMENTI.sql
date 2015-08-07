@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[GALA_ANAGRAFICA_MOVIMENTI] (
     [CODICE_PARTITA]                 VARCHAR (50)    NULL,
     [FACTOR]                         VARCHAR (50)    NULL,
     [Tipologia_fattura]              VARCHAR (100)   NULL,
-    [Desscrizione_tipologia_fattura] VARCHAR (200)   NULL,
+    [Desscrizione_tipologia_fattura]  VARCHAR (200)   NULL,
     [URL] 							 VARCHAR(2048) 	 NULL, 
     PRIMARY KEY ([ID_RECORD] ASC)
 );
