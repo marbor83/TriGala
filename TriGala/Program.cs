@@ -18,9 +18,7 @@ namespace TriGala
             Application.SetCompatibleTextRenderingDefault(false);
             frmMain myForm = new frmMain(args);
 
-            if (args != null && args[0] == "-A")
-                Application.Run();
-            else
+            if (args.Length == 0)
                 Application.Run(myForm);
         }
     }

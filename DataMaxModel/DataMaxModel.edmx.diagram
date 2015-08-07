@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="DataMaxDBModel.CB_Elaborazioni" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DataMaxDBModel.CB_Entita" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DataMaxDBModel.CB_EntitaCampi" Width="1.5" PointX="6" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="DataMaxDBModel.CB_EntitaCampiValoriAmmessi" Width="1.5" PointX="8.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataMaxDBModel.CB_EntitaCampiValoriAmmessi" Width="1.5" PointX="9.875" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DataMaxDBModel.CB_Esito" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DataMaxDBModel.CB_TipoCampo" Width="1.5" PointX="3.75" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DataMaxDBModel.CB_TipologiaElaborazione" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />

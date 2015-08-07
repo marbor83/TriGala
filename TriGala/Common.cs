@@ -20,5 +20,16 @@ namespace TriGala
             Automatica = 100,
             Manulae = 200
         }
+
+        public enum Entita
+        {
+            Anagrafica_Clienti = 1001,
+            Anagrafica_Contratti = 1002,
+            POD_PDR = 1003,
+            Anagrafica_Movimenti = 1004,
+            Anagrafica_Contatti = 1005,
+            Garanzie_Factor = 1006,
+            Esposizione = 1007
+        }
     }
 }
