@@ -50,6 +50,10 @@
     <Reference Include="EntityFramework">
       <HintPath>packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Exporter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL_Esterne\Exporter.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL_Esterne\log4net.dll</HintPath>
@@ -72,7 +76,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="EntityClass\cldPOD_PDR.cs" />
     <Compile Include="EntityClass\clsClienti.cs" />
+    <Compile Include="EntityClass\clsContatti.cs" />
+    <Compile Include="EntityClass\clsContratti.cs" />
+    <Compile Include="EntityClass\clsGaranzie.cs" />
+    <Compile Include="EntityClass\clsMovimenti.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +136,7 @@
     <Content Include="App_Data\Trilance_CB.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="DLL_Esterne\Exporter.dll" />
     <Content Include="DLL_Esterne\log4net.dll" />
   </ItemGroup>
   <ItemGroup>

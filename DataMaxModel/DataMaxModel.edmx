@@ -61,6 +61,7 @@
           <Property Name="ProceduraEstrazione" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="PathCSV" Type="varchar" Nullable="false" MaxLength="512" />
           <Property Name="PathCSVscarti" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="OrdineElaborazione" Type="int" Nullable="false" />
           <Property Name="Attivo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CB_EntitaCampi">
@@ -246,6 +247,7 @@
           <Property Name="Attivo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CB_Elaborazioni" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Entita" ToRole="CB_Elaborazioni" />
           <NavigationProperty Name="CB_EntitaCampi" Relationship="DataMaxDBModel.FKCB_EntitaC895445" FromRole="CB_Entita" ToRole="CB_EntitaCampi" />
+          <Property Type="Int32" Name="OrdineElaborazione" Nullable="false" />
         </EntityType>
         <EntityType Name="CB_EntitaCampi">
           <Key>
@@ -394,6 +396,7 @@
           <EntitySetMapping Name="CB_Entita">
             <EntityTypeMapping TypeName="DataMaxDBModel.CB_Entita">
               <MappingFragment StoreEntitySet="CB_Entita">
+                <ScalarProperty Name="OrdineElaborazione" ColumnName="OrdineElaborazione" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="NomeTabellaDestinazione" ColumnName="NomeTabellaDestinazione" />

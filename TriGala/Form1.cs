@@ -14,13 +14,14 @@ using System.Reflection;
 using System.Data.SqlClient;
 using System.Configuration;
 using TriGala.EntityClass;
+using ExporterClass;
+using System.IO;
 
 
 namespace TriGala
 {
     public partial class frmMain : Form
     {
-        private bool bFormVisible;
 
         private ILogService logService = new FileLogService(typeof(frmMain));
 
@@ -101,6 +102,8 @@ namespace TriGala
             DataTable dtQueryResult = new DataTable();
             DataTable dtRigheOk = new DataTable();
             DataTable dtRigheScarti = new DataTable();
+            String path_to_save = String.Empty;
+            bool exists = false;
 
             try
             {
@@ -115,22 +118,92 @@ namespace TriGala
 
                     //Creazione DataTable risutati
                     dtQueryResult = CreateResultDataTable(idEntita);
-                    dtRigheOk = dtQueryResult;
+                    dtRigheOk = dtQueryResult.Clone();
 
                     //Creazione DataTable scarti
-                    dtRigheScarti = dtQueryResult;
+                    dtRigheScarti = dtQueryResult.Clone();
                     dtRigheScarti.Columns.Add("Messaggio");
 
                     //Esgue la Store per recuperare i dati
                     dtQueryResult = ExecuteStore(StoreProcedureName, DataDa, DataA, idCliente);
 
                     //Verificare obligatorietà e congruenza dei dati
-                    VerifcaDati(idEntita, dtQueryResult, ref dtRigheOk, ref dtRigheScarti);
+                    if (dtQueryResult.Rows.Count > 0)
+                        VerifcaDati(idEntita, dtQueryResult, ref dtRigheOk, ref dtRigheScarti);
 
-                    //Scivere dati nella tabella di Storage
+                    //Scive dati nella tabella di Storage
+                    if (dtRigheOk.Rows.Count > 0)
+                        retValue = InsertIntoStorage(idEntita, dtRigheOk);
 
-                    //Salvare il file CSV dei dati
+                    //Salva i file CSV dei dati
+                    Exporter objExporter = new Exporter();
+                    objExporter.ExportType = ExportFormat.CSV;
+
+                    if (dtRigheOk.Rows.Count > 0)
+                    {
+                        byte[] csvOK = objExporter.ExportDataTable(dtRigheOk);
+                        path_to_save = ConfigurationManager.AppSettings["PathCSV_OK"].ToString();
+                        exists = System.IO.Directory.Exists(path_to_save);
+                        if (!exists)
+                            System.IO.Directory.CreateDirectory(path_to_save);
+                        File.WriteAllBytes(String.Format("{0}{1}", path_to_save, "RigheOk.csv"), csvOK);
+                    }
+
+                    if (dtRigheScarti.Rows.Count > 0)
+                    {
+                        byte[] csvScarti = objExporter.ExportDataTable(dtRigheScarti);
+
+                        path_to_save = ConfigurationManager.AppSettings["PathCSV_Scarti"].ToString();
+                        exists = System.IO.Directory.Exists(path_to_save);
+                        if (!exists)
+                            System.IO.Directory.CreateDirectory(path_to_save);
+                        File.WriteAllBytes(String.Format("{0}{1}", path_to_save, "RigheScarti.csv"), csvScarti);
+                    }
+
+
                 }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                throw (ex);
+            }
+
+            return retValue;
+        }
+
+        private Common.Esito_Elaborazione InsertIntoStorage(int idEntita, DataTable dtRigheOk)
+        {
+            Common.Esito_Elaborazione retValue = Common.Esito_Elaborazione.Errore;
+
+
+            try
+            {
+
+                String tabela_destinazione = String.Empty;
+
+                //Prima di procedere con la insert verifico nuovamente che le tabelle di Storage siano vuote
+                using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
+                {
+                    tabela_destinazione = DMdb.CB_Entita.Where(e => e.id == idEntita).SingleOrDefault().NomeTabellaDestinazione;
+
+                    if (!StorageTableIsEmpty(tabela_destinazione))
+                        return Common.Esito_Elaborazione.TabellaPiena;
+                }
+
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString());
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection))
+                {
+                    connection.Open();
+                    bulkCopy.DestinationTableName = tabela_destinazione;
+                    // Write from the source to the destination.
+                    bulkCopy.WriteToServer(dtRigheOk);
+                }
+
+
+                retValue = Common.Esito_Elaborazione.OK;
+
             }
             catch (Exception ex)
             {
@@ -173,6 +246,7 @@ namespace TriGala
 
             try
             {
+
                 Common.Entita myEntity = (Common.Entita)Enum.ToObject(typeof(Common.Entita), idEntita);
 
                 switch (myEntity)
@@ -189,35 +263,159 @@ namespace TriGala
                                 //Validazione specifica della riga
                                 if (objClienti.RowIsValid(r, ref sMessagio))
                                 {
-                                    dtRigheOk.Rows.Add(r);
+                                    dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
                                 }
                                 else
                                 {
-                                    r["Messaggio"] = sMessagio;
-                                    dtRigheScarti.Rows.Add(r);
+                                    dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
                                 }
                             }
                             else
                             {
-                                r["Messaggio"] = sMessagio;
-                                dtRigheScarti.Rows.Add(r);
+                                dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                            }
+                        }
+
+                        break;
+
+                    //Anagrafica Contratti
+                    case Common.Entita.Anagrafica_Contratti:
+
+                        clsContratti objContratti = new clsContratti();
+
+                        foreach (DataRow r in dtQueryResult.Rows)
+                        {
+                            //Validazione generica della riga
+                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            {
+                                //Validazione specifica della riga
+                                if (objContratti.RowIsValid(r, ref sMessagio))
+                                {
+                                    dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
+                                }
+                                else
+                                {
+                                    dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                                }
+                            }
+                            else
+                            {
+                                dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
                             }
                         }
                         break;
-                    //Anagrafica Contratti
-                    case Common.Entita.Anagrafica_Contratti:
-                        break;
+
                     //Dati POD PDR
                     case Common.Entita.POD_PDR:
+
+                        //Per l'entità POD_PDR al momento non sono previste validazione specifiche
+                        //clsPOD_PDR objPOD_PDR = new clsPOD_PDR();
+
+                        foreach (DataRow r in dtQueryResult.Rows)
+                        {
+                            //Validazione generica della riga
+                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            {
+                                dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
+
+                                //Validazione specifica della riga
+                                //if (objPOD_PDR.RowIsValid(r, ref sMessagio))
+                                //{                                    
+                                //    dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita,r,dtRigheOk));
+                                //}
+                                //else
+                                //{
+                                //    dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                                //}
+                            }
+                            else
+                            {
+                                dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                            }
+                        }
                         break;
                     //Anagrafica Movimenti
                     case Common.Entita.Anagrafica_Movimenti:
+                        clsMovimenti objMovimenti = new clsMovimenti();
+
+                        foreach (DataRow r in dtQueryResult.Rows)
+                        {
+                            //Validazione generica della riga
+                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            {
+                                //Validazione specifica della riga
+                                if (objMovimenti.RowIsValid(r, ref sMessagio))
+                                {
+                                    dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
+                                }
+                                else
+                                {
+                                    dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                                }
+                            }
+                            else
+                            {
+                                dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                            }
+                        }
+
                         break;
+
                     //Anagrafica Contatti
                     case Common.Entita.Anagrafica_Contatti:
+                        //Per l'entità Contatti al momento non sono previste validazione specifiche
+                        //clsContatti objContatti = new clsContatti();
+
+                        foreach (DataRow r in dtQueryResult.Rows)
+                        {
+                            //Validazione generica della riga
+                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            {
+                                dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
+
+                                //Validazione specifica della riga
+                                //if (objContatti.RowIsValid(r, ref sMessagio))
+                                //{                                    
+                                //    dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita,r,dtRigheOk));
+                                //}
+                                //else
+                                //{
+                                //    dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                                //}
+                            }
+                            else
+                            {
+                                dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                            }
+                        }
                         break;
+
                     //Garanzie Factor
                     case Common.Entita.Garanzie_Factor:
+
+                        clsGaranzie objGaranzie = new clsGaranzie();
+
+                        foreach (DataRow r in dtQueryResult.Rows)
+                        {
+                            //Validazione generica della riga
+                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            {
+                                //Validazione specifica della riga
+                                if (objGaranzie.RowIsValid(r, ref sMessagio))
+                                {
+                                    dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
+                                }
+                                else
+                                {
+                                    dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                                }
+                            }
+                            else
+                            {
+                                dtRigheScarti.Rows.Add(AggiungiRigaScarti(idEntita, r, dtRigheScarti, sMessagio));
+                            }
+                        }
+
                         break;
                     //Esposizione
                     case Common.Entita.Esposizione:
@@ -233,9 +431,60 @@ namespace TriGala
             }
         }
 
+        private DataRow AggiungiRigheOK(int idEntita, DataRow r, DataTable dtRigheOk)
+        {
+            DataRow retValue = dtRigheOk.NewRow();
+
+            try
+            {
+                using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
+                {
+                    List<CB_EntitaCampi> campi = DMdb.CB_EntitaCampi.Where(c => c.id_Entita == idEntita && c.Attivo).ToList();
+
+                    foreach (CB_EntitaCampi c in campi)
+                    {
+                        retValue[c.NomeCampoDestinazione] = r[c.NomeCampoDestinazione];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                throw (ex);
+            }
+
+            return retValue;
+        }
+
+        private DataRow AggiungiRigaScarti(int idEntita, DataRow r, DataTable dtRigheScarti, string sMessagio)
+        {
+            DataRow retValue = dtRigheScarti.NewRow();
+
+            try
+            {
+                using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
+                {
+                    List<CB_EntitaCampi> campi = DMdb.CB_EntitaCampi.Where(c => c.id_Entita == idEntita && c.Attivo).ToList();
+
+                    foreach (CB_EntitaCampi c in campi)
+                    {
+                        retValue[c.NomeCampoDestinazione] = r[c.NomeCampoDestinazione];
+                    }
+
+                    retValue["Messaggio"] = sMessagio;
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                throw (ex);
+            }
+
+            return retValue;
+        }
+
         private bool GenericValidationRow(DataRow r, int idEntita, ref string sMessagio)
         {
-            bool retValue = false;
 
             using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
             {
@@ -243,80 +492,70 @@ namespace TriGala
 
                 foreach (CB_EntitaCampi c in campi)
                 {
-                    String ValoreCampo = r[c.NomeCampoOrigine] == DBNull.Value ? String.Empty : r[c.NomeCampoOrigine].ToString();
+                    String ValoreCampo = r[c.NomeCampoDestinazione] == DBNull.Value ? String.Empty : r[c.NomeCampoDestinazione].ToString();
 
                     //Controllo obbligatorietà del campo
                     if (String.IsNullOrEmpty(ValoreCampo) & c.Obbligatorio)
                     {
-                        sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.NomeCampoOrigine);
+                        sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.NomeCampoDestinazione);
                         return false;
                     }
 
-                    if (!String.IsNullOrEmpty(ValoreCampo))
+                    //Controllo tipo CAMPO
+                    switch (c.CB_TipoCampo.Nome.ToUpper())
                     {
+                        case "STRING":
+                            break;
+                        case "INT":
+                            int i;
+                            if (!Int32.TryParse(ValoreCampo, out i))
+                            {
+                                sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                return false;
+                            }
+                            break;
+                        case "DATE":
+                            DateTime dt;
+                            if (!DateTime.TryParse(ValoreCampo, out dt))
+                            {
+                                sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                return false;
+                            }
 
-                        switch (c.CB_TipoCampo.Nome.ToUpper())
-                        {
-                            case "STRING":
-                                break;
-                            case "INT":
-                                int i;
-                                if (!Int32.TryParse(ValoreCampo, out i))
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoOrigine, c.CB_TipoCampo.Nome.ToUpper());
-                                    return false;
-                                }
-                                break;
-                            case "DATE":
-                                DateTime dt;
-                                if (!DateTime.TryParse(ValoreCampo, out dt))
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoOrigine, c.CB_TipoCampo.Nome.ToUpper());
-                                    return false;
-                                }
+                            break;
+                        case "DECIMAL2":
+                            int idx = ValoreCampo.IndexOf(",");
 
-                                break;
-                            case "DECIMAL2":
-                                int idx = ValoreCampo.IndexOf(",");
+                            if (ValoreCampo.Length != idx + 2)
+                            {
+                                sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                return false;
+                            }
 
-                                if (ValoreCampo.Length != idx + 2)
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoOrigine, c.CB_TipoCampo.Nome.ToUpper());
-                                    return false;
-                                }
+                            decimal dd;
+                            if (!Decimal.TryParse(ValoreCampo, out dd))
+                            {
+                                sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoDestinazione);
+                                return false;
+                            }
 
-                                decimal dd;                                
-                                if (!Decimal.TryParse(ValoreCampo, out dd))
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoOrigine);
-                                    return false;
-                                }
+                            break;
+                        default:
+                            break;
+                    }
 
-                                break;
-                            default:
-                                break;
-                        }
-
-                        //Controllo tipologia campo
-                        if (!String.IsNullOrEmpty(ValoreCampo))
-                        {
-                            sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.NomeCampoOrigine);
-                            return false;
-                        }
-
-                        //Controllo lunghezza campo
-                        if (ValoreCampo.Length > c.Lunghezza)
-                        {
-                            sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoOrigine, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
-                            retValue = false;
-                        }
+                    //Controllo lunghezza campo
+                    if (ValoreCampo.Length > c.Lunghezza)
+                    {
+                        sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoDestinazione, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
+                        return false;
                     }
 
                 }
 
             }
 
-            return retValue;
+            return true;
         }
 
         private DataTable ExecuteStore(string StoreProcedureName, DateTime DataDa, DateTime DataA, int IdCliente)
@@ -402,7 +641,7 @@ namespace TriGala
             {
                 using (DataMaxDBEntities dme = new DataMaxDBEntities())
                 {
-                    retValue = dme.CB_Entita.Where(x => x.Attivo.Equals(true)).ToList();
+                    retValue = dme.CB_Entita.Where(x => x.Attivo.Equals(true)).OrderBy(o => o.OrdineElaborazione).ToList();
                 }
             }
             catch (Exception ex)

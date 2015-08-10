@@ -27,6 +27,7 @@ namespace DataMaxModel
         public string PathCSV { get; set; }
         public string PathCSVscarti { get; set; }
         public bool Attivo { get; set; }
+        public int OrdineElaborazione { get; set; }
     
         public virtual ICollection<CB_Elaborazioni> CB_Elaborazioni { get; set; }
         public virtual ICollection<CB_EntitaCampi> CB_EntitaCampi { get; set; }

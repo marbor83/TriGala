@@ -8,6 +8,10 @@ namespace TriGala
 {
     public static class Common
     {
+
+        public const string PERSONA_FISICA = "F";
+        public const string PERSONA_GIURIDICA = "G";
+
         public enum Esito_Elaborazione
         {
             OK = 10,
@@ -31,5 +35,6 @@ namespace TriGala
             Garanzie_Factor = 1006,
             Esposizione = 1007
         }
+
     }
 }
