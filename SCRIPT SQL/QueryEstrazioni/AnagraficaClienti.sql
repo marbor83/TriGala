@@ -1,10 +1,3 @@
-ALTER PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
-	@DataDa Datetime,
-	@DataA  Datetime,
-	@IdCliente INT
-AS
-BEGIN
-
 	select  'IT10' as IDAzienda,
 			a.IDAnagrafica IdCliente,		
 			a.IDAnagrafica as id_master, -- per ora impostato ad idcliente poichè sono tutti master / oppure rimuovere dal tracciato
@@ -169,7 +162,4 @@ BEGIN
 						where	c.IDAnagrafica=a.IDAnagrafica
 								and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')) = 0
 				)*/			
-	and a.DatUMO between @DataDa and @DataA
-	and a.IDAnagrafica = ISNULL(@IdCliente, a.IDAnagrafica)				
 	order by a.IDAnagrafica
-END

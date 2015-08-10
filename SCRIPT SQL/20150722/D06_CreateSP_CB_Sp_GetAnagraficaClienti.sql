@@ -1,4 +1,4 @@
-ALTER PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT
@@ -140,7 +140,7 @@ BEGIN
 			case when a.TipoPersona='F' then a.Cognome else null end COGNOME,
 			null as classeDiRischio,
 			null as descrizioneRischio
-	from	dbo.Anagrafica a WITH(NOLOCK)
+	from	dbo.Anagrafica a
 	left outer join dbo.AnaForme af on a.IDAnaForma=af.IDAnaForma
 	left outer join dbo.TipiCapogruppo cg on a.IDTipoCapogruppo=cg.IDTipoCapogruppo
 	left outer join dbo.AgentiAnagrafica ag on a.IDAgente=ag.IDAgente
