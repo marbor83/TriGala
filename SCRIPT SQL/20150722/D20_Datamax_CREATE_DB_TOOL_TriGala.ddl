@@ -207,7 +207,7 @@ INSERT INTO CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazion
 SET IDENTITY_INSERT CB_EntitaCampi OFF;
 
 
-SET IDENTITY_INSERT CB_EntitaCampi ON;
+SET IDENTITY_INSERT CB_EntitaCampiValoriAmmessi ON;
 INSERT INTO CB_EntitaCampiValoriAmmessi(id, id_EntitaCampi, Valore, Attivo) VALUES (1, 168, 'EE', 1);
 INSERT INTO CB_EntitaCampiValoriAmmessi(id, id_EntitaCampi, Valore, Attivo) VALUES (2, 168, 'GAS', 1);
 INSERT INTO CB_EntitaCampiValoriAmmessi(id, id_EntitaCampi, Valore, Attivo) VALUES (3, 168, 'SERV', 1);
@@ -224,7 +224,7 @@ INSERT INTO CB_EntitaCampiValoriAmmessi(id, id_EntitaCampi, Valore, Attivo) VALU
 
 INSERT INTO CB_EntitaCampiValoriAmmessi(id, id_EntitaCampi, Valore, Attivo) VALUES (11, 41, 'S', 1);
 INSERT INTO CB_EntitaCampiValoriAmmessi(id, id_EntitaCampi, Valore, Attivo) VALUES (12, 41, 'N', 1);
-SET IDENTITY_INSERT CB_EntitaCampi OFF;
+SET IDENTITY_INSERT CB_EntitaCampiValoriAmmessi OFF;
 
 INSERT INTO CB_TipologiaElaborazione(id, Descrizione) VALUES (100, 'AUTOMATICA');
 INSERT INTO CB_TipologiaElaborazione(id, Descrizione) VALUES (200, 'MANUALE');
