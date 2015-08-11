@@ -5,7 +5,7 @@ CREATE PROC GALA_CB.CB_Sp_GetAnagraficaMovimenti
 AS
 BEGIN
 
-select	 m.idMovimento as Id_Record,
+select	m.idMovimento as Id_Record,
 		'IT10' as id_Azienda,		
 		s.IDAnagrafica as Id_Cliente,
 		s.NumDocSuFatt as N_DOC,
@@ -27,7 +27,14 @@ select	 m.idMovimento as Id_Record,
 				WHEN s.SiglaRegIVA In ('G','S') THEN 'GAS'
 				WHEN s.SiglaRegIVA In ('C','I','N','O') THEN 'SERV'
 				ELSE 'EE' END) as COMMODITY, 
-		m.idFattura as CODICE_PARTITA,
+		CASE WHEN billingtgala.dbo.de_isstorno(doct.iddoct) = 1 
+				THEN (select distinct s2.idfattura --id della fattura stornata
+					  from scadenzario s1
+						 inner join doct d1 on s1.idtbilling = d1.iddoct
+						 inner join docr c1 on d1.iddoct = c1.iddoct
+						 inner join scadenzario s2 on c1.iddoctparent = s2.idtbilling
+					  where s1.idfattura= m.idFattura and c1.idtiporiga = 4) 
+			 ELSE m.idFattura END as CODICE_PARTITA,
 		null as Factor,
 		s.TipoDoc as Tipologia_fattura,		
 		gdf.descrizione as  Desscrizione_tipologia_fattura,
@@ -54,6 +61,7 @@ LEFT JOIN	dbo.DocT doct	ON s.IDTBilling = doct.IDDocT
 left join dbo.TipiPagamento tp on tp.IDTipoPagamento = doct.idMetodoPag
 left join GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA gdf on s.TipoDoc = gdf.IdTipoDOC
 where	a.IDStatoAnagrafica=1
+		and a.IDAnagrafica=100469
 		and a.IDAnagrafica!='100001'
 		and m.IDStato>=0
 		--and m.IDCausale not in (1, 7) --Valorizzare modalità pagamento solo per 1 e 7
