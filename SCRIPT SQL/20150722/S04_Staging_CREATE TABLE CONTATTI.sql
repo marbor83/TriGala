@@ -21,6 +21,6 @@ CREATE TABLE [dbo].[GALA_CONTATTI]
 	RagioneSociale VARCHAR(110) NULL, 
 	PartitaIVa VARCHAR(50) NULL,
 	[ID_Tipo_persona]   VARCHAR (10)  NULL,
-    [Descrizione_tipo_persona] VARCHAR (50)  NULL
+    [Descrizione_tipo_persona] VARCHAR (50)  NULL,
     PRIMARY KEY ([ID_contatto], [ID_TIPOCONTATTO])
 )

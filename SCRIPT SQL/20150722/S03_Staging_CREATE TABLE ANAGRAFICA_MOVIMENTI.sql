@@ -1,5 +1,5 @@
 CREATE TABLE [dbo].[GALA_ANAGRAFICA_MOVIMENTI] (
-    [ID_RECORD]                      INT		     NOT NULL,
+    [ID_RECORD]                      INT		     NOT NULL PRIMARY KEY,
     [ID_AZIENDA]                     VARCHAR (10)    NOT NULL,
     [ID_CLIENTE]                     VARCHAR (30)    NOT NULL,
     [N_DOC]                          VARCHAR (50)    NOT NULL,
@@ -22,7 +22,6 @@ CREATE TABLE [dbo].[GALA_ANAGRAFICA_MOVIMENTI] (
     [FACTOR]                         VARCHAR (50)    NULL,
     [Tipologia_fattura]              VARCHAR (100)   NULL,
     [Desscrizione_tipologia_fattura]  VARCHAR (200)   NULL,
-    [URL] 							 VARCHAR(2048) 	 NULL, 
-    PRIMARY KEY ([ID_RECORD] ASC)
+    [URL] 							 VARCHAR(2048) 	 NULL
 );
 

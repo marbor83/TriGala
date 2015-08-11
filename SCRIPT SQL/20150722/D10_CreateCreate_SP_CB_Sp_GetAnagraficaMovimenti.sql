@@ -57,12 +57,12 @@ where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and m.IDStato>=0
 		--and m.IDCausale not in (1, 7) --Valorizzare modalità pagamento solo per 1 e 7
-		/*and exists (select	1 
+		and exists (select	1 
 					from	dbo.Contratti c
 					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	c.IDAnagrafica=a.IDAnagrafica
 							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))*/
+							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
 AND m.DatPMO between @DataDa and @DataA
 and s.IDAnagrafica = ISNULL(@IdCliente, s.IDAnagrafica)	
 

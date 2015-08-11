@@ -28,7 +28,7 @@ exec [GALA_CB].[ConsumoGASFatturatoUltimoAnno]
 select  *		
 from (
 select	'IT10' id_Azienda,		
-		ans.IDAnagrafica as Id_Cliente,
+		a.IDAnagrafica as Id_Cliente,
 		c.IDContratto as ID_CONTRATTO,
 		cr.IDRigaContratto as ID_RIGA_contratti,
 		ecs.POD as CODICE_DISPOSITIVO,
@@ -97,7 +97,7 @@ where	a.IDStatoAnagrafica=1
 		and getdate() between ecs.dtInizioVal and isnull(ecs.dtFineVal, '20501231')		
 union all 
 select	'IT10' idAzienda,		
-		ans.IDAnagrafica as IdCliente,
+		a.IDAnagrafica as IdCliente,
 		c.IDContratto,
 		cr.IDRigaContratto,
 		gcs.CodPDR CodiceDispositivo,

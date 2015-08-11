@@ -1,5 +1,4 @@
 CREATE TABLE [dbo].[GALA_POD_PDR] (
-    [Id]                    INT             IDENTITY (1, 1) NOT NULL,
     [ID_AZIENDA]            VARCHAR (10)    NOT NULL,
     [ID_CLIENTE]            VARCHAR (30)    NOT NULL,
     [ID_CONTRATTO]          VARCHAR (20)    NULL,
@@ -23,7 +22,7 @@ CREATE TABLE [dbo].[GALA_POD_PDR] (
     [DATA_FINE]         	DATETIME      	NOT NULL,
     [DATA_CESSAZIONE]   	DATETIME     	NULL,
 	[ID_PAG_MOD]            VARCHAR (10)    NULL,
-    [DESCR_PAG_MOD]         VARCHAR (50)    NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
+    [DESCR_PAG_MOD]         VARCHAR (50)    NULL,	
+    PRIMARY KEY ([ID_RIGA_CONTRATTI], [CODICE_DISPOSITIVO])
 );
 

@@ -71,15 +71,15 @@ select	c.IDContratto as ID_CONTRATTO,
 		null DESCR_AREA,		
 		c.IDAgente as ID_AGENTE,
 		ag.Nome Descr_Agente,
-		null as centro_DI_Costo,
+		null as CENTRO_DI_COSTO,
 		null as id_Pag_Mod,
 		null as Descr_Pag_Mod,
 		null as CIG,
 		null as CUP,
 		null as ODA,
-		c.IDTipoContratto,
+		c.IDTipoContratto as IdTipoContratto,
 		t.Descrizione DescrizioneTipoContratto,
-		c.IDAgenzia,
+		c.IDAgenzia as IDAgenzia,
 		ag1.Nome as NomeAgenzia
 from	dbo.Contratti c
 inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
