@@ -14,11 +14,10 @@ namespace StagingGalaModel
     
     public partial class GALA_POD_PDR
     {
-        public int Id { get; set; }
         public string ID_AZIENDA { get; set; }
         public string ID_CLIENTE { get; set; }
         public string ID_CONTRATTO { get; set; }
-        public Nullable<int> ID_RIGA_CONTRATTI { get; set; }
+        public int ID_RIGA_CONTRATTI { get; set; }
         public string CODICE_DISPOSITIVO { get; set; }
         public decimal VOL_QTA { get; set; }
         public string COMMODITY { get; set; }

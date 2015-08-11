@@ -22,7 +22,7 @@ namespace TriGala
 {
     public partial class frmMain : Form
     {
-
+        
         private ILogService logService = new FileLogService(typeof(frmMain));
 
         public frmMain(string[] args)
@@ -50,6 +50,7 @@ namespace TriGala
                 {
                     DateTime UltimaElaborazione;
                     List<CB_Entita> cbe = new List<CB_Entita>();
+                    String sMessaggio = String.Empty;
 
                     logService.Info(String.Format("Processo avviato: {0}", DateTime.Now.ToString()));
 
@@ -58,11 +59,15 @@ namespace TriGala
 
                     foreach (CB_Entita entity in cbe)
                     {
+                        logService.Info(String.Format("Inizio elaborazione entità: {0}", entity.Nome));
+
                         //Prende l'ultima data di elaborazione per l'entità
                         UltimaElaborazione = GetDateLastElaborazioneByEntity(entity);
 
                         //Verifica che la relativa tabella di Storage sia vuota
-                        if (StorageTableIsEmpty(entity.NomeTabellaDestinazione))
+                        int Esito = StorageTableIsEmpty(entity.NomeTabellaDestinazione);
+
+                        if (Esito > 0)
                         {
                             //Memorizza data lancio elaborazione
                             DateTime DataElaborazione = DateTime.Now;
@@ -75,10 +80,17 @@ namespace TriGala
                         }
                         else
                         {
-                            //Aggiorna l'esito dell'elaborazione con "Tabella piena"
-                            UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, Common.Esito_Elaborazione.TabellaPiena);
+                            if (Esito == -1)
+                                UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, Common.Esito_Elaborazione.Errore);
+                            else
+                                //Aggiorna l'esito dell'elaborazione con "Tabella piena"
+                                UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, Common.Esito_Elaborazione.TabellaPiena);
                         }
+
+                        logService.Info(String.Format("Fine elaborazione entità: {0}", entity.Nome));
                     }
+
+                    logService.Info(String.Format("Processo terminato: {0}", DateTime.Now.ToString()));
                 }
 
 
@@ -86,6 +98,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
                 MessageBox.Show(ex.Message);
             }
         }
@@ -137,7 +150,8 @@ namespace TriGala
 
                     //Salva i file CSV dei dati
                     Exporter objExporter = new Exporter();
-                    objExporter.ExportType = ExportFormat.CSV;
+                    objExporter.ExportType = ExportFormat.EXCEL;
+                    objExporter.CSV_WithHeader = true;
 
                     if (dtRigheOk.Rows.Count > 0)
                     {
@@ -146,7 +160,7 @@ namespace TriGala
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
                             System.IO.Directory.CreateDirectory(path_to_save);
-                        File.WriteAllBytes(String.Format("{0}{1}", path_to_save, "RigheOk.csv"), csvOK);
+                        File.WriteAllBytes(String.Format("{0}{1}_{2}_RigheOk{3}", path_to_save, DateTime.Now.ToString("yyyMMddHHmmssfff"), myEntity.Nome, ".xlsx"), csvOK);
                     }
 
                     if (dtRigheScarti.Rows.Count > 0)
@@ -157,15 +171,15 @@ namespace TriGala
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
                             System.IO.Directory.CreateDirectory(path_to_save);
-                        File.WriteAllBytes(String.Format("{0}{1}", path_to_save, "RigheScarti.csv"), csvScarti);
+                        File.WriteAllBytes(String.Format("{0}{1}_{2}_RigheScarti{3}", path_to_save, DateTime.Now.ToString("yyyMMddHHmmssfff"), myEntity.Nome, ".csv"), csvScarti);
                     }
 
-
+                    retValue = Common.Esito_Elaborazione.OK;
                 }
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
                 throw (ex);
             }
 
@@ -175,7 +189,7 @@ namespace TriGala
         private Common.Esito_Elaborazione InsertIntoStorage(int idEntita, DataTable dtRigheOk)
         {
             Common.Esito_Elaborazione retValue = Common.Esito_Elaborazione.Errore;
-
+            int EsitoControlloTabella = 0;
 
             try
             {
@@ -187,8 +201,20 @@ namespace TriGala
                 {
                     tabela_destinazione = DMdb.CB_Entita.Where(e => e.id == idEntita).SingleOrDefault().NomeTabellaDestinazione;
 
-                    if (!StorageTableIsEmpty(tabela_destinazione))
-                        return Common.Esito_Elaborazione.TabellaPiena;
+                    EsitoControlloTabella = StorageTableIsEmpty(tabela_destinazione);
+
+                    switch (EsitoControlloTabella)
+                    {
+                        case 1:
+                            //Do nothing Esito ok!
+                            break;
+                        case 0:
+                            return Common.Esito_Elaborazione.TabellaPiena;                          
+                        case -1:
+                            return Common.Esito_Elaborazione.Errore;                           
+                        default:
+                            return Common.Esito_Elaborazione.Errore;
+                    }
                 }
 
                 SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString());
@@ -207,7 +233,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
                 throw (ex);
             }
 
@@ -233,7 +259,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
                 throw (ex);
             }
 
@@ -426,7 +452,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
                 throw (ex);
             }
         }
@@ -449,7 +475,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
                 throw (ex);
             }
 
@@ -476,7 +502,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
                 throw (ex);
             }
 
@@ -501,56 +527,60 @@ namespace TriGala
                         return false;
                     }
 
-                    //Controllo tipo CAMPO
-                    switch (c.CB_TipoCampo.Nome.ToUpper())
+                    if (!String.IsNullOrEmpty(ValoreCampo))
                     {
-                        case "STRING":
-                            break;
-                        case "INT":
-                            int i;
-                            if (!Int32.TryParse(ValoreCampo, out i))
-                            {
-                                sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                return false;
-                            }
-                            break;
-                        case "DATE":
-                            DateTime dt;
-                            if (!DateTime.TryParse(ValoreCampo, out dt))
-                            {
-                                sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                return false;
-                            }
 
-                            break;
-                        case "DECIMAL2":
-                            int idx = ValoreCampo.IndexOf(",");
+                        //Controllo tipo CAMPO
+                        switch (c.CB_TipoCampo.Nome.ToUpper())
+                        {
+                            case "STRING":
+                                break;
+                            case "INT":
+                                int i;
+                                if (!Int32.TryParse(ValoreCampo, out i))
+                                {
+                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                    return false;
+                                }
+                                break;
+                            case "DATE":
+                                DateTime dt;
+                                if (!DateTime.TryParse(ValoreCampo, out dt))
+                                {
+                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                    return false;
+                                }
 
-                            if (ValoreCampo.Length != idx + 2)
-                            {
-                                sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                return false;
-                            }
+                                break;
+                            case "DECIMAL2":
 
-                            decimal dd;
-                            if (!Decimal.TryParse(ValoreCampo, out dd))
-                            {
-                                sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoDestinazione);
-                                return false;
-                            }
+                                //int idx = ValoreCampo.IndexOf(",");
 
-                            break;
-                        default:
-                            break;
+                                //if (ValoreCampo.Length != idx + 2)
+                                //{
+                                //    sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                //    return false;
+                                //}
+
+                                decimal dd;
+                                if (!Decimal.TryParse(ValoreCampo, out dd))
+                                {
+                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoDestinazione);
+                                    return false;
+                                }
+
+                                break;
+                            default:
+                                break;
+                        }
+
+                        //Controllo lunghezza campo
+                        if (ValoreCampo.Length > c.Lunghezza)
+                        {
+                            sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoDestinazione, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
+                            return false;
+                        }
                     }
-
-                    //Controllo lunghezza campo
-                    if (ValoreCampo.Length > c.Lunghezza)
-                    {
-                        sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoDestinazione, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
-                        return false;
-                    }
-
                 }
 
             }
@@ -571,6 +601,8 @@ namespace TriGala
                     mySqlCommand.CommandText = StoreProcedureName;
                     mySqlCommand.CommandType = CommandType.StoredProcedure;
                     mySqlCommand.Connection = mySQLConn;
+                    mySqlCommand.CommandTimeout = Int32.Parse(ConfigurationManager.AppSettings["CommandTimeOut"].ToString());
+                    
 
                     SqlParameter p = new SqlParameter();
                     p.ParameterName = "DataDa";
@@ -603,7 +635,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} StoreProcdure: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, StoreProcedureName));
                 throw (ex);
             }
 
@@ -625,7 +657,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entity.id.ToString()));
                 throw (ex);
             }
 
@@ -653,45 +685,46 @@ namespace TriGala
             return retValue;
         }
 
-        private bool StorageTableIsEmpty(string TableName)
+        private int StorageTableIsEmpty(string TableName)
         {
-            bool retValue = false;
+            int retValue = 0;
 
             try
             {
-                using (StagingGalaDBEntities sge = new StagingGalaDBEntities())
+                using (StagingDBEntities sge = new StagingDBEntities())
                 {
                     switch (TableName)
                     {
-                        case "GALA_ANAGRAFICA_CLIENTI":
+                        case "GALA_ANAGRAFICA_CLIENTI":                            
                             if (sge.GALA_ANAGRAFICA_CLIENTI.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         case "GALA_ANAGRAFICA_CONTRATTI":
                             if (sge.GALA_ANAGRAFICA_CONTRATTI.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         case "GALA_ANAGRAFICA_MOVIMENTI":
                             if (sge.GALA_ANAGRAFICA_MOVIMENTI.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         case "GALA_CONTATTI":
                             if (sge.GALA_CONTATTI.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         case "GALA_ESPOSIZIONE":
                             if (sge.GALA_ESPOSIZIONE.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         case "GALA_GARANZIE_FACTOR":
                             if (sge.GALA_GARANZIE_FACTOR.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         case "GALA_POD_PDR":
                             if (sge.GALA_POD_PDR.Count() == 0)
-                                retValue = true;
+                                retValue = 1;
                             break;
                         default:
+                            retValue = -1;
                             break;
                     }
 
@@ -761,7 +794,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entityID.ToString()));
                 throw (ex);
             }
         }
@@ -773,7 +806,7 @@ namespace TriGala
         {
             string retValue = string.Empty;
 
-            using (StagingGalaDBEntities StagingDBEntity = new StagingGalaDBEntities())
+            using (StagingDBEntities StagingDBEntity = new StagingDBEntities())
             {
 
                 PropertyInfo[] properties = StagingDBEntity.GetType().GetProperties();

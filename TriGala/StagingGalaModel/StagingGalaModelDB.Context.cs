@@ -13,10 +13,10 @@ namespace StagingGalaModel
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class StagingGalaDBEntities : DbContext
+    public partial class StagingDBEntities : DbContext
     {
-        public StagingGalaDBEntities()
-            : base("name=StagingGalaDBEntities")
+        public StagingDBEntities()
+            : base("name=StagingDBEntities")
         {
         }
     

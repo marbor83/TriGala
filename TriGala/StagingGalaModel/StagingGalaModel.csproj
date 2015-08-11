@@ -47,62 +47,62 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GALA_ANAGRAFICA_CLIENTI.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="GALA_ANAGRAFICA_CONTRATTI.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="GALA_ANAGRAFICA_MOVIMENTI.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="GALA_CONTATTI.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="GALA_ESPOSIZIONE.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="GALA_GARANZIE_FACTOR.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="GALA_POD_PDR.cs">
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StagingGalaModel.Context.cs">
+    <Compile Include="StagingGalaModelDB.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StagingGalaModel.Context.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="StagingGalaModel.cs">
+    <Compile Include="StagingGalaModelDB.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StagingGalaModel.tt</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="StagingGalaModel.Designer.cs">
+    <Compile Include="StagingGalaModelDB.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StagingGalaModel.edmx</DependentUpon>
+      <DependentUpon>StagingGalaModelDB.edmx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
     <None Include="packages.config" />
-    <EntityDeploy Include="StagingGalaModel.edmx">
+    <EntityDeploy Include="StagingGalaModelDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StagingGalaModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>StagingGalaModelDB.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="StagingGalaModel.Context.tt">
+    <None Include="StagingGalaModelDB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StagingGalaModel.edmx</DependentUpon>
-      <LastGenOutput>StagingGalaModel.Context.cs</LastGenOutput>
+      <DependentUpon>StagingGalaModelDB.edmx</DependentUpon>
+      <LastGenOutput>StagingGalaModelDB.Context.cs</LastGenOutput>
     </None>
-    <None Include="StagingGalaModel.edmx.diagram">
-      <DependentUpon>StagingGalaModel.edmx</DependentUpon>
+    <None Include="StagingGalaModelDB.edmx.diagram">
+      <DependentUpon>StagingGalaModelDB.edmx</DependentUpon>
     </None>
-    <None Include="StagingGalaModel.tt">
+    <None Include="StagingGalaModelDB.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StagingGalaModel.edmx</DependentUpon>
-      <LastGenOutput>StagingGalaModel.cs</LastGenOutput>
+      <DependentUpon>StagingGalaModelDB.edmx</DependentUpon>
+      <LastGenOutput>StagingGalaModelDB.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

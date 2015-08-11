@@ -4,15 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="DataMaxDBModelStoreContainer">
-          <EntitySet Name="CB_Elaborazioni" EntityType="DataMaxDBModel.Store.CB_Elaborazioni" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CB_Entita" EntityType="DataMaxDBModel.Store.CB_Entita" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CB_EntitaCampi" EntityType="DataMaxDBModel.Store.CB_EntitaCampi" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CB_EntitaCampiValoriAmmessi" EntityType="DataMaxDBModel.Store.CB_EntitaCampiValoriAmmessi" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CB_Esito" EntityType="DataMaxDBModel.Store.CB_Esito" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CB_TipoCampo" EntityType="DataMaxDBModel.Store.CB_TipoCampo" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CB_TipologiaElaborazione" EntityType="DataMaxDBModel.Store.CB_TipologiaElaborazione" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CB_Elaborazioni" EntityType="DataMaxDBModel.Store.CB_Elaborazioni" store:Type="Tables" Schema="GALA_CB" />
+          <EntitySet Name="CB_Entita" EntityType="DataMaxDBModel.Store.CB_Entita" store:Type="Tables" Schema="GALA_CB" />
+          <EntitySet Name="CB_EntitaCampi" EntityType="DataMaxDBModel.Store.CB_EntitaCampi" store:Type="Tables" Schema="GALA_CB" />
+          <EntitySet Name="CB_EntitaCampiValoriAmmessi" EntityType="DataMaxDBModel.Store.CB_EntitaCampiValoriAmmessi" store:Type="Tables" Schema="GALA_CB" />
+          <EntitySet Name="CB_Esito" EntityType="DataMaxDBModel.Store.CB_Esito" store:Type="Tables" Schema="GALA_CB" />
+          <EntitySet Name="CB_TipoCampo" EntityType="DataMaxDBModel.Store.CB_TipoCampo" store:Type="Tables" Schema="GALA_CB" />
+          <EntitySet Name="CB_TipologiaElaborazione" EntityType="DataMaxDBModel.Store.CB_TipologiaElaborazione" store:Type="Tables" Schema="GALA_CB" />
           <AssociationSet Name="FKCB_Elabora281711" Association="DataMaxDBModel.Store.FKCB_Elabora281711">
             <End Role="CB_Entita" EntitySet="CB_Entita" />
             <End Role="CB_Elaborazioni" EntitySet="CB_Elaborazioni" />
@@ -181,7 +181,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataMaxDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -225,14 +226,14 @@
           <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="id_Entita" Type="Int32" Nullable="false" />
           <Property Name="id_Tipologia" Type="Int32" Nullable="false" />
+          <Property Name="DataDa" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataA" Type="DateTime" Precision="3" />
+          <Property Name="IdCliente" Type="Int32" />
           <Property Name="DataElaborazione" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_Esito" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CB_Entita" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Elaborazioni" ToRole="CB_Entita" />
           <NavigationProperty Name="CB_TipologiaElaborazione" Relationship="DataMaxDBModel.FKCB_Elabora72081" FromRole="CB_Elaborazioni" ToRole="CB_TipologiaElaborazione" />
           <NavigationProperty Name="CB_Esito" Relationship="DataMaxDBModel.FKCB_Elabora877250" FromRole="CB_Elaborazioni" ToRole="CB_Esito" />
-          <Property Type="DateTime" Name="DataDa" Nullable="false" Precision="3" />
-          <Property Type="DateTime" Name="DataA" Precision="3" />
-          <Property Type="Int32" Name="IdCliente" />
         </EntityType>
         <EntityType Name="CB_Entita">
           <Key>
@@ -244,10 +245,10 @@
           <Property Name="ProceduraEstrazione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="PathCSV" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
           <Property Name="PathCSVscarti" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
+          <Property Name="OrdineElaborazione" Type="Int32" Nullable="false" />
           <Property Name="Attivo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CB_Elaborazioni" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Entita" ToRole="CB_Elaborazioni" />
           <NavigationProperty Name="CB_EntitaCampi" Relationship="DataMaxDBModel.FKCB_EntitaC895445" FromRole="CB_Entita" ToRole="CB_EntitaCampi" />
-          <Property Type="Int32" Name="OrdineElaborazione" Nullable="false" />
         </EntityType>
         <EntityType Name="CB_EntitaCampi">
           <Key>
@@ -382,12 +383,12 @@
           <EntitySetMapping Name="CB_Elaborazioni">
             <EntityTypeMapping TypeName="DataMaxDBModel.CB_Elaborazioni">
               <MappingFragment StoreEntitySet="CB_Elaborazioni">
-                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
-                <ScalarProperty Name="DataA" ColumnName="DataA" />
-                <ScalarProperty Name="DataDa" ColumnName="DataDa" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="id_Entita" ColumnName="id_Entita" />
                 <ScalarProperty Name="id_Tipologia" ColumnName="id_Tipologia" />
+                <ScalarProperty Name="DataDa" ColumnName="DataDa" />
+                <ScalarProperty Name="DataA" ColumnName="DataA" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
                 <ScalarProperty Name="DataElaborazione" ColumnName="DataElaborazione" />
                 <ScalarProperty Name="id_Esito" ColumnName="id_Esito" />
               </MappingFragment>
@@ -396,13 +397,13 @@
           <EntitySetMapping Name="CB_Entita">
             <EntityTypeMapping TypeName="DataMaxDBModel.CB_Entita">
               <MappingFragment StoreEntitySet="CB_Entita">
-                <ScalarProperty Name="OrdineElaborazione" ColumnName="OrdineElaborazione" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="NomeTabellaDestinazione" ColumnName="NomeTabellaDestinazione" />
                 <ScalarProperty Name="ProceduraEstrazione" ColumnName="ProceduraEstrazione" />
                 <ScalarProperty Name="PathCSV" ColumnName="PathCSV" />
                 <ScalarProperty Name="PathCSVscarti" ColumnName="PathCSVscarti" />
+                <ScalarProperty Name="OrdineElaborazione" ColumnName="OrdineElaborazione" />
                 <ScalarProperty Name="Attivo" ColumnName="Attivo" />
               </MappingFragment>
             </EntityTypeMapping>

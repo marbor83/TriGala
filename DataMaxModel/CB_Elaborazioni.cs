@@ -17,11 +17,11 @@ namespace DataMaxModel
         public int id { get; set; }
         public int id_Entita { get; set; }
         public int id_Tipologia { get; set; }
-        public System.DateTime DataElaborazione { get; set; }
-        public int id_Esito { get; set; }
         public System.DateTime DataDa { get; set; }
         public Nullable<System.DateTime> DataA { get; set; }
         public Nullable<int> IdCliente { get; set; }
+        public System.DateTime DataElaborazione { get; set; }
+        public int id_Esito { get; set; }
     
         public virtual CB_Entita CB_Entita { get; set; }
         public virtual CB_TipologiaElaborazione CB_TipologiaElaborazione { get; set; }

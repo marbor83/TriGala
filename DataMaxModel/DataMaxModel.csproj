@@ -47,63 +47,61 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CB_Elaborazioni.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CB_Entita.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CB_EntitaCampi.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CB_EntitaCampiValoriAmmessi.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CB_Esito.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CB_TipoCampo.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CB_TipologiaElaborazione.cs">
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataMaxModel.Context.cs">
+    <Compile Include="DataMaxDbModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataMaxModel.Context.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataMaxModel.cs">
+    <Compile Include="DataMaxDbModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataMaxModel.tt</DependentUpon>
+      <DependentUpon>DataMaxDbModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataMaxModel.Designer.cs">
+    <Compile Include="DataMaxDbModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataMaxModel.edmx</DependentUpon>
+      <DependentUpon>DataMaxDbModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="DataMaxModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DataMaxModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
-    <None Include="DataMaxModel.Context.tt">
+    <EntityDeploy Include="DataMaxDbModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DataMaxDbModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataMaxDbModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DataMaxModel.edmx</DependentUpon>
-      <LastGenOutput>DataMaxModel.Context.cs</LastGenOutput>
+      <DependentUpon>DataMaxDbModel.edmx</DependentUpon>
+      <LastGenOutput>DataMaxDbModel.Context.cs</LastGenOutput>
     </None>
-    <None Include="DataMaxModel.edmx.diagram">
-      <DependentUpon>DataMaxModel.edmx</DependentUpon>
+    <None Include="DataMaxDbModel.edmx.diagram">
+      <DependentUpon>DataMaxDbModel.edmx</DependentUpon>
     </None>
-    <None Include="DataMaxModel.tt">
+    <None Include="DataMaxDbModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DataMaxModel.edmx</DependentUpon>
-      <LastGenOutput>DataMaxModel.cs</LastGenOutput>
+      <DependentUpon>DataMaxDbModel.edmx</DependentUpon>
+      <LastGenOutput>DataMaxDbModel.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
