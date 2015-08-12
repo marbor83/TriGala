@@ -22,7 +22,7 @@ namespace TriGala
 {
     public partial class frmMain : Form
     {
-        
+
         private ILogService logService = new FileLogService(typeof(frmMain));
 
         public frmMain(string[] args)
@@ -116,6 +116,7 @@ namespace TriGala
             DataTable dtRigheOk = new DataTable();
             DataTable dtRigheScarti = new DataTable();
             String path_to_save = String.Empty;
+            String TipoFile = String.Empty;
             bool exists = false;
 
             try
@@ -150,8 +151,27 @@ namespace TriGala
 
                     //Salva i file CSV dei dati
                     Exporter objExporter = new Exporter();
-                    objExporter.ExportType = ExportFormat.EXCEL;
-                    objExporter.CSV_WithHeader = true;
+
+                    switch (ConfigurationManager.AppSettings["ExportFormat"].ToString().ToUpper())
+                    {
+                        case "CSV":
+                            objExporter.ExportType = ExportFormat.CSV;
+                            objExporter.CSV_WithHeader = false;
+                            TipoFile = "csv";
+                            break;
+                        case "XLS":
+                            objExporter.ExportType = ExportFormat.EXCEL;
+                            TipoFile = "xls";
+                            break;
+                        case "XLSX":
+                            objExporter.ExportType = ExportFormat.EXCEL;
+                            TipoFile = "xls";
+                            break;
+                        default:
+                            objExporter.ExportType = ExportFormat.EXCEL;
+                            TipoFile = "xls";
+                            break;
+                    }
 
                     if (dtRigheOk.Rows.Count > 0)
                     {
@@ -160,7 +180,7 @@ namespace TriGala
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
                             System.IO.Directory.CreateDirectory(path_to_save);
-                        File.WriteAllBytes(String.Format("{0}{1}_{2}_RigheOk{3}", path_to_save, DateTime.Now.ToString("yyyMMddHHmmssfff"), myEntity.Nome, ".xlsx"), csvOK);
+                        File.WriteAllBytes(String.Format("{0}{1}_{2}_RigheOk.{3}", path_to_save, DateTime.Now.ToString("yyyMMddHHmmssfff"), myEntity.Nome, TipoFile), csvOK);
                     }
 
                     if (dtRigheScarti.Rows.Count > 0)
@@ -171,7 +191,7 @@ namespace TriGala
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
                             System.IO.Directory.CreateDirectory(path_to_save);
-                        File.WriteAllBytes(String.Format("{0}{1}_{2}_RigheScarti{3}", path_to_save, DateTime.Now.ToString("yyyMMddHHmmssfff"), myEntity.Nome, ".csv"), csvScarti);
+                        File.WriteAllBytes(String.Format("{0}{1}_{2}_RigheScarti.{3}", path_to_save, DateTime.Now.ToString("yyyMMddHHmmssfff"), myEntity.Nome, TipoFile), csvScarti);
                     }
 
                     retValue = Common.Esito_Elaborazione.OK;
@@ -209,9 +229,9 @@ namespace TriGala
                             //Do nothing Esito ok!
                             break;
                         case 0:
-                            return Common.Esito_Elaborazione.TabellaPiena;                          
+                            return Common.Esito_Elaborazione.TabellaPiena;
                         case -1:
-                            return Common.Esito_Elaborazione.Errore;                           
+                            return Common.Esito_Elaborazione.Errore;
                         default:
                             return Common.Esito_Elaborazione.Errore;
                     }
@@ -602,7 +622,7 @@ namespace TriGala
                     mySqlCommand.CommandType = CommandType.StoredProcedure;
                     mySqlCommand.Connection = mySQLConn;
                     mySqlCommand.CommandTimeout = Int32.Parse(ConfigurationManager.AppSettings["CommandTimeOut"].ToString());
-                    
+
 
                     SqlParameter p = new SqlParameter();
                     p.ParameterName = "DataDa";
@@ -695,7 +715,7 @@ namespace TriGala
                 {
                     switch (TableName)
                     {
-                        case "GALA_ANAGRAFICA_CLIENTI":                            
+                        case "GALA_ANAGRAFICA_CLIENTI":
                             if (sge.GALA_ANAGRAFICA_CLIENTI.Count() == 0)
                                 retValue = 1;
                             break;
