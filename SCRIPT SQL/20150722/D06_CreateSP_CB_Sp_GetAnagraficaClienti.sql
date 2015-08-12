@@ -5,6 +5,56 @@ CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]
 AS
 BEGIN
 
+	-- In caso di cambio avvenuto nei contratti, devo poter aggiornare i clienti --
+	-- nel caso in cui IdCliente è NULL, lancio la procedura di recupero dei contratti e recupero tutti gli IdCliente che --
+	-- potrebbero aver necessità di aggiornamento --
+	CREATE TABLE #tmpContratti
+	(
+		[ID_CONTRATTO] VARCHAR(20) NOT NULL,
+		[ID_AZIENDA] VARCHAR(10) NOT NULL, 
+		[ID_CLIENTE] VARCHAR(30) NOT NULL, 
+		[STATO] VARCHAR(10) NOT NULL, 
+		[DATA_INIZIO] DATETIME  NULL, 
+		[DATA_FINE] DATETIME  NULL, 
+		[DATA_CESSAZIONE] DATETIME NULL, 
+		[CONV_APPARTENENZA] VARCHAR(100) NULL, 
+		[ID_BU] VARCHAR(10) NULL, 
+		[DESCR_BU] VARCHAR(50) NULL, 
+		[ID_AREA] VARCHAR(10) NULL, 
+		[DESCR_AREA] VARCHAR(50) NULL, 
+		[ID_AGENTE] VARCHAR(10) NULL, 
+		[DESCR_AGENTE] VARCHAR(50) NULL, 
+		[CENTRO_DI_COSTO] VARCHAR(50) NULL, 
+		[ID_PAG_MOD] VARCHAR(10)  NULL, 
+		[DESCR_PAG_MOD] VARCHAR(50)  NULL, 
+		[CIG] VARCHAR(200) NULL, 
+		[CUP] VARCHAR(200) NULL, 
+		[ODA] VARCHAR(200) NULL,
+		IdTipoContratto VARCHAR(10) NULL,
+		DescrizioneTipoContratto VARCHAR(200) NULL,
+		IDAgenzia VARCHAR(10) NULL,
+		NomeAgenzia VARCHAR(200) NULL	
+	)	
+	
+	CREATE TABLE #tmpClientiContratti
+	(
+		ID_CLIENTE VARCHAR(30) NOT NULL
+	)
+	
+	IF @IdCliente IS NULL
+	BEGIN
+		INSERT INTO #tmpContratti
+			EXEC GALA_CB.CB_Sp_GetAnagraficaContratti
+				@DataDa,
+				@DataA,
+				@IdCliente		
+				
+		INSERT INTO #tmpClientiContratti
+			SELECT  DISTINCT ID_CLIENTE 		
+			FROM #tmpContratti 
+	END
+
+
 	select  'IT10' as ID_AZIENDA,
 			a.IDAnagrafica ID_CLIENTE,		
 			a.IDAnagrafica as id_master, -- per ora impostato ad idcliente poichè sono tutti master / oppure rimuovere dal tracciato
@@ -169,7 +219,13 @@ BEGIN
 						where	c.IDAnagrafica=a.IDAnagrafica
 								and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')) = 0
 				)*/			
-	and a.DatUMO between @DataDa and @DataA
-	and a.IDAnagrafica = ISNULL(@IdCliente, a.IDAnagrafica)				
+	and ((a.DatUMO between @DataDa and @DataA
+		and a.IDAnagrafica = ISNULL(@IdCliente, a.IDAnagrafica)	) 
+		OR (a.IDAnagrafica in (SELECT ID_CLIENTE FROM #tmpClientiContratti)))
 	order by a.IDAnagrafica
+	
+	drop table #tmpContratti
+	drop table #tmpClientiContratti
+		
+	
 END
