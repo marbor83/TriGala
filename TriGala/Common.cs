@@ -16,13 +16,14 @@ namespace TriGala
         {
             OK = 10,
             TabellaPiena = -98,
-            Errore = -99
+            Errore = -99,
+            Default = -1
         }
 
         public enum Tipo_Elaborazione
         {
             Automatica = 100,
-            Manulae = 200
+            Manuale = 200
         }
 
         public enum Entita

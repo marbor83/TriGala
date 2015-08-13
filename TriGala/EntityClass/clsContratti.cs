@@ -17,7 +17,7 @@ namespace TriGala.EntityClass
             try
             {
                 //DESCR_BU obbligatorio se presente ID_BU
-                if (myRow["ID_BU"] != DBNull.Value & myRow["DESCR_BU"] == DBNull.Value)
+                if (myRow["ID_BU"] != DBNull.Value && myRow["DESCR_BU"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_BU: campo obligatorio se impostato ID_BU";
                     return false;
@@ -25,7 +25,7 @@ namespace TriGala.EntityClass
 
 
                 //DESCR_AREA obbligatorio se presente ID_AREA
-                if (myRow["ID_AREA"] != DBNull.Value & myRow["DESCR_AREA"] == DBNull.Value)
+                if (myRow["ID_AREA"] != DBNull.Value && myRow["DESCR_AREA"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_AREA: campo obligatorio se impostato ID_AREA";
                     return false;
@@ -33,7 +33,7 @@ namespace TriGala.EntityClass
 
 
                 //Descrizione Agente obbligatorio se presente id_Agente
-                if (myRow["ID_AGENTE"] != DBNull.Value & myRow["DESCR_AGENTE"] == DBNull.Value)
+                if (myRow["ID_AGENTE"] != DBNull.Value && myRow["DESCR_AGENTE"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_AGENTE: campo obligatorio se impostato ID_AGENTE";
                     return false;

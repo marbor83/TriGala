@@ -24,6 +24,7 @@ namespace TriGala
     {
 
         private ILogService logService = new FileLogService(typeof(frmMain));
+        Dictionary<string, string> dicEsiti = new Dictionary<string, string>();
 
         public frmMain(string[] args)
         {
@@ -33,7 +34,199 @@ namespace TriGala
                 StartCBProcess();
         }
 
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                using (DataMaxDBEntities dme = new DataMaxDBEntities())
+                {
+                    List<CB_Entita> cbe = new List<CB_Entita>();
 
+                    //leggi entità
+                    cbe = ReadCBEntity();
+
+                    foreach (CB_Entita entity in cbe)
+                    {
+                        clbEntita.Items.Add(entity.NomeTabellaDestinazione);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        private void btnManuale_Click(object sender, EventArgs e)
+        {
+            DateTime dtControllo = new DateTime();
+            bool bSelect = false;
+            String sMessaggio = String.Empty;
+
+            if (String.IsNullOrEmpty(txtDataA.Text) || String.IsNullOrEmpty(txtDataDa.Text))
+            {
+                MessageBox.Show("Valorizzare le date per l'elaborazione");
+                return;
+            }
+
+            if (!DateTime.TryParse(txtDataDa.Text, out dtControllo))
+            {
+                MessageBox.Show("DataDa non valida");
+                return;
+            }
+
+            if (!DateTime.TryParse(txtDataA.Text, out dtControllo))
+            {
+                MessageBox.Show("DataA non valida");
+                return;
+            }
+
+
+            if (DateTime.Parse(txtDataDa.Text) > DateTime.Parse(txtDataA.Text))
+            {
+                MessageBox.Show("Intervallo di date non valido");
+                return;
+            }
+
+
+            for (int i = 0; i < clbEntita.Items.Count; i++)
+            {
+                if (clbEntita.GetItemChecked(i))
+                {
+                    bSelect = true;
+                    break;
+                }
+            }
+
+            if (!bSelect)
+            {
+                MessageBox.Show("Selezionare un'entità");
+                return;
+            }
+
+
+            if (!String.IsNullOrEmpty(txtIdCliente.Text))
+            {
+                int j;
+
+                if (!Int32.TryParse(txtIdCliente.Text, out j))
+                {
+                    MessageBox.Show("Id Cliente non valido");
+                    return;
+                }
+            }
+
+
+            if (!StartProcessoManuale())
+                MessageBox.Show("Errore nell'elaborazione controlare il file di LOG");
+            else
+            {
+                foreach (KeyValuePair<string, string> el in dicEsiti)
+                {
+                    sMessaggio = String.Format("Elaborazione Entità: {0} Terminata con esito: {1} {2}", el.Key, el.Value, Environment.NewLine);
+                }
+                MessageBox.Show(sMessaggio);
+            }
+        }
+
+        private bool StartProcessoManuale()
+        {
+            bool retValue = false;
+            Common.Esito_Elaborazione EsitoElab = Common.Esito_Elaborazione.Default;
+            String result = String.Empty;
+
+            try
+            {
+                dicEsiti.Clear();
+                CB_Entita entity;
+
+                for (int i = 0; i < clbEntita.Items.Count; i++)
+                {                    
+                    if (clbEntita.GetItemChecked(i))
+                    {
+                        string NomeTabella = (string)clbEntita.Items[i];
+
+                        using (DataMaxDBEntities dme = new DataMaxDBEntities())
+                        {
+                            entity = dme.CB_Entita.Where(e => e.NomeTabellaDestinazione == NomeTabella).SingleOrDefault();
+                        }
+
+                        logService.Info(String.Format("Inizio elaborazione entità: {0}", entity.Nome));
+
+                        //Data partenza Elaborazione
+                        DateTime DataDa = DateTime.Parse(txtDataDa.Text);
+
+                        //Data fien Elaborazione
+                        DateTime DataA = DateTime.Parse(txtDataA.Text).AddDays(1).AddSeconds(-1);
+
+                        try
+                        {
+                            //Verifica che la relativa tabella di Storage sia vuota
+                            int Esito = StorageTableIsEmpty(NomeTabella);
+
+                            if (Esito > 0)
+                            {
+                                if (String.IsNullOrEmpty(txtIdCliente.Text))
+                                    //Avvia l'elaborazione per l'entità corrente
+                                    EsitoElab = AvviaElaborazioneEntita(entity.id, DataDa, DataA);
+                                else
+                                    EsitoElab = AvviaElaborazioneEntita(entity.id, DataDa, DataA, Convert.ToInt32(txtIdCliente.Text));
+
+                                result = "Elaborazione completata";
+                            }
+                            else
+                            {
+                                if (Esito == -1)
+                                {
+                                    EsitoElab = Common.Esito_Elaborazione.Errore;
+                                    result = "Elaborazione in errore";
+                                }
+                                else
+                                {
+                                    //Aggiorna l'esito dell'elaborazione con "Tabella piena"
+                                    EsitoElab = Common.Esito_Elaborazione.TabellaPiena;
+                                    result = "Elaborazione annullata causa tabella piena";
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            result = "errore";
+                            EsitoElab = Common.Esito_Elaborazione.Errore;
+                        }
+
+                        //Aggiorna l'esito dell'elaborazione
+                        UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Manuale, DataDa, DataA, EsitoElab);
+
+                        dicEsiti.Add(entity.NomeTabellaDestinazione, result);
+
+                        logService.Info(String.Format("Fine elaborazione entità: {0} Terminata con esito: {1}", entity.Nome, result));
+                    }
+                }
+
+                logService.Info("Riepilogo:");
+                foreach (KeyValuePair<string, string> el in dicEsiti)
+                {
+                    logService.Info(String.Format("Elaborazione Entità: {0} Terminata con esito: {1} ", el.Key, el.Value));
+                }
+
+                logService.Info(String.Format("Processo terminato: {0}", DateTime.Now.ToString()));
+
+                retValue = true;
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+
+
+            return retValue;
+        }
 
         private void btn_Start_Click(object sender, EventArgs e)
         {
@@ -45,12 +238,14 @@ namespace TriGala
 
             try
             {
-
+                dicEsiti.Clear();
                 using (DataMaxDBEntities dme = new DataMaxDBEntities())
                 {
                     DateTime UltimaElaborazione;
                     List<CB_Entita> cbe = new List<CB_Entita>();
-                    String sMessaggio = String.Empty;
+                    //String sMessaggio = String.Empty;
+                    Common.Esito_Elaborazione EsitoElab = Common.Esito_Elaborazione.Default;
+                    String result = String.Empty;
 
                     logService.Info(String.Format("Processo avviato: {0}", DateTime.Now.ToString()));
 
@@ -64,30 +259,52 @@ namespace TriGala
                         //Prende l'ultima data di elaborazione per l'entità
                         UltimaElaborazione = GetDateLastElaborazioneByEntity(entity);
 
-                        //Verifica che la relativa tabella di Storage sia vuota
-                        int Esito = StorageTableIsEmpty(entity.NomeTabellaDestinazione);
+                        //Memorizza data lancio elaborazione
+                        DateTime DataElaborazione = DateTime.Now;
 
-                        if (Esito > 0)
+                        try
                         {
-                            //Memorizza data lancio elaborazione
-                            DateTime DataElaborazione = DateTime.Now;
+                            //Verifica che la relativa tabella di Storage sia vuota
+                            int Esito = StorageTableIsEmpty(entity.NomeTabellaDestinazione);
 
-                            //Avvia l'elaborazione per l'entità corrente
-                            Common.Esito_Elaborazione EsitoElab = AvviaElaborazioneEntita(entity.id, UltimaElaborazione, DataElaborazione);
-
-                            //Aggiorna l'esito dell'elaborazione
-                            UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, DataElaborazione, EsitoElab);
-                        }
-                        else
-                        {
-                            if (Esito == -1)
-                                UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, Common.Esito_Elaborazione.Errore);
+                            if (Esito > 0)
+                            {
+                                //Avvia l'elaborazione per l'entità corrente
+                                EsitoElab = AvviaElaborazioneEntita(entity.id, UltimaElaborazione, DataElaborazione);
+                                result = "Elaborazione completata";
+                            }
                             else
-                                //Aggiorna l'esito dell'elaborazione con "Tabella piena"
-                                UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, Common.Esito_Elaborazione.TabellaPiena);
+                            {
+                                if (Esito == -1)
+                                {
+                                    EsitoElab = Common.Esito_Elaborazione.Errore;
+                                    result = "Elaborazione in errore";
+                                }
+                                else
+                                {
+                                    //Aggiorna l'esito dell'elaborazione con "Tabella piena"
+                                    EsitoElab = Common.Esito_Elaborazione.TabellaPiena;
+                                    result = "Elaborazione annullata causa tabella piena";
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            EsitoElab = Common.Esito_Elaborazione.Errore;
                         }
 
-                        logService.Info(String.Format("Fine elaborazione entità: {0}", entity.Nome));
+                        //Aggiorna l'esito dell'elaborazione
+                        UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, DataElaborazione, EsitoElab);
+
+                        dicEsiti.Add(entity.NomeTabellaDestinazione, result);
+
+                        logService.Info(String.Format("Fine elaborazione entità: {0} Terminata con esito: {1}", entity.Nome, result));
+                    }
+
+                    logService.Info("Riepilogo:");
+                    foreach (KeyValuePair<string, string> el in dicEsiti)
+                    {
+                        logService.Info(String.Format("Elaborazione Entità: {0} Terminata con esito: {1} ", el.Key, el.Value));
                     }
 
                     logService.Info(String.Format("Processo terminato: {0}", DateTime.Now.ToString()));
@@ -99,7 +316,7 @@ namespace TriGala
             catch (Exception ex)
             {
                 logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
             }
         }
 
@@ -122,6 +339,7 @@ namespace TriGala
             try
             {
 
+
                 using (DataMaxDBEntities dbDataMax = new DataMaxDBEntities())
                 {
 
@@ -139,6 +357,7 @@ namespace TriGala
                     dtRigheScarti.Columns.Add("Messaggio");
 
                     //Esgue la Store per recuperare i dati
+                    logService.Info(String.Format("Escuzione Store recupero dati. Parametri: DataDa: {0} DataA {1} idCliente {2}", DataDa.ToString(), DataA.ToString(), idCliente.ToString()));
                     dtQueryResult = ExecuteStore(StoreProcedureName, DataDa, DataA, idCliente);
 
                     //Verificare obligatorietà e congruenza dei dati
@@ -175,6 +394,7 @@ namespace TriGala
 
                     if (dtRigheOk.Rows.Count > 0)
                     {
+                        logService.Info("Creazione File righe esportate");
                         byte[] csvOK = objExporter.ExportDataTable(dtRigheOk);
                         path_to_save = ConfigurationManager.AppSettings["PathCSV_OK"].ToString();
                         exists = System.IO.Directory.Exists(path_to_save);
@@ -185,6 +405,7 @@ namespace TriGala
 
                     if (dtRigheScarti.Rows.Count > 0)
                     {
+                        logService.Info("Creazione File righe scartate");
                         byte[] csvScarti = objExporter.ExportDataTable(dtRigheScarti);
 
                         path_to_save = ConfigurationManager.AppSettings["PathCSV_Scarti"].ToString();
@@ -239,6 +460,8 @@ namespace TriGala
 
                 SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString());
 
+                logService.Info("Inserimento nella tabella di Storage");
+
                 using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection))
                 {
                     connection.Open();
@@ -289,10 +512,11 @@ namespace TriGala
         private void VerifcaDati(int idEntita, DataTable dtQueryResult, ref DataTable dtRigheOk, ref DataTable dtRigheScarti)
         {
             String sMessagio = String.Empty;
+            int j = 0;
 
             try
             {
-
+                logService.Info("Inizio Validazione Campi");
                 Common.Entita myEntity = (Common.Entita)Enum.ToObject(typeof(Common.Entita), idEntita);
 
                 switch (myEntity)
@@ -303,6 +527,7 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+                            j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, idEntita, ref sMessagio))
                             {
@@ -331,6 +556,7 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+                            j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, idEntita, ref sMessagio))
                             {
@@ -359,6 +585,7 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+                            j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, idEntita, ref sMessagio))
                             {
@@ -386,6 +613,7 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+                            j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, idEntita, ref sMessagio))
                             {
@@ -414,6 +642,7 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+                            j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, idEntita, ref sMessagio))
                             {
@@ -443,6 +672,7 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+                            j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, idEntita, ref sMessagio))
                             {
@@ -469,6 +699,8 @@ namespace TriGala
                     default:
                         break;
                 }
+
+                logService.Info("Fine Validazione Campi");
             }
             catch (Exception ex)
             {
@@ -541,64 +773,69 @@ namespace TriGala
                     String ValoreCampo = r[c.NomeCampoDestinazione] == DBNull.Value ? String.Empty : r[c.NomeCampoDestinazione].ToString();
 
                     //Controllo obbligatorietà del campo
-                    if (String.IsNullOrEmpty(ValoreCampo) & c.Obbligatorio)
+                    if (String.IsNullOrEmpty(ValoreCampo) && c.Obbligatorio)
                     {
                         sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.NomeCampoDestinazione);
                         return false;
                     }
 
-                    if (!String.IsNullOrEmpty(ValoreCampo))
+                    //Legge la cofigurazione per sapere se deve fare solo i controlli di obbligatorietà o anche di tipo e lunghezza
+                    if (ConfigurationManager.AppSettings["ControlloSoloRequired"].ToString().ToUpper() != "Y")
                     {
 
-                        //Controllo tipo CAMPO
-                        switch (c.CB_TipoCampo.Nome.ToUpper())
+                        if (!String.IsNullOrEmpty(ValoreCampo))
                         {
-                            case "STRING":
-                                break;
-                            case "INT":
-                                int i;
-                                if (!Int32.TryParse(ValoreCampo, out i))
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                    return false;
-                                }
-                                break;
-                            case "DATE":
-                                DateTime dt;
-                                if (!DateTime.TryParse(ValoreCampo, out dt))
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                    return false;
-                                }
 
-                                break;
-                            case "DECIMAL2":
+                            //Controllo tipo CAMPO
+                            switch (c.CB_TipoCampo.Nome.ToUpper())
+                            {
+                                case "STRING":
+                                    break;
+                                case "INT":
+                                    int i;
+                                    if (!Int32.TryParse(ValoreCampo, out i))
+                                    {
+                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                        return false;
+                                    }
+                                    break;
+                                case "DATE":
+                                    DateTime dt;
+                                    if (!DateTime.TryParse(ValoreCampo, out dt))
+                                    {
+                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                        return false;
+                                    }
 
-                                //int idx = ValoreCampo.IndexOf(",");
+                                    break;
+                                case "DECIMAL2":
 
-                                //if (ValoreCampo.Length != idx + 2)
-                                //{
-                                //    sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                //    return false;
-                                //}
+                                    //int idx = ValoreCampo.IndexOf(",");
 
-                                decimal dd;
-                                if (!Decimal.TryParse(ValoreCampo, out dd))
-                                {
-                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoDestinazione);
-                                    return false;
-                                }
+                                    //if (ValoreCampo.Length != idx + 2)
+                                    //{
+                                    //    sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                    //    return false;
+                                    //}
 
-                                break;
-                            default:
-                                break;
-                        }
+                                    decimal dd;
+                                    if (!Decimal.TryParse(ValoreCampo, out dd))
+                                    {
+                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoDestinazione);
+                                        return false;
+                                    }
 
-                        //Controllo lunghezza campo
-                        if (ValoreCampo.Length > c.Lunghezza)
-                        {
-                            sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoDestinazione, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
-                            return false;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            //Controllo lunghezza campo
+                            if (ValoreCampo.Length > c.Lunghezza)
+                            {
+                                sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoDestinazione, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
+                                return false;
+                            }
                         }
                     }
                 }
@@ -666,13 +903,15 @@ namespace TriGala
         private DateTime GetDateLastElaborazioneByEntity(CB_Entita entity)
         {
             DateTime retValue = DateTime.Now;
-            int idEsitoElaborazioe = Common.Esito_Elaborazione.OK.GetHashCode();
+            int idEsitoElaborazione = Common.Esito_Elaborazione.OK.GetHashCode();
+            int idTipoElaborazione = Common.Tipo_Elaborazione.Automatica.GetHashCode();
 
             try
             {
                 using (DataMaxDBEntities dme = new DataMaxDBEntities())
                 {
-                    retValue = (from elb in dme.CB_Elaborazioni where elb.id_Entita == entity.id & elb.id_Esito == idEsitoElaborazioe select elb.DataElaborazione).Max();
+                    retValue = (from elb in dme.CB_Elaborazioni where elb.id_Entita == entity.id && elb.id_Esito == idEsitoElaborazione && elb.id_Tipologia == idTipoElaborazione select elb.DataElaborazione).Max();
+                    logService.Info(String.Format("Data Ultima Elaborazione ricavate {0} per l'entità {1}", retValue.ToString(), entity.Nome));
                 }
             }
             catch (Exception ex)
@@ -708,6 +947,8 @@ namespace TriGala
         private int StorageTableIsEmpty(string TableName)
         {
             int retValue = 0;
+
+            logService.Info(String.Format("Verifica tabella di storage {0} vuota.", TableName));
 
             try
             {
@@ -849,6 +1090,9 @@ namespace TriGala
             return retValue;
         }
         #endregion
+
+
+
 
     }
 }

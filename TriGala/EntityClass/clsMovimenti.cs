@@ -17,7 +17,7 @@ namespace TriGala.EntityClass
             try
             {
                 //DESCR_PAG_MOD obbligatorio se presente ID_PAG_MOD
-                if (myRow["ID_PAG_MOD"] != DBNull.Value & myRow["DESCR_PAG_MOD"] == DBNull.Value)
+                if (myRow["ID_PAG_MOD"] != DBNull.Value && myRow["DESCR_PAG_MOD"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_PAG_MOD: campo obligatorio se impostato ID_PAG_MOD";
                     return false;
@@ -25,7 +25,7 @@ namespace TriGala.EntityClass
 
 
                 //DESCR_PAG_TER obbligatorio se presente ID_PAG_TER
-                if (myRow["ID_PAG_TER"] != DBNull.Value & myRow["DESCR_PAG_TER"] == DBNull.Value)
+                if (myRow["ID_PAG_TER"] != DBNull.Value && myRow["DESCR_PAG_TER"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_PAG_TER: campo obligatorio se impostato ID_PAG_TER";
                     return false;

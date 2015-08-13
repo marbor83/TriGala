@@ -19,14 +19,14 @@ namespace TriGala.EntityClass
                 string ValoreCampoPersonale = myRow["PERSONALE"] == DBNull.Value ? String.Empty : myRow["PERSONALE"].ToString().ToUpper();
 
                 //ID_GAR_ENTE obligatorio se PERSONALE è uguale a 'N'
-                if (ValoreCampoPersonale == "N" & myRow["ID_GAR_ENTE"] == DBNull.Value)
+                if (ValoreCampoPersonale == "N" && myRow["ID_GAR_ENTE"] == DBNull.Value)
                 {
                     sMessaggio = "ID_GAR_ENTE: campo obligatorio se PERSONALE è uguale a 'N'";
                     return false;
                 }
 
                 //DESCR_GAR_ENTE obligatorio se PERSONALE è uguale a 'N'
-                if (ValoreCampoPersonale == "N" & myRow["DESCR_GAR_ENTE"] == DBNull.Value)
+                if (ValoreCampoPersonale == "N" && myRow["DESCR_GAR_ENTE"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_GAR_ENTE: campo obligatorio se PERSONALE è uguale a 'N'";
                     return false;

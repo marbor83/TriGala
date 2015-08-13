@@ -18,7 +18,7 @@ namespace TriGala.EntityClass
             try
             {
                 //Tipo Cliente obbligatorio se presente id_Tipo_Cliente
-                if (myRow["ID_TIPO_CLIENTE"] != DBNull.Value & myRow["DESCR_TIPO_CLIENTE"] == DBNull.Value)
+                if (myRow["ID_TIPO_CLIENTE"] != DBNull.Value && myRow["DESCR_TIPO_CLIENTE"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_TIPO_CLIENTE: campo obligatorio se impostato ID_TIPO_CLIENTE";
                     return false;
@@ -69,14 +69,14 @@ namespace TriGala.EntityClass
 
 
                 //Descrizione Agente obbligatorio se presente id_Agente
-                if (myRow["ID_AGENTE"] != DBNull.Value & myRow["DESCR_AGENTE"] == DBNull.Value)
+                if (myRow["ID_AGENTE"] != DBNull.Value && myRow["DESCR_AGENTE"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_AGENTE: campo obligatorio se impostato ID_AGENTE";
                     return false;
                 }
 
                 //Descrizione Agenzia obbligatorio se presente id_Agenzia
-                if (myRow["ID_AGENZIA"] != DBNull.Value & myRow["DESCR_AGENZIA"] == DBNull.Value)
+                if (myRow["ID_AGENZIA"] != DBNull.Value && myRow["DESCR_AGENZIA"] == DBNull.Value)
                 {
                     sMessaggio = "DESCR_AGENZIA: campo obligatorio se impostato ID_AGENZIA";
                     return false;
