@@ -20,7 +20,7 @@ CREATE TABLE GALA_CB.CB_TipoCampo (id int IDENTITY NOT NULL, Nome varchar(100) N
 CREATE TABLE GALA_CB.CB_EntitaCampiValoriAmmessi (id int IDENTITY NOT NULL, id_EntitaCampi int NOT NULL, Valore varchar(100) NOT NULL, Attivo bit DEFAULT 1 NOT NULL, PRIMARY KEY (id));
 CREATE TABLE GALA_CB.CB_Elaborazioni (id int IDENTITY NOT NULL, id_Entita int NOT NULL, id_Tipologia int NOT NULL, DataDa datetime NOT NULL, DataA datetime NULL, IdCliente int NULL, DataElaborazione datetime NOT NULL, id_Esito int NOT NULL, PRIMARY KEY (id));
 CREATE TABLE GALA_CB.CB_TipologiaElaborazione (id int NOT NULL, Descrizione varchar(100) NOT NULL, PRIMARY KEY (id));
-CREATE TABLE GALA_CB.CB_Esito (id int IDENTITY NOT NULL, Descrizione varchar(100) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE GALA_CB.CB_Esito (id int NOT NULL, Descrizione varchar(100) NOT NULL, PRIMARY KEY (id));
 ALTER TABLE GALA_CB.CB_EntitaCampi ADD CONSTRAINT FKCB_EntitaC895445 FOREIGN KEY (id_Entita) REFERENCES GALA_CB.CB_Entita (id);
 ALTER TABLE GALA_CB.CB_EntitaCampi ADD CONSTRAINT FKCB_EntitaC26772 FOREIGN KEY (id_TipoCampo) REFERENCES GALA_CB.CB_TipoCampo (id);
 ALTER TABLE GALA_CB.CB_EntitaCampiValoriAmmessi ADD CONSTRAINT FKCB_EntitaC134717 FOREIGN KEY (id_EntitaCampi) REFERENCES GALA_CB.CB_EntitaCampi (id);
@@ -229,8 +229,7 @@ SET IDENTITY_INSERT GALA_CB.CB_EntitaCampiValoriAmmessi OFF;
 INSERT INTO GALA_CB.CB_TipologiaElaborazione(id, Descrizione) VALUES (100, 'AUTOMATICA');
 INSERT INTO GALA_CB.CB_TipologiaElaborazione(id, Descrizione) VALUES (200, 'MANUALE');
 
-SET IDENTITY_INSERT GALA_CB.CB_Esito ON;
 INSERT INTO GALA_CB.CB_Esito(id, Descrizione) VALUES (10, 'OK');
 INSERT INTO GALA_CB.CB_Esito(id, Descrizione) VALUES (-98, 'Tabella di destinazione piena');
 INSERT INTO GALA_CB.CB_Esito(id, Descrizione) VALUES (-99, 'Errore durante l''elaborazione');
-SET IDENTITY_INSERT GALA_CB.CB_Esito OFF;
+INSERT INTO GALA_CB.CB_Esito(id, Descrizione) VALUES (-1, 'Default');
