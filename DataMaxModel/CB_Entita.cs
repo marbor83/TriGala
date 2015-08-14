@@ -24,8 +24,6 @@ namespace DataMaxModel
         public string Nome { get; set; }
         public string NomeTabellaDestinazione { get; set; }
         public string ProceduraEstrazione { get; set; }
-        public string PathCSV { get; set; }
-        public string PathCSVscarti { get; set; }
         public int OrdineElaborazione { get; set; }
         public bool Attivo { get; set; }
     

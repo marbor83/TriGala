@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DataMaxDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="DataMaxDBModelStoreContainer">
           <EntitySet Name="CB_Elaborazioni" EntityType="DataMaxDBModel.Store.CB_Elaborazioni" store:Type="Tables" Schema="GALA_CB" />
           <EntitySet Name="CB_Entita" EntityType="DataMaxDBModel.Store.CB_Entita" store:Type="Tables" Schema="GALA_CB" />
@@ -59,8 +59,6 @@
           <Property Name="Nome" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="NomeTabellaDestinazione" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="ProceduraEstrazione" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="PathCSV" Type="varchar" Nullable="false" MaxLength="512" />
-          <Property Name="PathCSVscarti" Type="varchar" Nullable="false" MaxLength="512" />
           <Property Name="OrdineElaborazione" Type="int" Nullable="false" />
           <Property Name="Attivo" Type="bit" Nullable="false" />
         </EntityType>
@@ -181,8 +179,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataMaxDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -243,8 +240,6 @@
           <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="NomeTabellaDestinazione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="ProceduraEstrazione" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
-          <Property Name="PathCSV" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
-          <Property Name="PathCSVscarti" Type="String" Nullable="false" MaxLength="512" Unicode="false" FixedLength="false" />
           <Property Name="OrdineElaborazione" Type="Int32" Nullable="false" />
           <Property Name="Attivo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CB_Elaborazioni" Relationship="DataMaxDBModel.FKCB_Elabora281711" FromRole="CB_Entita" ToRole="CB_Elaborazioni" />
@@ -401,8 +396,6 @@
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="NomeTabellaDestinazione" ColumnName="NomeTabellaDestinazione" />
                 <ScalarProperty Name="ProceduraEstrazione" ColumnName="ProceduraEstrazione" />
-                <ScalarProperty Name="PathCSV" ColumnName="PathCSV" />
-                <ScalarProperty Name="PathCSVscarti" ColumnName="PathCSVscarti" />
                 <ScalarProperty Name="OrdineElaborazione" ColumnName="OrdineElaborazione" />
                 <ScalarProperty Name="Attivo" ColumnName="Attivo" />
               </MappingFragment>
