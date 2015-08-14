@@ -363,6 +363,9 @@ namespace TriGala
                     if (dtRigheOk.Rows.Count > 0)
                         retValue = InsertIntoStorage(idEntita, dtRigheOk);
 
+                    if (retValue != Common.Esito_Elaborazione.OK)
+                        return retValue;
+
                     //Salva i file CSV dei dati
                     Exporter objExporter = new Exporter();
 
@@ -391,7 +394,8 @@ namespace TriGala
                     {
                         logService.Info("Creazione File righe esportate");
                         byte[] csvOK = objExporter.ExportDataTable(dtRigheOk);
-                        path_to_save = ConfigurationManager.AppSettings["PathCSV_OK"].ToString();
+                        path_to_save = String.Format("{0}\\{1}\\", ConfigurationManager.AppSettings["PathCSV_OK"].ToString(),myEntity.NomeTabellaDestinazione);
+                        //path_to_save = myEntity.PathCSV;
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
                             System.IO.Directory.CreateDirectory(path_to_save);
@@ -403,7 +407,8 @@ namespace TriGala
                         logService.Info("Creazione File righe scartate");
                         byte[] csvScarti = objExporter.ExportDataTable(dtRigheScarti);
 
-                        path_to_save = ConfigurationManager.AppSettings["PathCSV_Scarti"].ToString();
+                        path_to_save = String.Format("{0}\\{1}\\", ConfigurationManager.AppSettings["PathCSV_OK"].ToString(), myEntity.NomeTabellaDestinazione);
+                        //path_to_save = myEntity.PathCSVscarti;
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
                             System.IO.Directory.CreateDirectory(path_to_save);

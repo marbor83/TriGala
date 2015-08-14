@@ -32,10 +32,10 @@
             this.txtDataDa = new System.Windows.Forms.MaskedTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtIdCliente = new System.Windows.Forms.TextBox();
             this.txtDataA = new System.Windows.Forms.MaskedTextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtIdCliente = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnManuale = new System.Windows.Forms.Button();
             this.clbEntita = new System.Windows.Forms.CheckedListBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -50,6 +50,7 @@
             this.btn_Start.TabIndex = 0;
             this.btn_Start.Text = "Simulazione processo automatico";
             this.btn_Start.UseVisualStyleBackColor = true;
+            this.btn_Start.Visible = false;
             this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);
             // 
             // txtDataDa
@@ -85,6 +86,22 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Parametri per l\'elaborazione";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(17, 83);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Id Cliente";
+            // 
+            // txtIdCliente
+            // 
+            this.txtIdCliente.Location = new System.Drawing.Point(84, 80);
+            this.txtIdCliente.Name = "txtIdCliente";
+            this.txtIdCliente.Size = new System.Drawing.Size(79, 20);
+            this.txtIdCliente.TabIndex = 5;
+            // 
             // txtDataA
             // 
             this.txtDataA.Location = new System.Drawing.Point(84, 54);
@@ -102,22 +119,6 @@
             this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Data A:";
-            // 
-            // txtIdCliente
-            // 
-            this.txtIdCliente.Location = new System.Drawing.Point(84, 80);
-            this.txtIdCliente.Name = "txtIdCliente";
-            this.txtIdCliente.Size = new System.Drawing.Size(79, 20);
-            this.txtIdCliente.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 83);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Id Cliente";
             // 
             // btnManuale
             // 
