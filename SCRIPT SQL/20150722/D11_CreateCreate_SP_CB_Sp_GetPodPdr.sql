@@ -19,10 +19,10 @@ CREATE TABLE #TempPDRVolQta
 
 
 INSERT INTO #TempPODVolQta
-exec [GALA_CB].[ConsumoEnergiaFatturataUltimoAnno]
+exec [GALA_CB].[ConsumoEnergiaFatturataUltimoAnno] @IdCliente
 
 INSERT INTO #TempPDRVolQta
-exec [GALA_CB].[ConsumoGASFatturatoUltimoAnno]
+exec [GALA_CB].[ConsumoGASFatturatoUltimoAnno] @IdCliente
 
 
 select  *		

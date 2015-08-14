@@ -14,7 +14,7 @@ DROP TABLE GALA_CB.CB_TipologiaElaborazione;
 DROP TABLE GALA_CB.CB_Esito;
 */
 
-CREATE TABLE GALA_CB.CB_Entita (id int IDENTITY NOT NULL, Nome varchar(100) NOT NULL, NomeTabellaDestinazione varchar(100) NOT NULL, ProceduraEstrazione varchar(100) NOT NULL, PathCSV varchar(512) NOT NULL, PathCSVscarti varchar(512) NOT NULL, OrdineElaborazione int NOT NULL, Attivo bit DEFAULT 1 NOT NULL, PRIMARY KEY (id));
+CREATE TABLE GALA_CB.CB_Entita (id int IDENTITY NOT NULL, Nome varchar(100) NOT NULL, NomeTabellaDestinazione varchar(100) NOT NULL, ProceduraEstrazione varchar(100) NOT NULL, OrdineElaborazione int NOT NULL, Attivo bit DEFAULT 1 NOT NULL, PRIMARY KEY (id));
 CREATE TABLE GALA_CB.CB_EntitaCampi (id int IDENTITY NOT NULL, id_Entita int NOT NULL, NomeCampoOrigine varchar(100) NOT NULL, NomeCampoDestinazione varchar(100) NOT NULL, Descrizione varchar(100) NOT NULL, Obbligatorio bit NOT NULL, Lunghezza int NOT NULL, id_TipoCampo int NOT NULL, OrdineEstrazione int NOT NULL, Attivo bit DEFAULT 1 NOT NULL, PRIMARY KEY (id));
 CREATE TABLE GALA_CB.CB_TipoCampo (id int IDENTITY NOT NULL, Nome varchar(100) NOT NULL, PRIMARY KEY (id));
 CREATE TABLE GALA_CB.CB_EntitaCampiValoriAmmessi (id int IDENTITY NOT NULL, id_EntitaCampi int NOT NULL, Valore varchar(100) NOT NULL, Attivo bit DEFAULT 1 NOT NULL, PRIMARY KEY (id));
@@ -30,13 +30,13 @@ ALTER TABLE GALA_CB.CB_Elaborazioni ADD CONSTRAINT FKCB_Elabora877250 FOREIGN KE
 
 
 SET IDENTITY_INSERT GALA_CB.CB_Entita ON;
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1001, 'Anagrafica Clienti', 'GALA_ANAGRAFICA_CLIENTI', 'GALA_CB.CB_Sp_GetAnagraficaClienti', '\\path\', '\\path\', 2, 1);
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1002, 'Anagrafica Contratti', 'GALA_ANAGRAFICA_CONTRATTI', 'GALA_CB.CB_Sp_GetAnagraficaContratti', '\\path\', '\\path\', 1, 1);
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1003, 'Dati POD PDR', 'GALA_POD_PDR', 'GALA_CB.CB_Sp_GetPodPdr', '\\path\', '\\path\', 4, 1);
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1004, 'Anagrafica Movimenti', 'GALA_ANAGRAFICA_MOVIMENTI', 'GALA_CB.CB_Sp_GetAnagraficaMovimenti', '\\path\', '\\path\', 5, 1);
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1005, 'Anagrafica Contatti', 'GALA_CONTATTI', 'GALA_CB.CB_Sp_GetAnagraficaContatti', '\\path\', '\\path\', 3, 1);
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1006, 'Garanzie Factor', 'GALA_GARANZIE_FACTOR', 'GALA_CB.CB_Sp_GetGaranzieFactor', '\\path\', '\\path\', 6, 1);
-INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1007, 'Esposizione', 'GALA_ESPOSIZIONE', 'GALA_CB.CB_Sp_SetEsposizione', '\\path\', '\\path\', 7, 0);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1001, 'Anagrafica Clienti', 'GALA_ANAGRAFICA_CLIENTI', 'GALA_CB.CB_Sp_GetAnagraficaClienti', 2, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1002, 'Anagrafica Contratti', 'GALA_ANAGRAFICA_CONTRATTI', 'GALA_CB.CB_Sp_GetAnagraficaContratti', 1, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1003, 'Dati POD PDR', 'GALA_POD_PDR', 'GALA_CB.CB_Sp_GetPodPdr', 4, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1004, 'Anagrafica Movimenti', 'GALA_ANAGRAFICA_MOVIMENTI', 'GALA_CB.CB_Sp_GetAnagraficaMovimenti', 5, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1005, 'Anagrafica Contatti', 'GALA_CONTATTI', 'GALA_CB.CB_Sp_GetAnagraficaContatti', 3, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1006, 'Garanzie Factor', 'GALA_GARANZIE_FACTOR', 'GALA_CB.CB_Sp_GetGaranzieFactor', 6, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, PathCSV, PathCSVscarti, OrdineElaborazione, Attivo) VALUES (1007, 'Esposizione', 'GALA_ESPOSIZIONE', 'GALA_CB.CB_Sp_SetEsposizione', 7, 0);
 SET IDENTITY_INSERT GALA_CB.CB_Entita OFF;
 
 SET IDENTITY_INSERT GALA_CB.CB_TipoCampo ON;

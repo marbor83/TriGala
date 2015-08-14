@@ -71,10 +71,10 @@ and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)
 
 
 
-SELECT *, billingtgala.dbo.de_isstorno(IDDocT) as STORNO
+SELECT *, 
+	   CASE WHEN IDDocT IS NULL THEN 0 ELSE  billingtgala.dbo.de_isstorno(IDDocT) END as STORNO
 INTO #tmpMovimenti2
 FROM #tmpMovimenti
-WHERE idDOCT IS NOT NULL
 
 UPDATE #tmpMovimenti2
 SET CODICE_PARTITA_STORNO = (select distinct d.idfattura  --id della fattura stornata
@@ -102,13 +102,14 @@ SELECT Id_Record, id_Azienda, Id_Cliente, N_DOC,
 		DATA_DOC, DATA_REG, Data_Acq, Data_Upd, DATA_SCAD,
 		Segno, Valuta, IMPORTO,
 		ID_CAUSALE, DESCR_CAUSALE, ID_PAG_MOD, DESCR_PAG_MOD, ID_PAG_TER, DESCR_PAG_TER,
-		COMMODITY, ISNULL(CODICE_PARTITA_STORNO,CODICE_PARTITA), Factor,
+		COMMODITY, ISNULL(CODICE_PARTITA_STORNO,CODICE_PARTITA) AS CODICE_PARTITA, Factor,
 		Tipologia_fattura, Desscrizione_tipologia_fattura, URL
-FROM #tmpMovimenti
+FROM #tmpMovimenti2
 
 
 
 DROP TABLE #tmpMovimenti
+DROP TABLE #tmpMovimenti2
 
 
 
