@@ -64,7 +64,6 @@ namespace TriGala
         {
             DateTime dtControllo = new DateTime();
             bool bSelect = false;
-            String sMessaggio = String.Empty;
 
             if (String.IsNullOrEmpty(txtDataA.Text) || String.IsNullOrEmpty(txtDataDa.Text))
             {
@@ -124,11 +123,7 @@ namespace TriGala
                 MessageBox.Show("Errore nell'elaborazione controlare il file di LOG");
             else
             {
-                foreach (KeyValuePair<string, string> el in dicEsiti)
-                {
-                    sMessaggio = String.Format("Elaborazione Entità: {0} Terminata con esito: {1} {2}", el.Key, el.Value, Environment.NewLine);
-                }
-                MessageBox.Show(sMessaggio);
+                MessageBox.Show("Elaborazione terminata per ulteriori dettagli consultare il LOG");                
             }
         }
 
@@ -420,7 +415,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
                 throw (ex);
             }
 
@@ -476,7 +471,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
                 throw (ex);
             }
 
@@ -502,7 +497,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
                 throw (ex);
             }
 
@@ -513,6 +508,9 @@ namespace TriGala
         {
             String sMessagio = String.Empty;
             int j = 0;
+            Dictionary<string, bool> dicObbligatorieta = new Dictionary<string, bool>();
+            Dictionary<string, string> dicTipoCampo = new Dictionary<string, string>();
+            Dictionary<string, int> dicLunghezzaCampo = new Dictionary<string, int>();
 
             try
             {
@@ -525,11 +523,16 @@ namespace TriGala
                     case Common.Entita.Anagrafica_Clienti:
                         clsClienti objClienti = new clsClienti();
 
+                        //Caricamento Dictionary Campi
+                        dicObbligatorieta = LoadDicObligatorieta(idEntita);
+                        dicTipoCampo = LoadDicTipo(idEntita);
+                        dicLunghezzaCampo = LoadDicLunghezza(idEntita);
+
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta,dicTipoCampo,dicLunghezzaCampo, ref sMessagio))
                             {
                                 //Validazione specifica della riga
                                 if (objClienti.RowIsValid(r, ref sMessagio))
@@ -554,11 +557,16 @@ namespace TriGala
 
                         clsContratti objContratti = new clsContratti();
 
+                        //Caricamento Dictionary Campi
+                        dicObbligatorieta = LoadDicObligatorieta(idEntita);
+                        dicTipoCampo = LoadDicTipo(idEntita);
+                        dicLunghezzaCampo = LoadDicLunghezza(idEntita);
+
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
                                 //Validazione specifica della riga
                                 if (objContratti.RowIsValid(r, ref sMessagio))
@@ -583,11 +591,16 @@ namespace TriGala
                         //Per l'entità POD_PDR al momento non sono previste validazione specifiche
                         //clsPOD_PDR objPOD_PDR = new clsPOD_PDR();
 
+                        //Caricamento Dictionary Campi
+                        dicObbligatorieta = LoadDicObligatorieta(idEntita);
+                        dicTipoCampo = LoadDicTipo(idEntita);
+                        dicLunghezzaCampo = LoadDicLunghezza(idEntita);
+
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
                                 dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
 
@@ -611,11 +624,16 @@ namespace TriGala
                     case Common.Entita.Anagrafica_Movimenti:
                         clsMovimenti objMovimenti = new clsMovimenti();
 
+                        //Caricamento Dictionary Campi
+                        dicObbligatorieta = LoadDicObligatorieta(idEntita);
+                        dicTipoCampo = LoadDicTipo(idEntita);
+                        dicLunghezzaCampo = LoadDicLunghezza(idEntita);
+
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
                                 //Validazione specifica della riga
                                 if (objMovimenti.RowIsValid(r, ref sMessagio))
@@ -640,11 +658,16 @@ namespace TriGala
                         //Per l'entità Contatti al momento non sono previste validazione specifiche
                         //clsContatti objContatti = new clsContatti();
 
+                        //Caricamento Dictionary Campi
+                        dicObbligatorieta = LoadDicObligatorieta(idEntita);
+                        dicTipoCampo = LoadDicTipo(idEntita);
+                        dicLunghezzaCampo = LoadDicLunghezza(idEntita);
+
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
                                 dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
 
@@ -670,11 +693,16 @@ namespace TriGala
 
                         clsGaranzie objGaranzie = new clsGaranzie();
 
+                        //Caricamento Dictionary Campi
+                        dicObbligatorieta = LoadDicObligatorieta(idEntita);
+                        dicTipoCampo = LoadDicTipo(idEntita);
+                        dicLunghezzaCampo = LoadDicLunghezza(idEntita);
+
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, idEntita, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
                                 //Validazione specifica della riga
                                 if (objGaranzie.RowIsValid(r, ref sMessagio))
@@ -704,11 +732,93 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
                 throw (ex);
             }
         }
 
+        #region Caricamento Dictionary Campi
+        private Dictionary<string, int> LoadDicLunghezza(int idEntita)
+        {
+            Dictionary<string, int> retValue = new Dictionary<string, int>();
+
+            try
+            {
+
+                using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
+                {
+                    List<CB_EntitaCampi> campi = DMdb.CB_EntitaCampi.Where(c => c.id_Entita == idEntita && c.Attivo).ToList();
+
+                    foreach (CB_EntitaCampi c in campi)
+                    {
+                        retValue.Add(c.NomeCampoDestinazione, c.Lunghezza);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
+                throw (ex);
+            }
+
+            return retValue;
+        }
+
+        private Dictionary<string, string> LoadDicTipo(int idEntita)
+        {
+            Dictionary<string, string> retValue = new Dictionary<string, string>();
+
+            try
+            {
+
+                using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
+                {
+                    List<CB_EntitaCampi> campi = DMdb.CB_EntitaCampi.Where(c => c.id_Entita == idEntita && c.Attivo).ToList();
+
+                    foreach (CB_EntitaCampi c in campi)
+                    {
+                        retValue.Add(c.NomeCampoDestinazione, c.CB_TipoCampo.Nome);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
+                throw (ex);
+            }
+
+            return retValue;
+        }
+
+        private Dictionary<string, bool> LoadDicObligatorieta(int idEntita)
+        {
+            Dictionary<string, bool> retValue = new Dictionary<string, bool>();
+
+
+            try
+            {
+
+                using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
+                {
+                    List<CB_EntitaCampi> campi = DMdb.CB_EntitaCampi.Where(c => c.id_Entita == idEntita && c.Attivo).ToList();
+
+                    foreach (CB_EntitaCampi c in campi)
+                    {
+                        retValue.Add(c.NomeCampoDestinazione, c.Obbligatorio);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
+                throw (ex);
+            }
+
+            return retValue;
+        }
+#endregion
+        
+        
         private DataRow AggiungiRigheOK(int idEntita, DataRow r, DataTable dtRigheOk)
         {
             DataRow retValue = dtRigheOk.NewRow();
@@ -727,7 +837,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
                 throw (ex);
             }
 
@@ -754,28 +864,24 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString()));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, idEntita.ToString(), ex.StackTrace));
                 throw (ex);
             }
 
             return retValue;
         }
 
-        private bool GenericValidationRow(DataRow r, int idEntita, ref string sMessagio)
+        private bool GenericValidationRow(DataRow r, Dictionary<string,bool> dicObbligatorieta, Dictionary<string,string> dicTipoCampo, Dictionary<string,int> dicLunghezza , ref string sMessagio)
         {
 
-            using (DataMaxDBEntities DMdb = new DataMaxDBEntities())
-            {
-                List<CB_EntitaCampi> campi = DMdb.CB_EntitaCampi.Where(c => c.id_Entita == idEntita && c.Attivo).ToList();
-
-                foreach (CB_EntitaCampi c in campi)
+            foreach (KeyValuePair<string, bool> c in dicObbligatorieta)
                 {
-                    String ValoreCampo = r[c.NomeCampoDestinazione] == DBNull.Value ? String.Empty : r[c.NomeCampoDestinazione].ToString();
+                    String ValoreCampo = r[c.Key] == DBNull.Value ? String.Empty : r[c.Key].ToString();
 
                     //Controllo obbligatorietà del campo
-                    if (String.IsNullOrEmpty(ValoreCampo) && c.Obbligatorio)
+                    if (String.IsNullOrEmpty(ValoreCampo) && c.Value)
                     {
-                        sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.NomeCampoDestinazione);
+                        sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.Key);
                         return false;
                     }
 
@@ -785,9 +891,10 @@ namespace TriGala
 
                         if (!String.IsNullOrEmpty(ValoreCampo))
                         {
+                            string _tipo = dicTipoCampo.Where(ca => ca.Key == c.Key).SingleOrDefault().Value;
 
                             //Controllo tipo CAMPO
-                            switch (c.CB_TipoCampo.Nome.ToUpper())
+                            switch (_tipo.ToUpper())
                             {
                                 case "STRING":
                                     break;
@@ -795,7 +902,7 @@ namespace TriGala
                                     int i;
                                     if (!Int32.TryParse(ValoreCampo, out i))
                                     {
-                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.Value, _tipo.ToUpper());
                                         return false;
                                     }
                                     break;
@@ -803,7 +910,7 @@ namespace TriGala
                                     DateTime dt;
                                     if (!DateTime.TryParse(ValoreCampo, out dt))
                                     {
-                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.Value, _tipo.ToUpper());
                                         return false;
                                     }
 
@@ -821,7 +928,7 @@ namespace TriGala
                                     decimal dd;
                                     if (!Decimal.TryParse(ValoreCampo, out dd))
                                     {
-                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.NomeCampoDestinazione);
+                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.Value);
                                         return false;
                                     }
 
@@ -830,15 +937,16 @@ namespace TriGala
                                     break;
                             }
 
+                            int _lunghezza = dicLunghezza.Where(l => l.Key == c.Key).SingleOrDefault().Value;
+
                             //Controllo lunghezza campo
-                            if (ValoreCampo.Length > c.Lunghezza)
+                            if (ValoreCampo.Length > _lunghezza)
                             {
-                                sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.NomeCampoDestinazione, ValoreCampo.Length.ToString(), c.Lunghezza.ToString());
+                                sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.Value, ValoreCampo.Length.ToString(), _lunghezza.ToString());
                                 return false;
                             }
                         }
                     }
-                }
 
             }
 
@@ -892,7 +1000,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} StoreProcdure: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, StoreProcedureName));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} StoreProcdure: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, StoreProcedureName, ex.StackTrace));
                 throw (ex);
             }
 
@@ -915,8 +1023,8 @@ namespace TriGala
                 }
             }
             catch (Exception ex)
-            {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entity.id.ToString()));
+            {                
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entity.ToString(), ex.StackTrace));
                 throw (ex);
             }
 
@@ -937,7 +1045,7 @@ namespace TriGala
             }
             catch (Exception ex)
             {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} STACK TRACE: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, ex.StackTrace));
                 throw (ex);
             }
 
@@ -1054,8 +1162,8 @@ namespace TriGala
                 }
             }
             catch (Exception ex)
-            {
-                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entityID.ToString()));
+            {                
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entityID.ToString(), ex.StackTrace));
                 throw (ex);
             }
         }
