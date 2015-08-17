@@ -64,15 +64,15 @@ select	c.IDContratto as ID_CONTRATTO,
 		null DESCR_AREA,		
 		c.IDAgente as ID_AGENTE,
 		ag.Nome Descr_Agente,
-		null as centro_DI_Costo,
+		null as CENTRO_DI_COSTO,
 		null as id_Pag_Mod,
 		null as Descr_Pag_Mod,
 		null as CIG,
 		null as CUP,
 		null as ODA,
-		c.IDTipoContratto,
+		c.IDTipoContratto as IdTipoContratto,
 		t.Descrizione DescrizioneTipoContratto,
-		c.IDAgenzia,
+		c.IDAgenzia as IDAgenzia,
 		ag1.Nome as NomeAgenzia
 from	dbo.Contratti c
 inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
@@ -81,14 +81,3 @@ left outer join dbo.AgentiAnagrafica ag on c.IDAgente=ag.IDAgente
 left outer join dbo.AgentiAnagrafica ag1 on c.IDAgenzia=ag1.IDAgente
 where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
-		/*and exists (select	1 
-					from	dbo.ContrattiRighe cr 
-					where	c.IDContratto_Cnt=cr.IDContratto_Cnt
-							and cr.IDStatoRiga != 11
-							and cr.IDMacroStatoRiga in (2, 3)
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
-order by a.IDAnagrafica, c.IDContratto*/
-
-
-
-

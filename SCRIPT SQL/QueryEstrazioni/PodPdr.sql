@@ -1,27 +1,8 @@
-CREATE TABLE #TempPODVolQta
-(
-	POD VARCHAR(100),
-	kWh_Fatturati_Ultimi_12_mesi DECIMAL(18,2)
-)
-
-CREATE TABLE #TempPDRVolQta
-(
-	PDR VARCHAR(100),
-	SMC_Fatturati_Ultimi_12_mesi DECIMAL(18,2)
-)
-
-
-INSERT INTO #TempPODVolQta
-exec [GALA_CB].[ConsumoEnergiaFatturataUltimoAnno]
-
-INSERT INTO #TempPDRVolQta
-exec [GALA_CB].[ConsumoGASFatturatoUltimoAnno]
-
 
 select  *		
 from (
 select	'IT10' id_Azienda,		
-		ans.IDAnagrafica as Id_Cliente,
+		a.IDAnagrafica as Id_Cliente,
 		c.IDContratto as ID_CONTRATTO,
 		cr.IDRigaContratto as ID_RIGA_contratti,
 		ecs.POD as CODICE_DISPOSITIVO,
@@ -77,18 +58,20 @@ inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
 inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 left outer join dbo.eneClienteSedi ecs on cr.IDSede=ecs.IDSede
 inner join dbo.AnaSedi ans on cr.IDSede=ans.IDSede
-left outer join #TempPODVolQta tvq on ecs.POD = tvq.POD
+left outer join GALA_CB.TempPODVolQta tvq on ecs.POD = tvq.POD
 left outer join dbo.TipiPagamento tp on cr.IDTipoPagamento = tp.IDTipoPagamento
 left outer join dbo.eneOpzioniTariffarie eot on ecs.IDOpzTar = eot.idOpzioneTariffaria
 where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and cr.IDStatoRiga != 11
 		and cr.IDMacroStatoRiga in (2, 3)
+		--and ((cr.DatUMO between @DataDa and @DataA) or  (ans.DatUMO between @DataDa and @DataA) or (ecs.DatUMO between @DataDa and @DataA)) 
+		--and c.IDAnagrafica = ISNULL(@IdCliente, c.IDAnagrafica)			
 		and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')
 		and getdate() between ecs.dtInizioVal and isnull(ecs.dtFineVal, '20501231')		
 union all 
 select	'IT10' idAzienda,		
-		ans.IDAnagrafica as IdCliente,
+		a.IDAnagrafica as IdCliente,
 		c.IDContratto,
 		cr.IDRigaContratto,
 		gcs.CodPDR CodiceDispositivo,
@@ -143,19 +126,17 @@ from	dbo.Contratti c
 inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
 inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
 left outer join dbo.gasClienteSedi gcs on cr.IDSede=gcs.IDSede
-left outer join #TempPDRVolQta tvq on gcs.CodPDR = tvq.PDR
+left outer join GALA_CB.TempPDRVolQta tvq on gcs.CodPDR = tvq.PDR
 inner join dbo.AnaSedi ans on cr.IDSede=ans.IDSede
 left outer join dbo.TipiPagamento tp on cr.IDTipoPagamento = tp.IDTipoPagamento
 where	a.IDStatoAnagrafica=1
 		and a.IDAnagrafica!='100001'
 		and cr.IDStatoRiga != 11
 		and cr.IDMacroStatoRiga in (2, 3)
+		--and ((cr.DatUMO between @DataDa and @DataA) or  (ans.DatUMO between @DataDa and @DataA) or (gcs.DatUMO between @DataDa and @DataA)) 
+		--and c.IDAnagrafica = ISNULL(@IdCliente, c.IDAnagrafica)			
 		and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')
 		and getdate() between gcs.validoDal and isnull(gcs.validoAl, '20501231')
 ) V
+where CODICE_DISPOSITIVO is not null and CAP is not null
 order by Id_Cliente, ID_Contratto, ID_RIGA_contratti
-
-
-DROP TABLE #TempPODVolQta
-
-DROP TABLE #TempPDRVolQta
