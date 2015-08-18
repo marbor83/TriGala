@@ -1,7 +1,7 @@
-	select  'IT10' as IDAzienda,
-			a.IDAnagrafica IdCliente,		
+select  'IT10' as ID_AZIENDA,
+			a.IDAnagrafica ID_CLIENTE,		
 			a.IDAnagrafica as id_master, -- per ora impostato ad idcliente poichè sono tutti master / oppure rimuovere dal tracciato
-			null IDTipoCliente,
+			null ID_TIPO_CLIENTE,
 			CASE 
 				WHEN  
 					(select count(*)
@@ -52,7 +52,7 @@
 									END
 							END	
 					END	
-			END	 DescrizioneTipoCliente,	
+			END	 DESCR_TIPO_CLIENTE,	
 			CASE 
 			WHEN  
 				(select count(*) 
@@ -105,35 +105,35 @@
 				END				
 			    
 			END	    
-		END descStatoCliente,
-			null StatoLavorazione, -- Rimane in sospeso per ora (Dupla : mail massimo, lista stati)
-			a.TipoPersona as idTipoPersona,
-			CASE WHEN a.TipoPersona = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as DescrizioneTipoPersona,
-			a.PIVA,
-			a.CFISC,
-			a.RagSoc,
-			a.Indirizzo,
-			a.CAP,
-			a.Localita,
-			a.Provincia,
-			a.Nazione,
-			a.NumeroFax Fax,
-			a.Email,
-			a.NumeroTelefonico Telefono,
-			null as pec, -- RIMOSSO da capire come recuperare la pec su anacontatti vista relazione 1 a n			
+		END DESC_STATO_CLIENTE,
+			null STATO_LAVORAZIONE, -- Rimane in sospeso per ora (Dupla : mail massimo, lista stati)
+			a.TipoPersona as ID_TIPO_PERSONA,
+			CASE WHEN a.TipoPersona = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as Descrizione_tipo_persone,
+			a.PIVA as PIVA,
+			a.CFISC as CODFISC,
+			a.RagSoc as RAGIONESOCIALE,
+			a.Indirizzo as INDIRIZZO,
+			a.CAP as CAP,
+			a.Localita as COMUNE,
+			a.Provincia as PROVINCIA,
+			a.Nazione as NAZIONE,
+			a.NumeroFax as Fax,
+			a.Email as Email,
+			a.NumeroTelefonico as Telefono,
+			null as PEC, -- RIMOSSO da capire come recuperare la pec su anacontatti vista relazione 1 a n			
 			a.NumeroCellulare as cellulare, 
-			a.IDAgente,
-			ag.Nome DescrizioneAgente,
-			a.IDAgenzia,
-			ag1.Nome DescrizioneAgenzia,
-			case when perc995.IDAnagrafica is not null then 'Y' else 'N' end [TRATTENUTA 0,5],
+			a.IDAgente as ID_AGENTE,
+			ag.Nome as DESCR_AGENTE,
+			a.IDAgenzia as ID_AGENZIA,
+			ag1.Nome DESCR_AGENZIA,
+			case when perc995.IDAnagrafica is not null then 'Y' else 'N' end as TRATTENUTA_0_5,
 			null CONVENZIONE,
-			case when a.TipoPersona='G' then a.RagSoc else NULL end [FORMA GIURIDICA],
-			case when a.TipoPersona='F' then a.Nome else null end NOME,
-			case when a.TipoPersona='F' then a.Cognome else null end COGNOME,
-			null as classeDiRischio,
-			null as descrizioneRischio
-	from	dbo.Anagrafica a WITH(NOLOCK)
+			case when a.TipoPersona='G' then a.RagSoc else NULL end as FORMA_GIURIDICA,
+			case when a.TipoPersona='F' then a.Nome else null end as NOME,
+			case when a.TipoPersona='F' then a.Cognome else null end as COGNOME,
+			null as Classe_di_rischio,
+			null as Descrizione_del_rischio
+	from	dbo.Anagrafica a
 	left outer join dbo.AnaForme af on a.IDAnaForma=af.IDAnaForma
 	left outer join dbo.TipiCapogruppo cg on a.IDTipoCapogruppo=cg.IDTipoCapogruppo
 	left outer join dbo.AgentiAnagrafica ag on a.IDAgente=ag.IDAgente
@@ -162,4 +162,5 @@
 						where	c.IDAnagrafica=a.IDAnagrafica
 								and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')) = 0
 				)*/			
+	
 	order by a.IDAnagrafica
