@@ -1,4 +1,5 @@
-select	 m.idMovimento as Id_Record,
+INSERT INTO GALA_CB.tmpMovimenti
+select	m.idMovimento as Id_Record,
 		'IT10' as id_Azienda,		
 		s.IDAnagrafica as Id_Cliente,
 		s.NumDocSuFatt as N_DOC,
@@ -21,6 +22,7 @@ select	 m.idMovimento as Id_Record,
 				WHEN s.SiglaRegIVA In ('C','I','N','O') THEN 'SERV'
 				ELSE 'EE' END) as COMMODITY, 
 		m.idFattura as CODICE_PARTITA,
+		null as CODICE_PARTITA_STORNO,
 		null as Factor,
 		s.TipoDoc as Tipologia_fattura,		
 		gdf.descrizione as  Desscrizione_tipologia_fattura,
@@ -37,24 +39,90 @@ select	 m.idMovimento as Id_Record,
 							WHEN LEN(s.NumeroDoc) = 5 THEN '000'
 							WHEN LEN(s.NumeroDoc) = 6 THEN '00'
 							WHEN LEN(s.NumeroDoc) = 7 THEN '0'
-							ELSE '' END) +	s.NumeroDoc + s.SiglaRegIVA + '.pdf') as URL	
-from	dbo.Anagrafica a
-inner join Scadenzario s on a.IDAnagrafica=s.IDAnagrafica
-inner join Tes.Movimenti m on s.IDFattura=m.IDFattura
+							ELSE '' END) +	s.NumeroDoc + s.SiglaRegIVA + '.pdf') as URL,
+		doct.IDDocT as IDDocT	
+from Tes.Movimenti m
+inner join Scadenzario s  on m.IDAnagrafica = s.IDAnagrafica and m.IDFattura=s.IDFattura 	
+inner join dbo.Anagrafica a on m.IDAnagrafica=a.IDAnagrafica 
 inner join tes.causali c on m.idCausale = c.idCausale
 LEFT JOIN	BillingTGALA.dbo.DocT bill	ON s.IDTBilling = bill.IDDocT
 LEFT JOIN	dbo.DocT doct	ON s.IDTBilling = doct.IDDocT
 left join dbo.TipiPagamento tp on tp.IDTipoPagamento = doct.idMetodoPag
 left join GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA gdf on s.TipoDoc = gdf.IdTipoDOC
 where	a.IDStatoAnagrafica=1
-		and a.IDAnagrafica!='100001'
+		and m.IDAnagrafica!='100001'
 		and m.IDStato>=0
-		--and m.IDCausale not in (1, 7) --Valorizzare modalità pagamento solo per 1 e 7
-		/*and exists (select	1 
-					from	dbo.Contratti c
-					inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
-					where	c.IDAnagrafica=a.IDAnagrafica
-							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))*/
-and year(m.DATPMO) = 2015 and MONTH(m.DATPMO) between 7 and 12
+		and exists (select	1 
+					from	dbo.Contratti contr
+					inner join dbo.ContrattiRighe cr on contr.IDContratto_Cnt=cr.IDContratto_Cnt
+					where	contr.IDAnagrafica=m.IDAnagrafica
+							and cr.IDStatoRiga != 11)
+							--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
+and exists (select * from GALA_CB.APPO WHERE idCli = m.IdAnagrafica)
 
+
+
+-- Verifica se è uno storno --
+INSERT INTO GALA_CB.tmpMovimenti2
+SELECT *, 
+	   CASE WHEN IDDocT IS NULL THEN 0 ELSE  billingtgala.dbo.de_isstorno(IDDocT) END as STORNO
+FROM GALA_CB.tmpMovimenti
+
+
+--- recupera gli Id delle fatture stornate --
+UPDATE GALA_CB.tmpMovimenti2
+SET CODICE_PARTITA_STORNO = (select distinct d.idfattura  --id della fattura stornata
+							from docr c
+								 inner join scadenzario d on c.iddoctparent = d.idtbilling							
+							     and c.iddoct = GALA_CB.tmpMovimenti2.IDDocT
+								 and c.idtiporiga = 4)
+								 
+WHERE   STORNO=1 
+AND idDOCT IS NOT NULL
+
+
+/* Aggiunto ragionamento più fatture legate 
+UPDATE GALA_CB.tmpMovimenti2
+SET CODICE_PARTITA_STORNO = (select distinct d.idfattura  --id della fattura stornata
+							from docr c
+								 inner join scadenzario d on c.iddoctparent = d.idtbilling							
+							     and c.iddoct = GALA_CB.tmpMovimenti2.IDDocT
+								 and c.idtiporiga = 4
+								 and (select count(distinct di.idfattura) from docr ci
+									  inner join scadenzario di on ci.iddoctparent = di.idtbilling							
+									  and ci.iddoct = c.iddoct
+									  and ci.idtiporiga = 4)=1)
+WHERE   STORNO=1 
+AND idDOCT IS NOT NULL*/
+
+
+/*UPDATE #tmpMovimenti
+SET CODICE_PARTITA_STORNO = (select distinct d.idfattura  --id della fattura stornata
+							from scadenzario a
+								 inner join doct b on a.idtbilling = b.iddoct
+								 inner join docr c on b.iddoct = c.iddoct
+								 inner join scadenzario d on c.iddoctparent = d.idtbilling
+							where a.idfattura= #tmpMovimenti.CODICE_PARTITA
+								 and c.idtiporiga = 4)
+WHERE   IDDocT IS NOT NULL
+	AND billingtgala.dbo.de_isstorno(IDDocT) = 1*/							
+ 	
+
+--- Query di popolamento su Staging
+SELECT Id_Record, id_Azienda, Id_Cliente, N_DOC,
+		DATA_DOC, DATA_REG, Data_Acq, Data_Upd, DATA_SCAD,
+		Segno, Valuta, IMPORTO,
+		ID_CAUSALE, DESCR_CAUSALE, ID_PAG_MOD, DESCR_PAG_MOD, ID_PAG_TER, DESCR_PAG_TER,
+		COMMODITY, ISNULL(CODICE_PARTITA_STORNO,CODICE_PARTITA) AS CODICE_PARTITA, Factor,
+		Tipologia_fattura, Desscrizione_tipologia_fattura, URL
+FROM GALA_CB.tmpMovimenti2
+
+
+--select count(*) from GALA_CB.tmpMovimenti2
+
+
+--delete from GALA_CB.tmpMovimenti2
+
+
+--drop table #tmpMovimenti
+--drop table #tmpMovimenti2
