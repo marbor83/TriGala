@@ -3,7 +3,7 @@ CREATE PROC GALA_CB.CB_Sp_GetAnagraficaMovimenti
 	@DataA  Datetime,
 	@IdCliente INT
 AS
-BEGIN 
+BEGIN
 
 
 select	m.idMovimento as Id_Record,
