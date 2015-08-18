@@ -1,0 +1,6 @@
+CREATE TABLE GALA_CB_ELABORAZIONI
+(
+	DataElaborazione DATETIME,
+	Entita VARCHAR(100),
+	Flag bit
+)
