@@ -125,6 +125,8 @@ namespace TriGala
             {
                 MessageBox.Show("Elaborazione terminata per ulteriori dettagli consultare il LOG");                
             }
+
+            SetInterface(true);
         }
 
         private bool StartProcessoManuale()
@@ -135,6 +137,8 @@ namespace TriGala
 
             try
             {
+                SetInterface(false);
+
                 dicEsiti.Clear();
                 CB_Entita entity;
 
@@ -221,6 +225,15 @@ namespace TriGala
 
 
             return retValue;
+        }
+
+        private void SetInterface(bool bset)
+        {
+            txtDataA.Enabled = bset;
+            txtDataDa.Enabled = bset;
+            txtIdCliente.Enabled = bset;
+            clbEntita.Enabled = bset;
+            btnManuale.Enabled = bset;
         }
 
         private void btn_Start_Click(object sender, EventArgs e)
@@ -355,6 +368,9 @@ namespace TriGala
                     logService.Info(String.Format("Escuzione Store recupero dati. Parametri: DataDa: {0} DataA {1} idCliente {2}", DataDa.ToString(), DataA.ToString(), idCliente.ToString()));
                     dtQueryResult = ExecuteStore(StoreProcedureName, DataDa, DataA, idCliente);
 
+                    if (myEntity.id == Common.Entita.Garanzie_Factor.GetHashCode())
+                        ExecuteRimuoviDuplicati();
+
                     //Verificare obligatorietà e congruenza dei dati
                     if (dtQueryResult.Rows.Count > 0)
                         VerifcaDati(idEntita, dtQueryResult, ref dtRigheOk, ref dtRigheScarti);
@@ -425,6 +441,29 @@ namespace TriGala
             }
 
             return retValue;
+        }
+
+        private void ExecuteRimuoviDuplicati()
+        {
+            try
+            {
+                using (SqlConnection mySQLConn = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString()))
+                {
+                    SqlCommand mySqlCommand = new SqlCommand();
+                    mySqlCommand.CommandText = "GALA_Sp_EliminaDuplicatiGaranzieFactor";
+                    mySqlCommand.CommandType = CommandType.StoredProcedure;
+                    mySqlCommand.Connection = mySQLConn;
+
+                    mySQLConn.Open();
+
+                    mySqlCommand.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1} StoreProcdure: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, "GALA_Sp_EliminaDuplicatiGaranzieFactor", ex.StackTrace));
+                throw (ex);
+            }
         }
 
         private Common.Esito_Elaborazione InsertIntoStorage(int idEntita, DataTable dtRigheOk)
