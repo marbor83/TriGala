@@ -5,7 +5,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROC [GALA_CB].[ConsumoGASFatturatoUltimoAnno]	
-			@IdCliente INT	
 AS
 
 --DECLARE @IDAnagrafica INT SET @IDAnagrafica = 158705
@@ -27,7 +26,7 @@ LEFT JOIN	dbDatamaxGALA.dbo.AnaSediTipoMatch G		ON E.idSede = G.IDSede
 WHERE		B.CodUtility In ('GAS')
 AND			G.IDTipoSede = 6
 AND			A.DataInizioValidita < (CASE WHEN A.DataCessazione Is Null THEN A.DataFineValidita ELSE A.DataCessazione END)
-AND			D.IDAnagrafica = ISNULL(@IdCliente,D.IDAnagrafica)
+--AND			D.IDAnagrafica = @IDAnagrafica
 AND			D.IDStatoAnagrafica = 1
 AND			D.IDTipoCapogruppo Not In ('29')
 AND			A.IDStatoRiga Not In ('11')
