@@ -76,12 +76,28 @@ SELECT *,
 INTO #tmpMovimenti2
 FROM #tmpMovimenti
 
+
+/*
 UPDATE #tmpMovimenti2
 SET CODICE_PARTITA_STORNO = (select distinct d.idfattura  --id della fattura stornata
 							from docr c
 								 inner join scadenzario d on c.iddoctparent = d.idtbilling							
 							     and c.iddoct = #tmpMovimenti2.IDDocT
 								 and c.idtiporiga = 4)
+WHERE   STORNO=1 
+AND idDOCT IS NOT NULL*/
+
+
+UPDATE #tmpMovimenti2
+SET CODICE_PARTITA_STORNO = (select distinct d.idfattura  --id della fattura stornata
+							from docr c
+								 inner join scadenzario d on c.iddoctparent = d.idtbilling							
+							     and c.iddoct = #tmpMovimenti2.IDDocT
+								 and c.idtiporiga = 4
+								 and (select count(distinct di.idfattura) from docr ci
+									  inner join scadenzario di on ci.iddoctparent = di.idtbilling							
+									  and ci.iddoct = c.iddoct
+									  and ci.idtiporiga = 4)=1)
 WHERE   STORNO=1 
 AND idDOCT IS NOT NULL
 
