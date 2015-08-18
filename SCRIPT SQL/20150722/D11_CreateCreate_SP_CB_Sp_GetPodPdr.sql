@@ -5,7 +5,7 @@ CREATE PROC GALA_CB.CB_Sp_GetPodPdr
 AS
 BEGIN
 
-CREATE TABLE #TempPODVolQta
+CREATE TABLE #TempPODVolQta 
 (
 	POD VARCHAR(100),
 	kWh_Fatturati_Ultimi_12_mesi DECIMAL(18,2)

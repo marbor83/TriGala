@@ -5,7 +5,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROC [GALA_CB].[ConsumoGASFatturatoUltimoAnno]	
-			@IdCliente INT	
+			@IdCliente INT
 AS
 
 --DECLARE @IDAnagrafica INT SET @IDAnagrafica = 158705
