@@ -3,7 +3,7 @@ CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]
 	@DataA  Datetime,
 	@IdCliente INT
 AS
-BEGIN
+BEGIN 
 
 	-- In caso di cambio avvenuto nei contratti, devo poter aggiornare i clienti --
 	-- nel caso in cui IdCliente è NULL, lancio la procedura di recupero dei contratti e recupero tutti gli IdCliente che --
