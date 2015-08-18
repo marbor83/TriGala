@@ -1,4 +1,4 @@
-CREATE PROC GALA_CB.CB_Sp_GetAnagraficaMovimenti
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT
@@ -64,8 +64,8 @@ where	a.IDStatoAnagrafica=1
 					from	dbo.Contratti contr
 					inner join dbo.ContrattiRighe cr on contr.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	contr.IDAnagrafica=m.IDAnagrafica
-							and cr.IDStatoRiga != 11
-							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
+							and cr.IDStatoRiga != 11)
+							--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
 AND m.DatPMO between @DataDa and @DataA
 and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)	
 
