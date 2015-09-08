@@ -123,7 +123,7 @@ namespace TriGala
                 MessageBox.Show("Errore nell'elaborazione controlare il file di LOG");
             else
             {
-                MessageBox.Show("Elaborazione terminata per ulteriori dettagli consultare il LOG");                
+                MessageBox.Show("Elaborazione terminata per ulteriori dettagli consultare il LOG");
             }
 
             SetInterface(true);
@@ -134,6 +134,7 @@ namespace TriGala
             bool retValue = false;
             Common.Esito_Elaborazione EsitoElab = Common.Esito_Elaborazione.Default;
             String result = String.Empty;
+            int Esito = -1;
 
             try
             {
@@ -143,7 +144,7 @@ namespace TriGala
                 CB_Entita entity;
 
                 for (int i = 0; i < clbEntita.Items.Count; i++)
-                {                    
+                {
                     if (clbEntita.GetItemChecked(i))
                     {
                         string NomeTabella = (string)clbEntita.Items[i];
@@ -163,8 +164,9 @@ namespace TriGala
 
                         try
                         {
+
                             //Verifica che la relativa tabella di Storage sia vuota
-                            int Esito = StorageTableIsEmpty(NomeTabella);
+                            Esito = StorageTableIsEmpty(NomeTabella);
 
                             if (Esito > 0)
                             {
@@ -202,6 +204,11 @@ namespace TriGala
 
                         dicEsiti.Add(entity.NomeTabellaDestinazione, result);
 
+                        if (Esito >= 0)
+                        {
+                            AggiornaTabellaStorageElaborazioni(entity.NomeTabellaDestinazione);
+                        }
+
                         logService.Info(String.Format("Fine elaborazione entità: {0} Terminata con esito: {1}", entity.Nome, result));
                     }
                 }
@@ -227,6 +234,34 @@ namespace TriGala
             return retValue;
         }
 
+        private void AggiornaTabellaStorageElaborazioni(string NomeTabellaDestinazione)
+        {
+
+            try
+            {
+                using (SqlConnection mySQLConn = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString()))
+                {
+                    String mySQL = String.Format("INSERT INTO GALA_CB_ELABORAZIONI (DataElaborazione,Entita,Flag) VALUES(GETDATE(),'{0}',0)", NomeTabellaDestinazione);
+
+                    SqlCommand mySqlCommand = new SqlCommand();
+                    mySqlCommand.CommandText = mySQL;
+                    mySqlCommand.CommandType = CommandType.Text;
+                    mySqlCommand.Connection = mySQLConn;
+
+                    mySQLConn.Open();
+
+                    mySqlCommand.ExecuteNonQuery();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}  STACK TRACE: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, ex.StackTrace));
+                throw (ex);
+            }
+
+        }
+
         private void SetInterface(bool bset)
         {
             txtDataA.Enabled = bset;
@@ -247,6 +282,8 @@ namespace TriGala
             try
             {
                 dicEsiti.Clear();
+                int Esito = -1;
+
                 using (DataMaxDBEntities dme = new DataMaxDBEntities())
                 {
                     DateTime UltimaElaborazione;
@@ -273,7 +310,7 @@ namespace TriGala
                         try
                         {
                             //Verifica che la relativa tabella di Storage sia vuota
-                            int Esito = StorageTableIsEmpty(entity.NomeTabellaDestinazione);
+                            Esito = StorageTableIsEmpty(entity.NomeTabellaDestinazione);
 
                             if (Esito > 0)
                             {
@@ -305,6 +342,11 @@ namespace TriGala
                         UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, DataElaborazione, EsitoElab);
 
                         dicEsiti.Add(entity.NomeTabellaDestinazione, result);
+
+                        if (Esito >= 0)
+                        {
+                            AggiornaTabellaStorageElaborazioni(entity.NomeTabellaDestinazione);
+                        }
 
                         logService.Info(String.Format("Fine elaborazione entità: {0} Terminata con esito: {1}", entity.Nome, result));
                     }
@@ -346,8 +388,6 @@ namespace TriGala
 
             try
             {
-
-
                 using (DataMaxDBEntities dbDataMax = new DataMaxDBEntities())
                 {
 
@@ -410,7 +450,7 @@ namespace TriGala
                     {
                         logService.Info("Creazione File righe esportate");
                         byte[] csvOK = objExporter.ExportDataTable(dtRigheOk);
-                        path_to_save = String.Format("{0}\\{1}\\", ConfigurationManager.AppSettings["PathCSV_OK"].ToString(),myEntity.NomeTabellaDestinazione);
+                        path_to_save = String.Format("{0}\\{1}\\", ConfigurationManager.AppSettings["PathCSV_OK"].ToString(), myEntity.NomeTabellaDestinazione);
                         //path_to_save = myEntity.PathCSV;
                         exists = System.IO.Directory.Exists(path_to_save);
                         if (!exists)
@@ -576,7 +616,7 @@ namespace TriGala
                         {
                             j++;
                             //Validazione generica della riga
-                            if (GenericValidationRow(r, dicObbligatorieta,dicTipoCampo,dicLunghezzaCampo, ref sMessagio))
+                            if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
                                 //Validazione specifica della riga
                                 if (objClienti.RowIsValid(r, ref sMessagio))
@@ -767,6 +807,7 @@ namespace TriGala
                         break;
                     //Esposizione
                     case Common.Entita.Esposizione:
+                        dtRigheOk = dtQueryResult.Copy();
                         break;
                     default:
                         break;
@@ -860,9 +901,9 @@ namespace TriGala
 
             return retValue;
         }
-#endregion
-        
-        
+        #endregion
+
+
         private DataRow AggiungiRigheOK(int idEntita, DataRow r, DataTable dtRigheOk)
         {
             DataRow retValue = dtRigheOk.NewRow();
@@ -915,82 +956,82 @@ namespace TriGala
             return retValue;
         }
 
-        private bool GenericValidationRow(DataRow r, Dictionary<string,bool> dicObbligatorieta, Dictionary<string,string> dicTipoCampo, Dictionary<string,int> dicLunghezza , ref string sMessagio)
+        private bool GenericValidationRow(DataRow r, Dictionary<string, bool> dicObbligatorieta, Dictionary<string, string> dicTipoCampo, Dictionary<string, int> dicLunghezza, ref string sMessagio)
         {
 
             foreach (KeyValuePair<string, bool> c in dicObbligatorieta)
+            {
+                String ValoreCampo = r[c.Key] == DBNull.Value ? String.Empty : r[c.Key].ToString();
+
+                //Controllo obbligatorietà del campo
+                if (String.IsNullOrEmpty(ValoreCampo) && c.Value)
                 {
-                    String ValoreCampo = r[c.Key] == DBNull.Value ? String.Empty : r[c.Key].ToString();
+                    sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.Key);
+                    return false;
+                }
 
-                    //Controllo obbligatorietà del campo
-                    if (String.IsNullOrEmpty(ValoreCampo) && c.Value)
+                //Legge la cofigurazione per sapere se deve fare solo i controlli di obbligatorietà o anche di tipo e lunghezza
+                if (ConfigurationManager.AppSettings["ControlloSoloRequired"].ToString().ToUpper() != "Y")
+                {
+
+                    if (!String.IsNullOrEmpty(ValoreCampo))
                     {
-                        sMessagio = String.Format("Il Campo: {0} è obbligatorio", c.Key);
-                        return false;
-                    }
+                        string _tipo = dicTipoCampo.Where(ca => ca.Key == c.Key).SingleOrDefault().Value;
 
-                    //Legge la cofigurazione per sapere se deve fare solo i controlli di obbligatorietà o anche di tipo e lunghezza
-                    if (ConfigurationManager.AppSettings["ControlloSoloRequired"].ToString().ToUpper() != "Y")
-                    {
-
-                        if (!String.IsNullOrEmpty(ValoreCampo))
+                        //Controllo tipo CAMPO
+                        switch (_tipo.ToUpper())
                         {
-                            string _tipo = dicTipoCampo.Where(ca => ca.Key == c.Key).SingleOrDefault().Value;
+                            case "STRING":
+                                break;
+                            case "INT":
+                                int i;
+                                if (!Int32.TryParse(ValoreCampo, out i))
+                                {
+                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.Value, _tipo.ToUpper());
+                                    return false;
+                                }
+                                break;
+                            case "DATE":
+                                DateTime dt;
+                                if (!DateTime.TryParse(ValoreCampo, out dt))
+                                {
+                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.Value, _tipo.ToUpper());
+                                    return false;
+                                }
 
-                            //Controllo tipo CAMPO
-                            switch (_tipo.ToUpper())
-                            {
-                                case "STRING":
-                                    break;
-                                case "INT":
-                                    int i;
-                                    if (!Int32.TryParse(ValoreCampo, out i))
-                                    {
-                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.Value, _tipo.ToUpper());
-                                        return false;
-                                    }
-                                    break;
-                                case "DATE":
-                                    DateTime dt;
-                                    if (!DateTime.TryParse(ValoreCampo, out dt))
-                                    {
-                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo {1}", c.Value, _tipo.ToUpper());
-                                        return false;
-                                    }
+                                break;
+                            case "DECIMAL2":
 
-                                    break;
-                                case "DECIMAL2":
+                                //int idx = ValoreCampo.IndexOf(",");
 
-                                    //int idx = ValoreCampo.IndexOf(",");
+                                //if (ValoreCampo.Length != idx + 2)
+                                //{
+                                //    sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
+                                //    return false;
+                                //}
 
-                                    //if (ValoreCampo.Length != idx + 2)
-                                    //{
-                                    //    sMessagio = String.Format("Il Campo: {0} deve avere due cifre decimali", c.NomeCampoDestinazione, c.CB_TipoCampo.Nome.ToUpper());
-                                    //    return false;
-                                    //}
+                                decimal dd;
+                                if (!Decimal.TryParse(ValoreCampo, out dd))
+                                {
+                                    sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.Value);
+                                    return false;
+                                }
 
-                                    decimal dd;
-                                    if (!Decimal.TryParse(ValoreCampo, out dd))
-                                    {
-                                        sMessagio = String.Format("Il Campo: {0} deve essere di tipo Number con 2 cifre decimali", c.Value);
-                                        return false;
-                                    }
+                                break;
+                            default:
+                                break;
+                        }
 
-                                    break;
-                                default:
-                                    break;
-                            }
+                        int _lunghezza = dicLunghezza.Where(l => l.Key == c.Key).SingleOrDefault().Value;
 
-                            int _lunghezza = dicLunghezza.Where(l => l.Key == c.Key).SingleOrDefault().Value;
-
-                            //Controllo lunghezza campo
-                            if (ValoreCampo.Length > _lunghezza)
-                            {
-                                sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.Value, ValoreCampo.Length.ToString(), _lunghezza.ToString());
-                                return false;
-                            }
+                        //Controllo lunghezza campo
+                        if (ValoreCampo.Length > _lunghezza)
+                        {
+                            sMessagio = String.Format("Il Campo: {0} è di lunghezza {1} valore ammesso {2}", c.Value, ValoreCampo.Length.ToString(), _lunghezza.ToString());
+                            return false;
                         }
                     }
+                }
 
             }
 
@@ -1067,7 +1108,7 @@ namespace TriGala
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entity.ToString(), ex.StackTrace));
                 throw (ex);
             }
@@ -1206,7 +1247,7 @@ namespace TriGala
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 logService.Error(String.Format("METODO: {0} ERRORE: {1} ENTITA: {2} STACK TRACE: {3}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, entityID.ToString(), ex.StackTrace));
                 throw (ex);
             }

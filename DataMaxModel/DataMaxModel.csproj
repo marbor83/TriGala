@@ -85,7 +85,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="DataMaxDbModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataMaxDbModel.Designer.cs</LastGenOutput>

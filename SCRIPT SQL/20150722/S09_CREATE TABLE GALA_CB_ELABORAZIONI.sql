@@ -1,0 +1,24 @@
+USE [CBX_GALA_STAG]
+GO
+
+/****** Object:  Table [dbo].[GALA_CB_ELABORAZIONI]    Script Date: 08/21/2015 15:42:55 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[GALA_CB_ELABORAZIONI](
+	[DataElaborazione] [datetime] NULL,
+	[Entita] [varchar](100) NULL,
+	[Flag] [bit] NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+

@@ -17,5 +17,7 @@ namespace StagingGalaModel
         public string ID_AZIENDA { get; set; }
         public string ID_CLIENTE { get; set; }
         public decimal SALDO { get; set; }
+        public decimal EXTRA_SALDO { get; set; }
+        public Nullable<int> STATO_LAVORAZIONE { get; set; }
     }
 }

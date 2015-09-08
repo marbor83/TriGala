@@ -38,5 +38,6 @@ namespace StagingGalaModel
         public string Tipologia_fattura { get; set; }
         public string Desscrizione_tipologia_fattura { get; set; }
         public string URL { get; set; }
+        public Nullable<decimal> IMPONIBILE { get; set; }
     }
 }
