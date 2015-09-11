@@ -18,7 +18,7 @@ namespace DataMaxModel
         public int id_Entita { get; set; }
         public int id_Tipologia { get; set; }
         public System.DateTime DataDa { get; set; }
-        public Nullable<System.DateTime> DataA { get; set; }
+        public System.DateTime DataA { get; set; }
         public Nullable<int> IdCliente { get; set; }
         public System.DateTime DataElaborazione { get; set; }
         public int id_Esito { get; set; }

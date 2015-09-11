@@ -1526,15 +1526,6 @@ IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetAnagraf
 	DROP PROCEDURE GALA_CB.CB_Sp_GetAnagraficaMovimenti
 GO
 
-
-USE [dbDatamaxGALA]
-GO
-/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]    Script Date: 09/11/2015 15:24:57 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
 /* ISTRUZIONI SQL SENZA GO */
 CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]
 	@DataDa Datetime,
@@ -1542,6 +1533,13 @@ CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]
 	@IdCliente INT
 AS
 BEGIN
+
+	DECLARE @DataDaExtraSaldo DATETIME
+	 Select @DataDaExtraSaldo =  CAST( 
+						cast(year(@DataA) as  varchar)+'/'+ 
+						cast(MONTH(@DataA) as  varchar)+ '/' + 
+						cast(day(@DataA) as  varchar) as datetime)
+
 
 Select * into #tmpMovimenti from(
 select 	m.idMovimento as Id_Record,
@@ -1641,7 +1639,8 @@ inner join dbo.Anagrafica a on m.IDAnagrafica=a.IDAnagrafica
 where	a.IDStatoAnagrafica=1
 		and m.IDFattura is null
 		and m.IDAnagrafica!='100001'
-		and m.IDStato>=0
+		--and m.IDStato>=0
+		and m.DatPMO between @DataDaExtraSaldo and @DataA
 		--and exists (select 1 idAnagrafica from GALA_CB.GALA_ANAGRAFICA_CLIENTI_EXP_ATTIVI ct where ct.ID_CLIENTE = m.IdAnagrafica)
 		and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)
 		) as temp
@@ -1691,6 +1690,8 @@ DROP TABLE #tmpMovimenti2
 END
 
 
+
+
 --##########################################################################
 
 PRINT '16) Creazione Store Procedure CB_Sp_SetEsposizione'
@@ -1700,15 +1701,6 @@ IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_SetEsposiz
 	DROP PROCEDURE GALA_CB.CB_Sp_SetEsposizione
 GO
 
-USE [dbDatamaxGALA]
-GO
-/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_SetEsposizione]    Script Date: 09/11/2015 15:25:48 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-/* ISTRUZIONI SQL SENZA GO */
 CREATE PROCEDURE [GALA_CB].[CB_Sp_SetEsposizione]
 	@DataDa Datetime,
 	@DataA  Datetime,
@@ -1717,9 +1709,9 @@ AS
 BEGIN
 	
 	 Select @DataDa =  CAST( 
-						cast(day(getdate()) as  varchar)+'/'+ 
-						cast(MONTH(getdate()) as  varchar)+ '/' + 
-						cast(year(getdate()) as  varchar) as datetime)
+						cast(year(@DataA) as  varchar)+'/'+ 
+						cast(MONTH(@DataA) as  varchar)+ '/' + 
+						cast(day(@DataA) as  varchar) as datetime)
 	
 	create table #TempAnag
 	(

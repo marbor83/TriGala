@@ -46,7 +46,7 @@
           <Property Name="id_Entita" Type="int" Nullable="false" />
           <Property Name="id_Tipologia" Type="int" Nullable="false" />
           <Property Name="DataDa" Type="datetime" Nullable="false" />
-          <Property Name="DataA" Type="datetime" />
+          <Property Name="DataA" Type="datetime" Nullable="false" />
           <Property Name="IdCliente" Type="int" />
           <Property Name="DataElaborazione" Type="datetime" Nullable="false" />
           <Property Name="id_Esito" Type="int" Nullable="false" />
@@ -224,7 +224,7 @@
           <Property Name="id_Entita" Type="Int32" Nullable="false" />
           <Property Name="id_Tipologia" Type="Int32" Nullable="false" />
           <Property Name="DataDa" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DataA" Type="DateTime" Precision="3" />
+          <Property Name="DataA" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="IdCliente" Type="Int32" />
           <Property Name="DataElaborazione" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_Esito" Type="Int32" Nullable="false" />

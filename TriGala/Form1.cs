@@ -718,14 +718,13 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
-
+                            j++;
                             if (r["ID_CAUSALE"].ToString() == "99999")
                             {
                                 dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
                                 continue;
                             }
-
-                            j++;
+                            
                             //Validazione generica della riga
                             if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
                             {
@@ -1113,6 +1112,7 @@ namespace TriGala
             {
                 using (DataMaxDBEntities dme = new DataMaxDBEntities())
                 {
+                    int a = dme.CB_Elaborazioni.Count();
                     retValue = (from elb in dme.CB_Elaborazioni where elb.id_Entita == entity.id && elb.id_Esito == idEsitoElaborazione && elb.id_Tipologia == idTipoElaborazione select (DateTime)elb.DataA).Max();
                     logService.Info(String.Format("Data Ultima Elaborazione ricavate {0} per l'entità {1}", retValue.ToString(), entity.Nome));
                 }

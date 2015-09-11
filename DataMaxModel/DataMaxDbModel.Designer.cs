@@ -1,4 +1,4 @@
-﻿// Default code generation is disabled for model 'D:\Ericsson\TriGala\TriGala\DataMaxModel\DataMaxDbModel.edmx'. 
+﻿// Default code generation is disabled for model 'C:\Progetti\DotNet\TriGala\DataMaxModel\DataMaxDbModel.edmx'. 
 // To enable default code generation, change the value of the 'Code Generation Strategy' designer
 // property to an alternate value. This property is available in the Properties Window when the model is
 // open in the designer.
