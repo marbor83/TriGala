@@ -4,15 +4,51 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="StagingGalaDBEntities.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="StagingGalaDBEntitiesStoreContainer">
-          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="StagingGalaDBEntities.Store.GALA_ANAGRAFICA_CLIENTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="StagingGalaDBEntities.Store.GALA_ANAGRAFICA_CONTRATTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="StagingGalaDBEntities.Store.GALA_ANAGRAFICA_MOVIMENTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_CONTATTI" EntityType="StagingGalaDBEntities.Store.GALA_CONTATTI" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="StagingGalaDBEntities.Store.GALA_ESPOSIZIONE" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="StagingGalaDBEntities.Store.GALA_GARANZIE_FACTOR" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GALA_POD_PDR" EntityType="StagingGalaDBEntities.Store.GALA_POD_PDR" store:Type="Tables" Schema="dbo" />
+      <Schema Namespace="StagingGalaModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="StagingGalaModelStoreContainer">
+          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="StagingGalaModel.Store.GALA_ANAGRAFICA_CLIENTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="StagingGalaModel.Store.GALA_ANAGRAFICA_CONTRATTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="StagingGalaModel.Store.GALA_ANAGRAFICA_MOVIMENTI" store:Type="Tables" store:Schema="dbo" store:Name="GALA_ANAGRAFICA_MOVIMENTI">
+            <DefiningQuery>SELECT 
+      [GALA_ANAGRAFICA_MOVIMENTI].[ID_RECORD] AS [ID_RECORD], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[ID_AZIENDA] AS [ID_AZIENDA], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[ID_CLIENTE] AS [ID_CLIENTE], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[N_DOC] AS [N_DOC], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DATA_DOC] AS [DATA_DOC], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DATA_REG] AS [DATA_REG], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DATA_ACQ] AS [DATA_ACQ], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DATA_UPD] AS [DATA_UPD], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DATA_SCAD] AS [DATA_SCAD], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[SEGNO] AS [SEGNO], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[VALUTA] AS [VALUTA], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[IMPORTO] AS [IMPORTO], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[IMPONIBILE] AS [IMPONIBILE], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[ID_CAUSALE] AS [ID_CAUSALE], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DESCR_CAUSALE] AS [DESCR_CAUSALE], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[ID_PAG_MOD] AS [ID_PAG_MOD], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DESCR_PAG_MOD] AS [DESCR_PAG_MOD], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[ID_PAG_TER] AS [ID_PAG_TER], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[DESCR_PAG_TER] AS [DESCR_PAG_TER], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[COMMODITY] AS [COMMODITY], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[CODICE_PARTITA] AS [CODICE_PARTITA], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[FACTOR] AS [FACTOR], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[Tipologia_fattura] AS [Tipologia_fattura], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[Desscrizione_tipologia_fattura] AS [Desscrizione_tipologia_fattura], 
+      [GALA_ANAGRAFICA_MOVIMENTI].[URL] AS [URL]
+      FROM [dbo].[GALA_ANAGRAFICA_MOVIMENTI] AS [GALA_ANAGRAFICA_MOVIMENTI]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="GALA_CONTATTI" EntityType="StagingGalaModel.Store.GALA_CONTATTI" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="StagingGalaModel.Store.GALA_ESPOSIZIONE" store:Type="Tables" store:Schema="dbo" store:Name="GALA_ESPOSIZIONE">
+            <DefiningQuery>SELECT 
+      [GALA_ESPOSIZIONE].[ID_AZIENDA] AS [ID_AZIENDA], 
+      [GALA_ESPOSIZIONE].[ID_CLIENTE] AS [ID_CLIENTE], 
+      [GALA_ESPOSIZIONE].[SALDO] AS [SALDO], 
+      [GALA_ESPOSIZIONE].[EXTRA_SALDO] AS [EXTRA_SALDO], 
+      [GALA_ESPOSIZIONE].[STATO_LAVORAZIONE] AS [STATO_LAVORAZIONE]
+      FROM [dbo].[GALA_ESPOSIZIONE] AS [GALA_ESPOSIZIONE]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="StagingGalaModel.Store.GALA_GARANZIE_FACTOR" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GALA_POD_PDR" EntityType="StagingGalaModel.Store.GALA_POD_PDR" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="GALA_ANAGRAFICA_CLIENTI">
           <Key>
@@ -28,30 +64,31 @@
           <Property Name="STATO_LAVORAZIONE" Type="varchar" MaxLength="50" />
           <Property Name="ID_Tipo_persona" Type="char" Nullable="false" MaxLength="1" />
           <Property Name="Descrizione_tipo_persone" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="PIVA" Type="char" MaxLength="16" />
-          <Property Name="CODFISC" Type="char" MaxLength="16" />
+          <Property Name="PIVA" Type="char" MaxLength="50" />
+          <Property Name="CODFISC" Type="char" MaxLength="50" />
           <Property Name="RAGIONESOCIALE" Type="varchar" Nullable="false" MaxLength="200" />
           <Property Name="INDIRIZZO" Type="varchar" MaxLength="255" />
           <Property Name="CAP" Type="varchar" MaxLength="10" />
           <Property Name="COMUNE" Type="varchar" MaxLength="100" />
           <Property Name="PROVINCIA" Type="varchar" MaxLength="5" />
-          <Property Name="NAZIONE" Type="varchar" MaxLength="3" />
+          <Property Name="NAZIONE" Type="varchar" MaxLength="4" />
           <Property Name="FAX" Type="varchar" MaxLength="50" />
           <Property Name="EMAIL" Type="varchar" MaxLength="500" />
           <Property Name="TELEFONO" Type="varchar" MaxLength="50" />
           <Property Name="PEC" Type="varchar" MaxLength="100" />
           <Property Name="CELLULARE" Type="varchar" MaxLength="20" />
-          <Property Name="ID_AGENTE" Type="varchar" MaxLength="10" />
-          <Property Name="DESCR_AGENTE" Type="varchar" MaxLength="50" />
-          <Property Name="ID_AGENZIA" Type="varchar" MaxLength="10" />
-          <Property Name="DESCR_AGENZIA" Type="varchar" MaxLength="50" />
+          <Property Name="ID_AGENTE" Type="int" />
+          <Property Name="DESCR_AGENTE" Type="varchar" MaxLength="255" />
+          <Property Name="ID_AGENZIA" Type="int" />
+          <Property Name="DESCR_AGENZIA" Type="varchar" MaxLength="255" />
           <Property Name="TRATTENUTA_0_5" Type="char" MaxLength="1" />
           <Property Name="CONVENZIONE" Type="varchar" MaxLength="250" />
-          <Property Name="FORMA_GIURIDICA" Type="varchar" MaxLength="100" />
+          <Property Name="FORMA_GIURIDICA" Type="varchar" MaxLength="150" />
           <Property Name="NOME" Type="varchar" MaxLength="100" />
           <Property Name="COGNOME" Type="varchar" MaxLength="100" />
           <Property Name="Classe_di_rischio" Type="varchar" MaxLength="250" />
           <Property Name="Descrizione_del_rischio" Type="varchar" MaxLength="250" />
+          <Property Name="ORIGINE_CLIENTE" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="GALA_ANAGRAFICA_CONTRATTI">
           <Key>
@@ -82,9 +119,24 @@
           <Property Name="IDAgenzia" Type="varchar" MaxLength="10" />
           <Property Name="NomeAgenzia" Type="varchar" MaxLength="200" />
         </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CBX_GALA_STAG.dbo.GALA_ANAGRAFICA_MOVIMENTI' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="GALA_ANAGRAFICA_MOVIMENTI">
           <Key>
             <PropertyRef Name="ID_RECORD" />
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="N_DOC" />
+            <PropertyRef Name="DATA_DOC" />
+            <PropertyRef Name="DATA_REG" />
+            <PropertyRef Name="DATA_ACQ" />
+            <PropertyRef Name="DATA_SCAD" />
+            <PropertyRef Name="SEGNO" />
+            <PropertyRef Name="VALUTA" />
+            <PropertyRef Name="IMPORTO" />
+            <PropertyRef Name="ID_CAUSALE" />
+            <PropertyRef Name="DESCR_CAUSALE" />
           </Key>
           <Property Name="ID_RECORD" Type="int" Nullable="false" />
           <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
@@ -140,15 +192,21 @@
           <Property Name="ID_Tipo_persona" Type="varchar" MaxLength="10" />
           <Property Name="Descrizione_tipo_persona" Type="varchar" MaxLength="50" />
         </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'CBX_GALA_STAG.dbo.GALA_ESPOSIZIONE' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="GALA_ESPOSIZIONE">
           <Key>
+            <PropertyRef Name="ID_AZIENDA" />
             <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="SALDO" />
+            <PropertyRef Name="STATO_LAVORAZIONE" />
           </Key>
           <Property Name="ID_AZIENDA" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="ID_CLIENTE" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="SALDO" Type="numeric" Nullable="false" Scale="2" />
-          <Property Name="EXTRA_SALDO" Type="numeric" Nullable="false" Scale="2" />
-          <Property Name="STATO_LAVORAZIONE" Type="int" />
+          <Property Name="EXTRA_SALDO" Type="numeric" Scale="2" />
+          <Property Name="STATO_LAVORAZIONE" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="GALA_GARANZIE_FACTOR">
           <Key>
@@ -201,25 +259,26 @@
           <Property Name="DESCR_PAG_MOD" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6013: The table/view 'D:\ERICSSON\TRIGALA\TRIGALA\TRIGALA\APP_DATA\TRILANCE_CB.MDF.dbo.GALA_CB_ELABORAZIONI' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      warning 6013: The table/view 'CBX_GALA_STAG.dbo.GALA_CB_ELABORAZIONI' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
       
       <EntityType Name="GALA_CB_ELABORAZIONI">
         <Property Name="DataElaborazione" Type="datetime" />
         <Property Name="Entita" Type="varchar" MaxLength="100" />
         <Property Name="Flag" Type="bit" />
       </EntityType>-->
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="StagingGalaDBEntities" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="StagingGalaModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="StagingDBEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="StagingGalaDBEntities.GALA_ANAGRAFICA_CLIENTI" />
-          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="StagingGalaDBEntities.GALA_ANAGRAFICA_CONTRATTI" />
-          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="StagingGalaDBEntities.GALA_ANAGRAFICA_MOVIMENTI" />
-          <EntitySet Name="GALA_CONTATTI" EntityType="StagingGalaDBEntities.GALA_CONTATTI" />
-          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="StagingGalaDBEntities.GALA_ESPOSIZIONE" />
-          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="StagingGalaDBEntities.GALA_GARANZIE_FACTOR" />
-          <EntitySet Name="GALA_POD_PDR" EntityType="StagingGalaDBEntities.GALA_POD_PDR" />
+          <EntitySet Name="GALA_ANAGRAFICA_CLIENTI" EntityType="StagingGalaModel.GALA_ANAGRAFICA_CLIENTI" />
+          <EntitySet Name="GALA_ANAGRAFICA_CONTRATTI" EntityType="StagingGalaModel.GALA_ANAGRAFICA_CONTRATTI" />
+          <EntitySet Name="GALA_ANAGRAFICA_MOVIMENTI" EntityType="StagingGalaModel.GALA_ANAGRAFICA_MOVIMENTI" />
+          <EntitySet Name="GALA_CONTATTI" EntityType="StagingGalaModel.GALA_CONTATTI" />
+          <EntitySet Name="GALA_ESPOSIZIONE" EntityType="StagingGalaModel.GALA_ESPOSIZIONE" />
+          <EntitySet Name="GALA_GARANZIE_FACTOR" EntityType="StagingGalaModel.GALA_GARANZIE_FACTOR" />
+          <EntitySet Name="GALA_POD_PDR" EntityType="StagingGalaModel.GALA_POD_PDR" />
         </EntityContainer>
         <EntityType Name="GALA_ANAGRAFICA_CLIENTI">
           <Key>
@@ -235,30 +294,31 @@
           <Property Name="STATO_LAVORAZIONE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="ID_Tipo_persona" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
           <Property Name="Descrizione_tipo_persone" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="PIVA" Type="String" MaxLength="16" Unicode="false" FixedLength="true" />
-          <Property Name="CODFISC" Type="String" MaxLength="16" Unicode="false" FixedLength="true" />
+          <Property Name="PIVA" Type="String" MaxLength="50" Unicode="false" FixedLength="true" />
+          <Property Name="CODFISC" Type="String" MaxLength="50" Unicode="false" FixedLength="true" />
           <Property Name="RAGIONESOCIALE" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
           <Property Name="INDIRIZZO" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="CAP" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="COMUNE" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="PROVINCIA" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
-          <Property Name="NAZIONE" Type="String" MaxLength="3" Unicode="false" FixedLength="false" />
+          <Property Name="NAZIONE" Type="String" MaxLength="4" Unicode="false" FixedLength="false" />
           <Property Name="FAX" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="EMAIL" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="TELEFONO" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="PEC" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="CELLULARE" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="ID_AGENTE" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="DESCR_AGENTE" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="ID_AGENZIA" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="DESCR_AGENZIA" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AGENTE" Type="Int32" />
+          <Property Name="DESCR_AGENTE" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="ID_AGENZIA" Type="Int32" />
+          <Property Name="DESCR_AGENZIA" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="TRATTENUTA_0_5" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
           <Property Name="CONVENZIONE" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
-          <Property Name="FORMA_GIURIDICA" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="FORMA_GIURIDICA" Type="String" MaxLength="150" Unicode="false" FixedLength="false" />
           <Property Name="NOME" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="COGNOME" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="Classe_di_rischio" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
           <Property Name="Descrizione_del_rischio" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="ORIGINE_CLIENTE" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="GALA_ANAGRAFICA_CONTRATTI">
           <Key>
@@ -292,6 +352,18 @@
         <EntityType Name="GALA_ANAGRAFICA_MOVIMENTI">
           <Key>
             <PropertyRef Name="ID_RECORD" />
+            <PropertyRef Name="ID_AZIENDA" />
+            <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="N_DOC" />
+            <PropertyRef Name="DATA_DOC" />
+            <PropertyRef Name="DATA_REG" />
+            <PropertyRef Name="DATA_ACQ" />
+            <PropertyRef Name="DATA_SCAD" />
+            <PropertyRef Name="SEGNO" />
+            <PropertyRef Name="VALUTA" />
+            <PropertyRef Name="IMPORTO" />
+            <PropertyRef Name="ID_CAUSALE" />
+            <PropertyRef Name="DESCR_CAUSALE" />
           </Key>
           <Property Name="ID_RECORD" Type="Int32" Nullable="false" />
           <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
@@ -305,6 +377,7 @@
           <Property Name="SEGNO" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
           <Property Name="VALUTA" Type="String" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
           <Property Name="IMPORTO" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="IMPONIBILE" Type="Decimal" Precision="16" Scale="6" />
           <Property Name="ID_CAUSALE" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="DESCR_CAUSALE" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="ID_PAG_MOD" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
@@ -317,7 +390,6 @@
           <Property Name="Tipologia_fattura" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="Desscrizione_tipologia_fattura" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
           <Property Name="URL" Type="String" MaxLength="2048" Unicode="false" FixedLength="false" />
-          <Property Type="Decimal" Name="IMPONIBILE" Precision="16" Scale="6" />
         </EntityType>
         <EntityType Name="GALA_CONTATTI">
           <Key>
@@ -349,13 +421,16 @@
         </EntityType>
         <EntityType Name="GALA_ESPOSIZIONE">
           <Key>
+            <PropertyRef Name="ID_AZIENDA" />
             <PropertyRef Name="ID_CLIENTE" />
+            <PropertyRef Name="SALDO" />
+            <PropertyRef Name="STATO_LAVORAZIONE" />
           </Key>
           <Property Name="ID_AZIENDA" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="ID_CLIENTE" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
           <Property Name="SALDO" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="EXTRA_SALDO" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="STATO_LAVORAZIONE" />
+          <Property Name="EXTRA_SALDO" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="STATO_LAVORAZIONE" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="GALA_GARANZIE_FACTOR">
           <Key>
@@ -412,9 +487,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="StagingGalaDBEntitiesStoreContainer" CdmEntityContainer="StagingDBEntities">
+        <EntityContainerMapping StorageEntityContainer="StagingGalaModelStoreContainer" CdmEntityContainer="StagingDBEntities">
           <EntitySetMapping Name="GALA_ANAGRAFICA_CLIENTI">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_ANAGRAFICA_CLIENTI">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_ANAGRAFICA_CLIENTI">
               <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_CLIENTI">
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
@@ -449,11 +524,12 @@
                 <ScalarProperty Name="COGNOME" ColumnName="COGNOME" />
                 <ScalarProperty Name="Classe_di_rischio" ColumnName="Classe_di_rischio" />
                 <ScalarProperty Name="Descrizione_del_rischio" ColumnName="Descrizione_del_rischio" />
+                <ScalarProperty Name="ORIGINE_CLIENTE" ColumnName="ORIGINE_CLIENTE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_ANAGRAFICA_CONTRATTI">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_ANAGRAFICA_CONTRATTI">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_ANAGRAFICA_CONTRATTI">
               <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_CONTRATTI">
                 <ScalarProperty Name="ID_CONTRATTO" ColumnName="ID_CONTRATTO" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
@@ -483,9 +559,8 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_ANAGRAFICA_MOVIMENTI">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_ANAGRAFICA_MOVIMENTI">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_ANAGRAFICA_MOVIMENTI">
               <MappingFragment StoreEntitySet="GALA_ANAGRAFICA_MOVIMENTI">
-                <ScalarProperty Name="IMPONIBILE" ColumnName="IMPONIBILE" />
                 <ScalarProperty Name="ID_RECORD" ColumnName="ID_RECORD" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
@@ -498,6 +573,7 @@
                 <ScalarProperty Name="SEGNO" ColumnName="SEGNO" />
                 <ScalarProperty Name="VALUTA" ColumnName="VALUTA" />
                 <ScalarProperty Name="IMPORTO" ColumnName="IMPORTO" />
+                <ScalarProperty Name="IMPONIBILE" ColumnName="IMPONIBILE" />
                 <ScalarProperty Name="ID_CAUSALE" ColumnName="ID_CAUSALE" />
                 <ScalarProperty Name="DESCR_CAUSALE" ColumnName="DESCR_CAUSALE" />
                 <ScalarProperty Name="ID_PAG_MOD" ColumnName="ID_PAG_MOD" />
@@ -514,7 +590,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_CONTATTI">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_CONTATTI">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_CONTATTI">
               <MappingFragment StoreEntitySet="GALA_CONTATTI">
                 <ScalarProperty Name="ID_contatto" ColumnName="ID_contatto" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
@@ -542,18 +618,18 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_ESPOSIZIONE">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_ESPOSIZIONE">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_ESPOSIZIONE">
               <MappingFragment StoreEntitySet="GALA_ESPOSIZIONE">
-                <ScalarProperty Name="STATO_LAVORAZIONE" ColumnName="STATO_LAVORAZIONE" />
-                <ScalarProperty Name="EXTRA_SALDO" ColumnName="EXTRA_SALDO" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />
                 <ScalarProperty Name="SALDO" ColumnName="SALDO" />
+                <ScalarProperty Name="EXTRA_SALDO" ColumnName="EXTRA_SALDO" />
+                <ScalarProperty Name="STATO_LAVORAZIONE" ColumnName="STATO_LAVORAZIONE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_GARANZIE_FACTOR">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_GARANZIE_FACTOR">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_GARANZIE_FACTOR">
               <MappingFragment StoreEntitySet="GALA_GARANZIE_FACTOR">
                 <ScalarProperty Name="ID_COUNTRY" ColumnName="ID_COUNTRY" />
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
@@ -571,7 +647,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GALA_POD_PDR">
-            <EntityTypeMapping TypeName="StagingGalaDBEntities.GALA_POD_PDR">
+            <EntityTypeMapping TypeName="StagingGalaModel.GALA_POD_PDR">
               <MappingFragment StoreEntitySet="GALA_POD_PDR">
                 <ScalarProperty Name="ID_AZIENDA" ColumnName="ID_AZIENDA" />
                 <ScalarProperty Name="ID_CLIENTE" ColumnName="ID_CLIENTE" />

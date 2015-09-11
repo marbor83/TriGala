@@ -306,6 +306,7 @@ namespace TriGala
 
                         //Memorizza data lancio elaborazione
                         DateTime DataElaborazione = DateTime.Now;
+                        DateTime DataA = DateTime.Parse(DateTime.Now.ToShortDateString()).AddSeconds(-1);
 
                         try
                         {
@@ -315,7 +316,7 @@ namespace TriGala
                             if (Esito > 0)
                             {
                                 //Avvia l'elaborazione per l'entità corrente
-                                EsitoElab = AvviaElaborazioneEntita(entity.id, UltimaElaborazione, DataElaborazione);
+                                EsitoElab = AvviaElaborazioneEntita(entity.id, UltimaElaborazione, DataA);
                                 result = "Elaborazione completata";
                             }
                             else
@@ -339,7 +340,7 @@ namespace TriGala
                         }
 
                         //Aggiorna l'esito dell'elaborazione
-                        UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione, DataElaborazione, EsitoElab);
+                        UpdateEsitoElaborazione(entity.id, Common.Tipo_Elaborazione.Automatica, UltimaElaborazione,DataA, DataElaborazione, EsitoElab);
 
                         dicEsiti.Add(entity.NomeTabellaDestinazione, result);
 
@@ -414,6 +415,8 @@ namespace TriGala
                     //Verificare obligatorietà e congruenza dei dati
                     if (dtQueryResult.Rows.Count > 0)
                         VerifcaDati(idEntita, dtQueryResult, ref dtRigheOk, ref dtRigheScarti);
+                    else
+                        retValue = Common.Esito_Elaborazione.OK;
 
                     //Scive dati nella tabella di Storage
                     if (dtRigheOk.Rows.Count > 0)
@@ -715,6 +718,13 @@ namespace TriGala
 
                         foreach (DataRow r in dtQueryResult.Rows)
                         {
+
+                            if (r["ID_CAUSALE"].ToString() == "99999")
+                            {
+                                dtRigheOk.Rows.Add(AggiungiRigheOK(idEntita, r, dtRigheOk));
+                                continue;
+                            }
+
                             j++;
                             //Validazione generica della riga
                             if (GenericValidationRow(r, dicObbligatorieta, dicTipoCampo, dicLunghezzaCampo, ref sMessagio))
@@ -1103,7 +1113,7 @@ namespace TriGala
             {
                 using (DataMaxDBEntities dme = new DataMaxDBEntities())
                 {
-                    retValue = (from elb in dme.CB_Elaborazioni where elb.id_Entita == entity.id && elb.id_Esito == idEsitoElaborazione && elb.id_Tipologia == idTipoElaborazione select elb.DataElaborazione).Max();
+                    retValue = (from elb in dme.CB_Elaborazioni where elb.id_Entita == entity.id && elb.id_Esito == idEsitoElaborazione && elb.id_Tipologia == idTipoElaborazione select (DateTime)elb.DataA).Max();
                     logService.Info(String.Format("Data Ultima Elaborazione ricavate {0} per l'entità {1}", retValue.ToString(), entity.Nome));
                 }
             }

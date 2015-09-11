@@ -36,9 +36,9 @@ namespace StagingGalaModel
         public string TELEFONO { get; set; }
         public string PEC { get; set; }
         public string CELLULARE { get; set; }
-        public string ID_AGENTE { get; set; }
+        public Nullable<int> ID_AGENTE { get; set; }
         public string DESCR_AGENTE { get; set; }
-        public string ID_AGENZIA { get; set; }
+        public Nullable<int> ID_AGENZIA { get; set; }
         public string DESCR_AGENZIA { get; set; }
         public string TRATTENUTA_0_5 { get; set; }
         public string CONVENZIONE { get; set; }
@@ -47,5 +47,6 @@ namespace StagingGalaModel
         public string COGNOME { get; set; }
         public string Classe_di_rischio { get; set; }
         public string Descrizione_del_rischio { get; set; }
+        public string ORIGINE_CLIENTE { get; set; }
     }
 }
