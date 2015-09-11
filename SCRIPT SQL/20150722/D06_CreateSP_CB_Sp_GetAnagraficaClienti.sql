@@ -1,11 +1,11 @@
 USE [dbDatamaxGALA]
 GO
-/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_GetAnagraficaClienti]    Script Date: 09/10/2015 17:03:04 ******/
+/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_GetAnagraficaClienti]    Script Date: 09/11/2015 11:26:31 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT

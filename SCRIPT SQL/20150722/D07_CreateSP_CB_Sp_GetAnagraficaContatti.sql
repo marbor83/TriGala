@@ -6,7 +6,7 @@
 -- Referente aziendale prendo da Cliente
 -- Rappresentante Legale da Cliente
 
-CREATE PROC GALA_CB.CB_Sp_GetAnagraficaContatti
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaContatti]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT

@@ -1,4 +1,4 @@
-CREATE PROC GALA_CB.CB_Sp_GetPodPdr
+CREATE PROC [GALA_CB].[CB_Sp_GetPodPdr]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT

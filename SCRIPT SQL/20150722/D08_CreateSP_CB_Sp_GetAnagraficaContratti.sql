@@ -1,4 +1,4 @@
-CREATE PROC GALA_CB.CB_Sp_GetAnagraficaContratti
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaContratti]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT
@@ -99,5 +99,3 @@ where	a.IDStatoAnagrafica=1
 order by a.IDAnagrafica, c.IDContratto*/
 
 END
-
-

@@ -1,4 +1,4 @@
-CREATE PROC GALA_CB.CB_Sp_GetGaranzieFactor
+ALTER PROC [GALA_CB].[CB_Sp_GetGaranzieFactor]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT

@@ -1,6 +1,8 @@
+USE [dbDatamaxGALA]
+GO
+/****** Object:  StoredProcedure [GALA_CB].[ConsumoGASFatturatoUltimoAnno]    Script Date: 09/11/2015 11:28:01 ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -99,5 +101,3 @@ DROP TABLE #ConsumiFatturati
 DROP TABLE #Last12
 DROP TABLE #SediPeriodi
 DROP TABLE #PODFatturati
-
-GO

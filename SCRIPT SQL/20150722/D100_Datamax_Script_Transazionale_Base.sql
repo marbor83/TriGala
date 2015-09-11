@@ -1,0 +1,1539 @@
+/*SCRIPT TRANSAZIONALE*/
+
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+IF EXISTS (SELECT * FROM tempdb..sysobjects WHERE id=OBJECT_ID('tempdb..#tmpErrors')) DROP TABLE #tmpErrors
+GO
+CREATE TABLE #tmpErrors (Error int)
+GO
+SET XACT_ABORT ON
+GO
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+GO
+BEGIN TRANSACTION
+GO
+--##########################################################################
+PRINT '1) Creazione SCHEMA GALA_CB'
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+--CREATE SCHEMA GALA_CB
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+--##########################################################################
+
+PRINT '2) Creazione Tabella GALA_DESCRIZIONE_TIPO_FATTURA'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA')) 
+	DROP TABLE GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE TABLE GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA
+(
+	IDTipoDoc    varchar(10),
+	IDCatDoc	 varchar(10),
+	Descrizione		varchar(100),
+	Attivo		int,
+	Sigla		varchar(10),
+	Tipo		varchar(10),
+	IDSubTipoDoc	varchar(10),
+	DescrizioneAlternativa	varchar(50),
+	CodTrasco	varchar(10)
+)
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+--##########################################################################
+PRINT '3) Inserimento valori nella Tabella: GALA_DESCRIZIONE_TIPO_FATTURA'
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FAE', N'FA', N'Fornitura energia', 1, N'FT', N'E', N'', N'', N'C1')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FAG', N'FA', N'Fattura Fornitura Gas Naturale', 1, N'FT', N'G', N'', N'Fattura', N'C3')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FCC', N'FA', N'Fattura servizi di Connessione', 1, N'FT', N'S', N'', N'Fattura', N'C5')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FCI', N'FA', N'Fattura interessi di mora', 1, N'FT', N'S', N'', N'Fattura', N'C7')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FCP', N'FA', N'FatturaPA Connessione', 1, N'FT', N'S', N'', N'Fattura', N'P5')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FEP', N'FA', N'FatturaPA Energia', 1, N'FT', N'E', N'', N'Fattura', N'P1')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FGP', N'FA', N'FatturaPA Gas', 1, N'FT', N'G', N'', N'Fattura', N'P3')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FIP', N'FA', N'FatturaPA Interessi', 1, N'FT', N'S', N'', N'Fattura', N'P7')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FSP', N'FA', N'FatturaPA Servizi', 1, N'FT', N'S', N'', N'Fattura', N'P1')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FTE', N'FA', N'Fattura Fornitura Energia Elettrica', 0, N'', N'E', N'', N'Fattura', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FTG', N'FA', N'Fattura GAS - obsoleta', 0, N'', N'G', N'', N'Fattura', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FTM', N'FA', N'Fattura', 0, N'', N'S', N'', N'Fattura', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'FTS', N'FA', N'Fattura Servizi', 1, N'FT', N'S', N'', N'Fattura', N'C1')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NAE', N'NA', N'Nota accredito energia', 1, N'NC', N'E', N'', N'Nota Credito', N'C2')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NAG', N'NA', N'Nota di Accredito Gas Naturale', 1, N'NC', N'G', N'', N'Nota Credito', N'C4')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCC', N'NA', N'Nota di accredito serv. di connessione', 1, N'NC', N'S', N'', N'Nota Credito', N'C6')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCE', N'NA', N'Nota di Accredito Energia Elettrica', 0, N'', N'E', N'', N'Nota Credito', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCG', N'NA', N'Nota di Accredito GAS - obsoleta', 0, N'', N'G', N'', N'Nota Credito', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCI', N'NA', N'Nota Credito Interessi di Mora', 1, N'NC', N'S', N'', N'Nota Credito', N'C8')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCM', N'NA', N'Nota di Accredito', 0, N'', N'S', N'', N'Nota Credito', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCP', N'NA', N'Nota di CreditoPA Connessione', 1, N'NC', N'S', N'', N'Nota Credito', N'P6')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NCS', N'NA', N'Nota di Accredito Servizi', 1, N'NC', N'S', N'', N'Nota Credito', N'C2')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NDI', N'FA', N'Nota Debito Interessi di Mora', 0, N'', N'S', N'', N'Nota Debito', N'')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NEP', N'NA', N'Nota di CreditoPA Energia', 1, N'NC', N'E', N'', N'Nota Credito', N'P2')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NGP', N'NA', N'Nota di CreditoPA Gas', 1, N'NC', N'G', N'', N'Nota Credito', N'P4')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NIP', N'NA', N'Nota di CreditoPA Interessi', 1, N'NC', N'S', N'', N'Nota Credito', N'P8')
+INSERT INTO GALA_CB.[GALA_DESCRIZIONE_TIPO_FATTURA] ([IDTipoDoc], [IDCatDoc], [Descrizione], [Attivo], [Sigla], [Tipo], [IDSubTipoDoc], [DescrizioneAlternativa], [CodTrasco]) VALUES (N'NSP', N'NA', N'Nota di CreditoPA Servizi', 1, N'NC', N'S', N'', N'Nota Credito', N'P2')
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+
+PRINT '4) Creazione Tabella GALA_SEGMENTAZIONE_CLIENTI'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.GALA_SEGMENTAZIONE_CLIENTI')) 
+	DROP TABLE GALA_CB.GALA_SEGMENTAZIONE_CLIENTI
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE TABLE GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] (
+    [IDProdotto]        INT primary key,
+    [Nome]              VARCHAR (255) NULL,
+    [CodVoceBIT]        VARCHAR (255) NULL,
+    [UTILITY]           VARCHAR (255) NULL,
+    [SEGMENTO_CLIENTE]  VARCHAR (255) NULL,
+    IdSegmentoCliente   INT NOT NULL,
+    [SEGMENTAZIONE_SAP] VARCHAR (255) NULL,
+    [NOTE]              VARCHAR (255) NULL
+);
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '5) Inserimento valori nella Tabella GALA_SEGMENTAZIONE_CLIENTI'
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100912, N'CUSTOM BUSINESS BINOMIA - FIX', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100916, N'CUSTOM BUSINESS BINOMIA - PB', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100917, N'CUSTOM BUSINESS MONOMIA SPECIAL - FIX', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100752, N'GAS IMPRESA SICURA 1.0', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100753, N'GAS IMPRESA SICURA 2.0', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100754, N'GAS IMPRESA SICURA 3.0', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100757, N'GAS IMPRESA Trasparente 1.0', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100758, N'GAS IMPRESA Trasparente 2.0', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100759, N'GAS IMPRESA Trasparente 3.0', N'ALGO_AQ159', N'GAS', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100732, N'LUCE IMPRESA SICURA 1.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100890, N'LUCE IMPRESA SICURA 1.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100891, N'LUCE IMPRESA SICURA 1.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100733, N'LUCE IMPRESA SICURA 1.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100734, N'LUCE IMPRESA SICURA 2.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100892, N'LUCE IMPRESA SICURA 2.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100893, N'LUCE IMPRESA SICURA 2.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100735, N'LUCE IMPRESA SICURA 2.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100736, N'LUCE IMPRESA SICURA 3.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100894, N'LUCE IMPRESA SICURA 3.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100895, N'LUCE IMPRESA SICURA 3.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100737, N'LUCE IMPRESA SICURA 3.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100909, N'LUCE IMPRESA SICURA ECO 1.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100910, N'LUCE IMPRESA SICURA ECO 1.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100743, N'LUCE Impresa Trasparente 1.0 - 3 F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100896, N'LUCE Impresa Trasparente 1.0 - 3 F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100897, N'LUCE Impresa Trasparente 1.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100898, N'LUCE Impresa Trasparente 2.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100745, N'LUCE Impresa Trasparente 2.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100746, N'LUCE Impresa Trasparente 2.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100899, N'LUCE Impresa Trasparente 2.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100900, N'LUCE Impresa Trasparente 3.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100747, N'LUCE Impresa Trasparente 3.0 - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100748, N'LUCE Impresa Trasparente 3.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100901, N'LUCE Impresa Trasparente 3.0 - F1F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100937, N'Luce Impresa Sicura NY - 3F', N'Libero_MM_DispBT', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100799, N'CUSTOM BUSINESS - Fix 3F', N'M_LIBERO', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100907, N'CUSTOM BUSINESS - Fix 3F - PCV-CUSTOM', N'M_LIBERO', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100838, N'CUSTOM BUSINESS - Fix POP', N'M_LIBERO', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100800, N'CUSTOM BUSINESS - PUN  3F', N'M_LIBERO', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100963, N'CUSTOM BUSINESS - PUN  HH', N'M_LIBERO', N'EE', N'NO PA', N'SBU', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100267, N'AD HOC DIRETTO', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100719, N'CONTRATTO GAS NON RICHIESTO - AEEG', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100673, N'GAS SCO - Altroconsumo', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100727, N'GAS SCO - INDEX Pfor MONOMIA COFELY', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100263, N'PREZZO FISSO PMI BINOMIA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100314, N'PREZZO FISSO PMI BINOMIA con penali su alfa', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100264, N'PREZZO FISSO PMI MONOMIA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100268, N'PRODOTTO AGGREGATO PMI', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100315, N'PRODOTTO AGGREGATO PMI con penali alfa', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100252, N'SCONTO TUTELA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100303, N'SCONTO TUTELA - dipendenti Gala', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100651, N'TRADECOM GAS BUSINESS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100818, N'CUSTOM CORPORATE - Fix 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100844, N'CUSTOM CORPORATE - Fix POP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100845, N'CUSTOM CORPORATE - PUN  3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100302, N'Dipendenti Gala 3F - PUN', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100690, N'EE SCO - Acquisito da Voltura - Fisso 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100699, N'EE SCO - Acquisito da Voltura - PUN+ 4', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100705, N'EE SCO - Acquisito da Voltura - PUN+1,5', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100691, N'EE SCO - Acquisito da Voltura - PUN+3,5', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100889, N'EE SCO - Acquisito da Voltura - PUN+5', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100668, N'EE SCO - Acquisito da Voltura - PUN+7', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100830, N'EE SCO - CAIE - 2015 - SLOT 1', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100883, N'EE SCO - CAIE - 2015 - SLOT 2', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100885, N'EE SCO - CAIE - 2015 - SLOT MISTO', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100709, N'EE SCO - CAIE 2° semestre 2014', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100687, N'EE SCO - Consorzio Muse', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100688, N'EE SCO - Consorzio Muse - AIREST', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100661, N'EE SCO - Prezzo Fisso 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100665, N'EE SCO - Prezzo Fisso POP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100663, N'EE SCO - PUN + Delta 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100679, N'EE SCO - PUN + Delta POP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100188, N'Fisso - 3F', N'M_LIBERO', N'EE', N'PA', N'SCO - TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100217, N'Fisso - 3F - 2010', N'M_LIBERO', N'EE', N'NO PA', N'SCO - TEO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100215, N'Fisso - 3F - Perdite su Prezzo', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100218, N'Fisso - 3F - Perdite su Prezzo - 2010', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100189, N'Fisso - OP/OV', N'M_LIBERO', N'EE', N'NO PA', N'SCO - TEO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100219, N'Fisso - OP/OV - 2010', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100216, N'Fisso - OP/OV - Perdite su prezzo', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100181, N'Indicizzato CONSIP - 3F', N'M_LIBERO', N'EE', N'PA', N'SCO - TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100221, N'Indicizzato CONSIP - 3F - 2010', N'M_LIBERO', N'EE', N'PA', N'SCO - TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100193, N'Indicizzato CONSIP - 3F - con CAP', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100222, N'Indicizzato CONSIP - 3F - Perdite du Prezzo - 2010', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100199, N'Indicizzato CONSIP - 3F - Perdite su Prezzo', N'M_LIBERO', N'EE', N'ESCLUDERE', N'SCO - TEO', N'NON PIU'' UTILIZZATO', 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100180, N'Indicizzato ITEC  - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100192, N'Indicizzato ITEC  - 3F - con CAP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100210, N'Indicizzato ITEC  - 3F - Perdite su prezzo', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100184, N'Indicizzato ITEC  - P/OP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100223, N'Indicizzato ITEC - 3F - 2010', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100185, N'Indicizzato ITEC-1  - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100191, N'PUN + DELTA', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100298, N'Tradecom - Tabella A', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100299, N'Tradecom - Tabella B', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100300, N'Tradecom - Tabella C', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100301, N'Tradecom - Tabella D', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100308, N'Tradecom - Tabella E - 2013_01 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100312, N'Tradecom - Tabella E - 2013_02 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100313, N'Tradecom - Tabella E - 2013_02 - O/OP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100317, N'Tradecom - Tabella E - 2013_03 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100334, N'Tradecom - Tabella E - 2013_05 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100336, N'Tradecom - Tabella E - 2013_06 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100337, N'Tradecom - Tabella E - 2013_06 - O/OP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100614, N'Tradecom - Tabella E - 2013_07 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100616, N'Tradecom - Tabella E - 2013_08 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100617, N'Tradecom - Tabella E - 2013_08 - O/OP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100638, N'Tradecom - Tabella E - 2013_09 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100639, N'Tradecom - Tabella E - 2013_09 - O/OP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100646, N'Tradecom - Tabella E - 2013_10 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100647, N'Tradecom - Tabella E - 2013_10 - O/OP', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100648, N'Tradecom - Tabella E - 2013_11 - 3F', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100605, N'Tradecom - Tabella E - PUN + 2,5', N'M_LIBERO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100676, N'EE SCO - Altroconsumo', N'M_LIBERO_ALTROCONSUM', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100678, N'EE SCO - Altroconsumo - RECS', N'M_LIBERO_ALTROCONSUM', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100202, N'PE - 3F', N'M_LIBERO_PE', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100316, N'Dipendenti Gala F23 - FISSO', N'M_LIBERO_RETAILS', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100201, N'Indicizzato ITEC  - 3F - con CAP - TERREMOTO', N'M_LIBERO_TERR', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100295, N'Dipendenti Gala F0 - F23 - AEEG', N'MTUT_DIPENDENTI_GALA', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100703, N'CONTRATTI NON RICHIESTO - AEEG ', N'MTUT_NON RICHIESTO', N'EE', N'NO PA', N'SCO', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100789, N'GALA Casa Sicura GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100926, N'GALA Casa SuperTutela GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100790, N'GALA Casa Trasparente GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100791, N'GALA Casa Vantaggiosa GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100720, N'GALA GAS NORD', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100721, N'GALA GAS SUD', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100792, N'GALA Impresa Sicura GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100793, N'GALA Impresa Trasparente GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100794, N'GALA Impresa Vantaggiosa GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100606, N'GAS BUS - ANDI CDA EUROPA Business', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100608, N'GAS BUS - Gas Special Fix', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100669, N'GAS BUS - PREZZO FISSO DEDICATO', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100775, N'GAS CASA SICURA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100813, N'GAS CASA SICURA FRIENDS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100888, N'GAS CONDOMINIO FIX', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100769, N'GAS HOME PLUS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100770, N'GAS Impresa Sicura', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100815, N'GAS IMPRESA SICURA FRIENDS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100755, N'GAS IMPRESA SICURA Semplice', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100816, N'GAS IMPRESA VANTAGGIOSA FRIENDS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100609, N'GAS RES - ANDI CDA EUROPA Casa', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100697, N'GAS RES - GAS GALA HOME PLUS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100610, N'GAS RES - Home All Day - componente Gas della luce + gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100611, N'GAS RES - Home All Day - solo gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100706, N'GAS RES - HOME PLUS GAS', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100612, N'GAS RES - Night & WeekEnd - solo gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100613, N'GAS RES - Night & WeekEnd componente Gas della luce + gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100624, N'GAS RES T - Home All Day - componente Gas della luce + gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100625, N'GAS RES T - Home All Day - solo gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100626, N'GAS RES T - Night & WeekEnd - solo gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100628, N'GAS RES T - Night & WeekEnd componente Gas della luce + gas', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100806, N'GAS SICURA FAMILY', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100805, N'GAS VANTAGGIOSA FAMILY', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100256, N'INDEX PIVA MONOMIA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100261, N'INDEX PMI BINOMIA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100698, N'OLD GAS RES - Home Plus - All Day', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100272, N'Prezzo Bilanciamento Domestico', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100265, N'Prezzo Bilanciamento PMI', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100255, N'PREZZO FISSO', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100258, N'PREZZO FISSO PIVA MONOMIA', N'ALGO_AQ159', N'GAS', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100325, N'EE SMM - BUS - ANDI CDA EUROPA Business', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100311, N'EE SMM - BUS - Condominio Special Fix', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100323, N'EE SMM - BUS - GALA FIX per le Aziende 3 fasce', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100322, N'EE SMM - BUS - GALA FIX per le Aziende P - OP', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100321, N'EE SMM - BUS - GALA INDEX', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100652, N'EE SMM - BUS - GALA MB_CF MONO', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100685, N'EE SMM - BUS - PUN', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100332, N'EE SMM - BUS - Special Fix Fasce', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100331, N'EE SMM - BUS - Special Fix Mono', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100330, N'EE SMM - BUS - Special Index', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100324, N'EE SMM - RES - ANDI CDA EUROPA Casa', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100328, N'EE SMM - RES - Home All Day - luce', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100329, N'EE SMM - RES - Home All Day - luce + gas', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100326, N'EE SMM - RES - Night & Week End - luce', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100327, N'EE SMM - RES - Night & Week End - luce + gas', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100778, N'GALA Impresa Sicura - F1-F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100779, N'GALA Impresa Sicura - Unica', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100780, N'GALA Impresa Trasparente - F1-F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100782, N'GALA Impresa Trasparente - Unica', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100887, N'LUCE CONDOMINIO FIX - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100886, N'LUCE CONDOMINIO FIX - F1-F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100801, N'LUCE CONDOMINIO SICURO - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100768, N'LUCE Impresa Sicura - 3F', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100767, N'LUCE Impresa Sicura - Unica', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100807, N'LUCE IMPRESA SICURA FRIENDS - F1-F23', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100771, N'LUCE SICURA', N'Libero_MassM_NO_PLUS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100695, N'EE SMM - RES - GALA HOME -  bio', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100696, N'EE SMM - RES - GALA HOME - mono', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100712, N'EE SMM - RES - GALA HOME PLUS -  bio', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100707, N'EE SMM - RES - GALA HOME PLUS -  bio + Verde', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100713, N'EE SMM - RES - GALA HOME PLUS - mono', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100708, N'EE SMM - RES - GALA HOME PLUS - mono + Verde', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100694, N'EE SMM - RES - GALA HOME PLUS - vecchia offerta -  mono', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100692, N'EE SMM - RES - GALA HOME PLUS - vecchia offerta - bio ', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100776, N'GALA Casa Sicura - F1-F23', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100777, N'GALA Casa Sicura - Unica', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100784, N'GALA Casa Trasparente - F1-F23', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100783, N'GALA Casa Trasparente - Unica', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100772, N'LUCE CASA SICURA - F1-F23', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100808, N'LUCE CASA SICURA FRIENDS - F1-F23', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100765, N'LUCE HOME PLUS - F1-F23', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100764, N'LUCE HOME PLUS - Unica', N'Libero_MassMarket', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100730, N'LUCE Impresa Sicura Semplice - 3F', N'Libero_MMNPLUS_PCVCu', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100731, N'LUCE Impresa Sicura Semplice - F1F23', N'Libero_MMNPLUS_PCVCu', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100238, N'Cliente Retail F23 - PUN', N'M_LIBERO', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100620, N'EE SMM - RES T - Home All Day - luce', N'M_LIBERO', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100621, N'EE SMM - RES T - Home All Day - luce + gas', N'M_LIBERO', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100622, N'EE SMM - RES T - Night & Week End - luce', N'M_LIBERO', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100623, N'EE SMM - RES T - Night & Week End - luce + gas', N'M_LIBERO', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100240, N'Cliente Retail 3F - CONSIP', N'M_LIBERO_RETAIL', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100236, N'Cliente Retail 3F - FISSO', N'M_LIBERO_RETAIL', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100234, N'Cliente Retail 3F - PUN', N'M_LIBERO_RETAIL', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100237, N'Cliente Retail F23 - FISSO', N'M_LIBERO_RETAIL', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100248, N'Cliente Retail P/OP - FISSO', N'M_LIBERO_RETAIL', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100802, N'LUCE SICURA FAMILY - F1-F23', N'M_LIBERO_RETAILS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100803, N'LUCE TRASPARENTE FAMILY - F1-F23', N'M_LIBERO_RETAILS', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100235, N'Cliente Retail 3F - AEEG', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100227, N'Cliente Retail F23 - AEEG', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100925, N'GALA Casa SuperTutela - Bioraria', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100924, N'GALA Casa SuperTutela - monoraria', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100787, N'GALA Casa Vantaggiosa - F1-F23', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100788, N'GALA Casa Vantaggiosa - Unica', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100812, N'LUCE CASA VANTAGGIOSA FRIENDS - F1-F23', N'MTUT', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100804, N'LUCE VANTAGGIOSA FAMILY - F1-F23', N'MTUT_DIPENDENTI_GALA', N'EE', N'NO PA', N'SMM', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100908, N'CINECA GAS 2015', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100729, N'GAS TEO - CET AT 2014-2015 Lotto12', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100726, N'GAS TEO - INTERCENTER 14/15 NON SANITARIE', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100728, N'GAS TEO - INTERCENTER 2015 SANITARIE', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100762, N'MILANO SERRAVALLE - 2014_2015', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100817, N'SACBO 2015-2016', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100604, N'SCONTO FISSO INTERCENT ER 13/14', N'ALGO_AQ159', N'GAS', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100878, N'EE TEO - Acque VCO', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100832, N'EE TEO - AMAP S.p.A. 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100686, N'EE TEO - ANAS 2014/15', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100873, N'EE TEO - Autostrada Pedemontana Lombarda 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100700, N'EE TEO - Banca d''Italia 2014', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100872, N'EE TEO - Brianzacque 2015 - Gruppo 2 e 3', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100869, N'EE TEO - C.A.D.F. Lotto 1 - 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100870, N'EE TEO - C.A.D.F. Lotto 2 - 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100867, N'EE TEO - CAFC 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100874, N'EE TEO - CINECA 2015 - Emilia Romagna', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100875, N'EE TEO - CINECA 2015 - Lazio', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100876, N'EE TEO - CINECA 2015 - Lombardia', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100829, N'EE TEO - CISPEL 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100689, N'EE TEO - Comune di Prato 2014', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100717, N'EE TEO - Comune di Spoleto', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100819, N'EE TEO - Comune di Talla', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100704, N'EE TEO - Comunità Montana EVANCON', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100902, N'EE TEO - CONSIP EE11 - Lotto 5', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100653, N'EE TEO - CONSIP EE11 - Lotto 6', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100654, N'EE TEO - CONSIP EE11 - Lotto 6 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100655, N'EE TEO - CONSIP EE11 - Lotto 7', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100656, N'EE TEO - CONSIP EE11 - Lotto 7 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100657, N'EE TEO - CONSIP EE11 - Lotto 9', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100658, N'EE TEO - CONSIP EE11 - Lotto 9 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100846, N'EE TEO - CONSIP EE12 - Lotto 1', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100847, N'EE TEO - CONSIP EE12 - Lotto 1 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100864, N'EE TEO - CONSIP EE12 - Lotto 10', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100865, N'EE TEO - CONSIP EE12 - Lotto 10 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100848, N'EE TEO - CONSIP EE12 - Lotto 2', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100849, N'EE TEO - CONSIP EE12 - Lotto 2 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100850, N'EE TEO - CONSIP EE12 - Lotto 3', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100851, N'EE TEO - CONSIP EE12 - Lotto 3 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100852, N'EE TEO - CONSIP EE12 - Lotto 4', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100853, N'EE TEO - CONSIP EE12 - Lotto 4 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100854, N'EE TEO - CONSIP EE12 - Lotto 5', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100855, N'EE TEO - CONSIP EE12 - Lotto 5 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100856, N'EE TEO - CONSIP EE12 - Lotto 6', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100857, N'EE TEO - CONSIP EE12 - Lotto 6 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100858, N'EE TEO - CONSIP EE12 - Lotto 7', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100859, N'EE TEO - CONSIP EE12 - Lotto 7 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100860, N'EE TEO - CONSIP EE12 - Lotto 8', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100861, N'EE TEO - CONSIP EE12 - Lotto 8 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100862, N'EE TEO - CONSIP EE12 - Lotto 9', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100863, N'EE TEO - CONSIP EE12 - Lotto 9 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100659, N'EE TEO - Convenzione CET 2014', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100866, N'EE TEO - Convenzione CET 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100940, N'EE TEO - Convenzione SEL - EE4 - bis - Lotto1', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100868, N'EE TEO - F.A.O. 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100882, N'EE TEO - GESAC 2015 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100828, N'EE TEO - IAS Industria Acqua Siracusana SpA 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100666, N'EE TEO - Indicizzato CONSIP', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100795, N'EE TEO - INTERCENTER 2015 - Lotto 2', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100796, N'EE TEO - INTERCENTER 2015 - Lotto 3', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100797, N'EE TEO - INTERCENTER 2015 - Lotto 3 RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100660, N'EE TEO - Prezzo Fisso 3F', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100664, N'EE TEO - Prezzo Fisso POP', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100662, N'EE TEO - PUN + Delta', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100680, N'EE TEO - Regione Campania 2014', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100880, N'EE TEO - SAGAT 2015 - RECS', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100827, N'EE TEO - Siciliacque S.p.A. 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100841, N'EE TEO - Smat 2015', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100682, N'EE TEO - Uniacque SpA 2014 - Misuratori Non Orari Fasce', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100683, N'EE TEO - Uniacque SpA 2014 - Misuratori Non Orari Mono', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100684, N'EE TEO - Uniacque SpA 2014 - Misuratori Orari', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100821, N'EE TEO - Uniacque SpA 2015/16', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100820, N'EE TEO - Viveracqua s.c.ar.l. 2015 - Lotto 2', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100823, N'EE TEO - Viveracqua s.c.ar.l. 2015 - Lotto 3', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100825, N'EE TEO - Viveracqua s.c.ar.l. 2015 - Lotto 4', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100833, N'FLEXI PA (CONSIP EE 11 - Lotto 2)', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100206, N'Indicizzato AMIAT', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100194, N'Indicizzato IAS - PoP', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100200, N'Indicizzato INTERCENT-ER - 3F', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100195, N'Indicizzato PF17 - 3F', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100196, N'Indicizzato TEK 9- 3F', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100224, N'Indicizzato TEK9 - 3F - 2010', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100306, N'UNIACQUE - Misuratori Non Orari Fasce', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100304, N'UNIACQUE - Misuratori Orari', N'M_LIBERO', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100197, N'Indicizzato CONSIP - 3F - ANAS', N'M_LIBERO_NODISP', N'EE', N'PA', N'TEO', N'', 1)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100944, N'EE TRA - Fisso - 3F', N'Libero_MM_DispBT', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100947, N'EE TRA - Indicizzato BINE', N'Libero_MM_DispBT', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100945, N'EE TRA - Fisso - OP/OV', N'Libero_MMNPLUS_PCVCu', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100946, N'EE TRA - Indicizzato ITEC', N'Libero_MMNPLUS_PCVCu', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100942, N'EE TRA - Indicizzato ITMIX', N'Libero_MMNPLUS_PCVCu', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100943, N'EE TRA - PUN + DELTA', N'Libero_MMNPLUS_PCVCu', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100948, N'EE TRA - SCONTO PED', N'MTUT', N'EE', N'NO PA', N'TRA', N'', 2)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100294, NULL, NULL, NULL, N'ESCLUDERE', NULL, NULL, 99)
+INSERT INTO GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] ([IDProdotto], [Nome], [CodVoceBIT], [UTILITY], [SEGMENTO_CLIENTE], [SEGMENTAZIONE_SAP], [NOTE], [IdSegmentoCliente]) VALUES (100310, NULL, NULL, NULL, N'ESCLUDERE', NULL, NULL, 99)
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+
+PRINT '6) Creazione Store Procedure ConsumoEnergiaFatturataUltimoAnno'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.ConsumoEnergiaFatturataUltimoAnno')) 
+	DROP PROCEDURE GALA_CB.ConsumoEnergiaFatturataUltimoAnno
+GO
+	
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[ConsumoEnergiaFatturataUltimoAnno]	
+	@IdCliente INT	
+AS
+
+--DECLARE @IDAnagrafica INT SET @IDAnagrafica = 100338
+
+-- PUNTI DI PRELIEVO FATTURABILI PER ANAGRAFICA --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		D.IDAnagrafica AS 'Conto DATAMAX',
+			(CASE WHEN D.IDTERP Is Null THEN '' ELSE D.IDTERP END) AS 'Conto SAP',
+			UPPER(D.RagSoc) AS 'Ragione Sociale',
+			A.IDSede,
+			E.POD
+INTO		#PODFatturati
+FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+LEFT JOIN	dbDatamaxGALA.dbo.TipiMovimento B			ON A.IDTipoMovimento = B.IDTipoMovimento
+LEFT JOIN	dbDatamaxGALA.dbo.Contratti C				ON A.IDContratto_cnt = C.IDContratto_cnt
+LEFT JOIN	dbDatamaxGALA.dbo.Anagrafica D				ON C.IDAnagrafica = D.IDAnagrafica
+LEFT JOIN	dbDatamaxGALA.dbo.eneclientesediToday E		ON A.IDSede = E.IDSede
+WHERE		B.CodUtility In ('EE')
+AND			A.DataInizioValidita < (CASE WHEN A.DataCessazione Is Null THEN A.DataFineValidita ELSE A.DataCessazione END)
+AND			D.IDAnagrafica = ISNULL(@IdCliente,D.IDAnagrafica)
+AND			D.IDStatoAnagrafica = 1
+AND			D.IDTipoCapogruppo Not In ('29')
+AND			A.IDStatoRiga Not In ('11')
+AND			A.IDMacroStatoRiga In (2,3)
+AND			(CASE WHEN A.DataCessazione Is Null THEN A.DataFineValidita ELSE A.DataCessazione END) >= CURRENT_TIMESTAMP
+AND			E.POD Is Not Null
+GROUP BY	D.IDAnagrafica, D.IDTERP, D.RagSoc, A.IDSede, E.POD
+-- DROP TABLE #PODFatturati
+
+-- FATTURE CICLO ATTIVO --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		A.[Conto DATAMAX],
+			A.[Conto SAP],
+			A.[Ragione Sociale],
+			B.IDSede,
+			A.POD,
+			dbDatamaxGALA.dbo.FirstOfMonth(B.PeriodoDal) AS PeriodoDal
+INTO		#SediPeriodi
+FROM		#PODFatturati A
+INNER JOIN	dbDatamaxGALA.dbo.eneClienteSediAgg B		ON A.IDSede = B.IDSede
+WHERE		B.IDeneOrigineDati = 6
+GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], B.IDSede, A.POD, dbDatamaxGALA.dbo.FirstOfMonth(B.PeriodoDal)
+ORDER BY	B.IDSede, dbDatamaxGALA.dbo.FirstOfMonth(B.PeriodoDal) DESC
+-- DROP TABLE #SediPeriodi
+
+-- ULTIME 12 MESI DI FATTURE CICLO ATTIVO --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		A.[Conto DATAMAX],
+			A.[Conto SAP],
+			A.[Ragione Sociale],
+			A.IDSede,
+			A.POD,
+			A.PeriodoDal
+INTO		#Last12
+FROM (		SELECT		[Conto DATAMAX], [Conto SAP], [Ragione Sociale], RANK()OVER(PARTITION BY IDSede ORDER BY PeriodoDal DESC) AS ID, IDSede, POD, PeriodoDal
+			FROM		#SediPeriodi) A
+WHERE		A.ID <= 12
+GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], A.IDSede, A.POD, A.PeriodoDal
+-- DROP TABLE #Last12
+
+-- CONSUMI FATTURATI GLI ULTIMI 12 MESI --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		--A.[Conto DATAMAX],
+			--A.[Conto SAP],
+			--A.[Ragione Sociale],
+			--A.IDSede,
+			A.POD,
+			SUM(A.F1 + A.F2 + A.F3 + A.F0) AS 'kWh_Fatturati_Ultimi_12_mesi'
+INTO		#ConsumiFatturati
+FROM (		SELECT		A.[Conto DATAMAX],
+						A.[Conto SAP],
+						A.[Ragione Sociale],
+						A.IDSede,
+						A.POD,
+						(CASE WHEN B.EneAttF1 Is Null THEN 0 ELSE B.EneAttF1 END) AS F1,
+						(CASE WHEN B.EneAttF2 Is Null THEN 0 ELSE B.EneAttF2 END) AS F2,
+						(CASE WHEN B.EneAttF3 Is Null THEN 0 ELSE B.EneAttF3 END) AS F3,
+						(CASE WHEN B.EneAttF4 Is Null THEN 0 ELSE B.EneAttF4 END) AS F0
+			FROM		#Last12 A
+			INNER JOIN	dbDatamaxGALA.dbo.eneClienteSediAgg B		ON A.IDSede = B.IDSede AND A.PeriodoDal = dbDatamaxGALA.dbo.FirstOfMonth(B.PeriodoDal)
+			WHERE		B.IDeneOrigineDati = 6
+			GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], A.IDSede, A.POD, B.EneAttF1, B.EneAttF2, B.EneAttF3, B.EneAttF4) A
+GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], A.IDSede, A.POD
+--	DROP TABLE #ConsumiFatturati
+
+-- ESTRAZIONE CONSUMI FATTURATI NEGLI ULTIMI 12 MESI --
+SELECT		*
+FROM		#ConsumiFatturati
+--ORDER BY	3,4
+
+
+DROP TABLE #ConsumiFatturati
+DROP TABLE #Last12
+DROP TABLE #SediPeriodi
+DROP TABLE #PODFatturati
+
+
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '7) Creazione Store Procedure ConsumoGASFatturatoUltimoAnno'
+GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.ConsumoGASFatturatoUltimoAnno')) 
+	DROP PROCEDURE GALA_CB.ConsumoGASFatturatoUltimoAnno
+GO
+	
+	
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[ConsumoGASFatturatoUltimoAnno]	
+			@IdCliente INT	
+AS
+
+--DECLARE @IDAnagrafica INT SET @IDAnagrafica = 158705
+
+-- PUNTI DI PRELIEVO FATTURABILI PER ANAGRAFICA --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		D.IDAnagrafica AS 'Conto DATAMAX',
+			(CASE WHEN D.IDTERP Is Null THEN '' ELSE D.IDTERP END) AS 'Conto SAP',
+			UPPER(D.RagSoc) AS 'Ragione Sociale',
+			A.IDSede,
+			(CASE WHEN E.CodPDR Is Null THEN 'Sede di Trasporto diretta' ELSE E.CodPDR END) AS PDR
+INTO		#PODFatturati
+FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+LEFT JOIN	dbDatamaxGALA.dbo.TipiMovimento B			ON A.IDTipoMovimento = B.IDTipoMovimento
+LEFT JOIN	dbDatamaxGALA.dbo.Contratti C				ON A.IDContratto_cnt = C.IDContratto_cnt
+LEFT JOIN	dbDatamaxGALA.dbo.Anagrafica D				ON C.IDAnagrafica = D.IDAnagrafica
+LEFT JOIN	dbDatamaxGALA.dbo.GasClienteSediToday E		ON A.IDSede = E.idSede
+LEFT JOIN	dbDatamaxGALA.dbo.AnaSediTipoMatch G		ON E.idSede = G.IDSede
+WHERE		B.CodUtility In ('GAS')
+AND			G.IDTipoSede = 6
+AND			A.DataInizioValidita < (CASE WHEN A.DataCessazione Is Null THEN A.DataFineValidita ELSE A.DataCessazione END)
+AND			D.IDAnagrafica = ISNULL(@IdCliente,D.IDAnagrafica)
+AND			D.IDStatoAnagrafica = 1
+AND			D.IDTipoCapogruppo Not In ('29')
+AND			A.IDStatoRiga Not In ('11')
+AND			A.IDMacroStatoRiga In (2,3)
+AND			(CASE WHEN A.DataCessazione Is Null THEN A.DataFineValidita ELSE A.DataCessazione END) >= CURRENT_TIMESTAMP
+GROUP BY	D.IDAnagrafica, D.IDTERP, D.RagSoc, A.IDSede, E.CodPDR
+-- DROP TABLE #PODFatturati
+
+-- FATTURE CICLO ATTIVO --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		A.[Conto DATAMAX],
+			A.[Conto SAP],
+			A.[Ragione Sociale],
+			B.IDSede,
+			A.PDR,
+			dbDatamaxGALA.dbo.FirstOfMonth(B.DtDal) AS PeriodoDal
+INTO		#SediPeriodi
+FROM		#PODFatturati A
+INNER JOIN	dbDatamaxGALA.dbo.gasConsumi B		ON A.IDSede = B.IDSede
+WHERE		B.IDGasOrigineDati = 6
+GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], B.IDSede, A.PDR, dbDatamaxGALA.dbo.FirstOfMonth(B.DtDal)
+ORDER BY	B.IDSede, dbDatamaxGALA.dbo.FirstOfMonth(B.DtDal) DESC
+-- DROP TABLE #SediPeriodi
+
+-- ULTIME 12 MESI DI FATTURE CICLO ATTIVO --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		A.[Conto DATAMAX],
+			A.[Conto SAP],
+			A.[Ragione Sociale],
+			A.IDSede,
+			A.PDR,
+			A.PeriodoDal
+INTO		#Last12
+FROM (		SELECT		[Conto DATAMAX], [Conto SAP], [Ragione Sociale], RANK()OVER(PARTITION BY IDSede ORDER BY PeriodoDal DESC) AS ID, IDSede, PDR, PeriodoDal
+			FROM		#SediPeriodi) A
+WHERE		A.ID <= 12
+GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], A.IDSede, A.PDR, A.PeriodoDal
+-- DROP TABLE #Last12
+--
+-- CONSUMI FATTURATI GLI ULTIMI 12 MESI --
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT		--A.[Conto DATAMAX],
+			--A.[Conto SAP],
+			--A.[Ragione Sociale],
+			--A.IDSede,
+			A.PDR,
+			SUM(A.SMC) AS 'SMC_Fatturati_Ultimi_12_mesi'
+INTO		#ConsumiFatturati
+FROM (		SELECT		A.[Conto DATAMAX],
+						A.[Conto SAP],
+						A.[Ragione Sociale],
+						A.IDSede,
+						A.PDR,
+						(CASE WHEN B.PrelieviSMCAdeguato Is Null THEN 0 ELSE B.PrelieviSMCAdeguato END) AS SMC
+			FROM		#Last12 A
+			INNER JOIN	dbDatamaxGALA.dbo.gasConsumi B		ON A.IDSede = B.IDSede AND A.PeriodoDal = dbDatamaxGALA.dbo.FirstOfMonth(B.DtDal)
+			WHERE		B.IDGasOrigineDati = 6
+			GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], A.IDSede, A.PDR, B.PrelieviSMCAdeguato) A
+GROUP BY	A.[Conto DATAMAX], A.[Conto SAP], A.[Ragione Sociale], A.IDSede, A.PDR
+--	DROP TABLE #ConsumiFatturati
+
+-- ESTRAZIONE CONSUMI FATTURATI NEGLI ULTIMI 12 MESI --
+SELECT		*
+FROM		#ConsumiFatturati
+--ORDER BY	3,4
+
+
+DROP TABLE #ConsumiFatturati
+DROP TABLE #Last12
+DROP TABLE #SediPeriodi
+DROP TABLE #PODFatturati
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+
+PRINT '8) Creazione Store Procedure CB_Sp_GetAnagraficaClienti'
+GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetAnagraficaClienti')) 
+	DROP PROCEDURE GALA_CB.CB_Sp_GetAnagraficaClienti
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
+	@DataDa Datetime,
+	@DataA  Datetime,
+	@IdCliente INT
+AS
+BEGIN 
+
+	-- In caso di cambio avvenuto nei contratti, devo poter aggiornare i clienti --
+	-- nel caso in cui IdCliente è NULL, lancio la procedura di recupero dei contratti e recupero tutti gli IdCliente che --
+	-- potrebbero aver necessità di aggiornamento --
+	CREATE TABLE #tmpContratti
+	(
+		[ID_CONTRATTO] VARCHAR(20) NOT NULL,
+		[ID_AZIENDA] VARCHAR(10) NOT NULL, 
+		[ID_CLIENTE] VARCHAR(30) NOT NULL, 
+		[STATO] VARCHAR(10) NOT NULL, 
+		[DATA_INIZIO] DATETIME  NULL, 
+		[DATA_FINE] DATETIME  NULL, 
+		[DATA_CESSAZIONE] DATETIME NULL, 
+		[CONV_APPARTENENZA] VARCHAR(100) NULL, 
+		[ID_BU] VARCHAR(10) NULL, 
+		[DESCR_BU] VARCHAR(50) NULL, 
+		[ID_AREA] VARCHAR(10) NULL, 
+		[DESCR_AREA] VARCHAR(50) NULL, 
+		[ID_AGENTE] VARCHAR(10) NULL, 
+		[DESCR_AGENTE] VARCHAR(50) NULL, 
+		[CENTRO_DI_COSTO] VARCHAR(50) NULL, 
+		[ID_PAG_MOD] VARCHAR(10)  NULL, 
+		[DESCR_PAG_MOD] VARCHAR(50)  NULL, 
+		[CIG] VARCHAR(200) NULL, 
+		[CUP] VARCHAR(200) NULL, 
+		[ODA] VARCHAR(200) NULL,
+		IdTipoContratto VARCHAR(10) NULL,
+		DescrizioneTipoContratto VARCHAR(200) NULL,
+		IDAgenzia VARCHAR(10) NULL,
+		NomeAgenzia VARCHAR(200) NULL	
+	)	
+	
+	CREATE TABLE #tmpClientiContratti
+	(
+		ID_CLIENTE VARCHAR(30) NOT NULL
+	)
+	
+	IF @IdCliente IS NULL
+	BEGIN
+		INSERT INTO #tmpContratti
+			EXEC GALA_CB.CB_Sp_GetAnagraficaContratti
+				@DataDa,
+				@DataA,
+				@IdCliente		
+				
+		INSERT INTO #tmpClientiContratti
+			SELECT  DISTINCT ID_CLIENTE 		
+			FROM #tmpContratti 
+	END
+
+
+	select  'IT10' as ID_AZIENDA,
+			a.IDAnagrafica ID_CLIENTE,		
+			a.IDAnagrafica as id_master, -- per ora impostato ad idcliente poichè sono tutti master / oppure rimuovere dal tracciato
+			null ID_TIPO_CLIENTE,
+			CASE 
+				WHEN  
+					(select count(*)
+					from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+					where c.IDContratto_Cnt=cr.IDContratto_Cnt
+					and c.IDAnagrafica=a.IDAnagrafica
+					and cr.IDProdotto = gsc.IDProdotto
+					and cr.IDStatoRiga != 11				
+					and gsc.[IdSegmentoCliente] = 1) > 0 --'PA'			
+				THEN 
+					'PA'  			
+				ELSE  
+					CASE 
+						WHEN  
+							(select count(*)
+							from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+							where c.IDContratto_Cnt=cr.IDContratto_Cnt
+							and c.IDAnagrafica=a.IDAnagrafica
+							and cr.IDProdotto = gsc.IDProdotto
+							and cr.IDStatoRiga != 11
+							and gsc.[IdSegmentoCliente] = 2) > 0 --'NO PA'			
+						THEN 
+							'NO PA'  			
+						ELSE  
+							CASE 
+								WHEN  
+									(select count(*)
+									from dbo.Contratti c, dbo.ContrattiRighe cr
+									where c.IDContratto_Cnt=cr.IDContratto_Cnt
+									and cr.IDStatoRiga != 11
+									and c.IDAnagrafica=a.IDAnagrafica) = 0 --'PROSPECT'			
+								THEN 
+									'PROSPECT'  			
+								ELSE  
+									CASE
+										WHEN  
+											(select count(*)
+											from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+											where c.IDContratto_Cnt=cr.IDContratto_Cnt
+											and c.IDAnagrafica=a.IDAnagrafica
+											and cr.IDProdotto = gsc.IDProdotto
+											and cr.IDStatoRiga != 11
+											and gsc.[IdSegmentoCliente] = 99) > 0 --'ALTRO'			
+										THEN 
+											'ALTRO' --- legati a prodotti esclusi sulla [GALA_SEGMENTAZIONE_CLIENTI] 			
+										ELSE  
+											null  -- casistiche non gestite
+									END
+							END	
+					END	
+			END	 DESCR_TIPO_CLIENTE,	
+			CASE 
+			WHEN  
+				(select count(*) 
+				from dbo.Contratti c, dbo.ContrattiRighe cr		
+				where c.IDContratto_Cnt=cr.IDContratto_Cnt
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDStatoRiga = 4) > 0   --Attivo
+				
+			THEN 'ATTIVO'  
+		    
+			ELSE  
+			CASE 
+				WHEN  
+					(select count(*) 
+					from dbo.Contratti c, dbo.ContrattiRighe cr		
+					where c.IDContratto_Cnt=cr.IDContratto_Cnt
+					and c.IDAnagrafica=a.IDAnagrafica
+					and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Morosità , Disalimentato
+					and cr.dataCessazione > getdate()-30 ) > 0
+					
+				THEN 'ATTIVO'  
+			    
+				ELSE  			
+				CASE 
+					WHEN  
+						(select count(*) 
+						from dbo.Contratti c, dbo.ContrattiRighe cr		
+						where c.IDContratto_Cnt=cr.IDContratto_Cnt
+						and c.IDAnagrafica=a.IDAnagrafica
+						and cr.IDStatoRiga in (3006, 3099) --Scaduto, Sfilato
+						and cr.dataCessazione > getdate()-30 
+						and cr.dataCessazione > cr.dataFineValidita) > 0
+						
+					THEN 'ATTIVO'  
+				    
+					ELSE  
+						CASE 
+							WHEN  
+								(select count(*) 
+								from dbo.Contratti c, dbo.ContrattiRighe cr		
+								where c.IDContratto_Cnt=cr.IDContratto_Cnt
+								and cr.IDStatoRiga != 11   -- StatoContratti - Annullato Non Attivo ID 11 (Usare in caso di inserimenti ERRATI su contratti ATTIVI)							
+								and c.IDAnagrafica=a.IDAnagrafica) = 0  -- Se non sono presenti contratti
+								
+							THEN 'PROSPECT'  
+						    
+							ELSE  
+								'CESSATO'
+						END							
+				END				
+			    
+			END	    
+		END DESC_STATO_CLIENTE,
+			null STATO_LAVORAZIONE, -- Rimane in sospeso per ora (Dupla : mail massimo, lista stati)
+			a.TipoPersona as ID_TIPO_PERSONA,
+			CASE WHEN a.TipoPersona = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as Descrizione_tipo_persone,
+			a.PIVA as PIVA,
+			a.CFISC as CODFISC,
+			a.RagSoc as RAGIONESOCIALE,
+			a.Indirizzo as INDIRIZZO,
+			a.CAP as CAP,
+			a.Localita as COMUNE,
+			a.Provincia as PROVINCIA,
+			a.Nazione as NAZIONE,
+			a.NumeroFax as Fax,
+			a.Email as Email,
+			a.NumeroTelefonico as Telefono,
+			null as PEC, -- RIMOSSO da capire come recuperare la pec su anacontatti vista relazione 1 a n			
+			a.NumeroCellulare as cellulare, 
+			a.IDAgente as ID_AGENTE,
+			ag.Nome as DESCR_AGENTE,
+			a.IDAgenzia as ID_AGENZIA,
+			ag1.Nome DESCR_AGENZIA,
+			case when perc995.IDAnagrafica is not null then 'Y' else 'N' end as TRATTENUTA_0_5,
+			null CONVENZIONE,
+			af.Descrizione as FORMA_GIURIDICA,
+			--case when a.TipoPersona='G' then a.RagSoc else NULL end as FORMA_GIURIDICA,
+			case when a.TipoPersona='F' then a.Nome else null end as NOME,
+			case when a.TipoPersona='F' then a.Cognome else null end as COGNOME,
+			null as Classe_di_rischio,
+			null as Descrizione_del_rischio,
+			(SELECT distinct oc.Origine
+			 from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.ORIGINE_CLIENTI oc
+			 where c.IDContratto_Cnt=cr.IDContratto_Cnt
+			 and c.IDAnagrafica=a.IDAnagrafica
+			 and cr.IDProdotto = oc.IdProdotto
+			 and cr.IDStatoRiga != 11)	as ORIGINE_CLIENTE
+	from	dbo.Anagrafica a
+	left outer join dbo.AnaForme af on a.IDAnaForma=af.IDAnaForma
+	left outer join dbo.TipiCapogruppo cg on a.IDTipoCapogruppo=cg.IDTipoCapogruppo
+	left outer join dbo.AgentiAnagrafica ag on a.IDAgente=ag.IDAgente
+	left outer join dbo.AgentiAnagrafica ag1 on a.IDAgenzia=ag1.IDAgente
+	left outer join dbo.Gala_AnagrafichePagamento995Perc perc995 on a.IDAnagrafica=perc995.IDAnagrafica and getdate() between perc995.ValidoDal and isnull(perc995.ValidoAl, '20501231')
+	where	a.IDStatoAnagrafica=1 -- Cliente Attivo (con 2 il cliente non è visualizzabile)
+			and a.IDAnagrafica!='100001'
+			--and a.IDAnagrafica in (166532,179893)
+			/*and exists (select	1 
+						from	dbo.Contratti c
+						inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+						where	c.IDAnagrafica=a.IDAnagrafica
+								and cr.IDStatoRiga != 11
+								and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))	
+				
+			and (exists (select	1 
+						from	dbo.Contratti c
+						inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+						inner join GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc on cr.IDProdotto = gsc.IDProdotto
+						where	c.IDAnagrafica=a.IDAnagrafica
+								and gsc.idsegmentoCliente != 99 -- Da Escludere
+								and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))		
+				or 	(select	count(*) 
+						from	dbo.Contratti c
+						inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+						where	c.IDAnagrafica=a.IDAnagrafica
+								and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')) = 0
+				)*/			
+	and ((a.DatUMO between @DataDa and @DataA
+		and a.IDAnagrafica = ISNULL(@IdCliente, a.IDAnagrafica)	) 
+		OR (a.IDAnagrafica in (SELECT ID_CLIENTE FROM #tmpClientiContratti)))
+	order by a.IDAnagrafica
+	
+	drop table #tmpContratti
+	drop table #tmpClientiContratti
+	
+END
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '9) Creazione Store Procedure CB_Sp_GetAnagraficaContatti'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetAnagraficaContatti')) 
+	DROP PROCEDURE GALA_CB.CB_Sp_GetAnagraficaContatti
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaContatti]
+	@DataDa Datetime,
+	@DataA  Datetime,
+	@IdCliente INT
+AS
+BEGIN
+
+
+	-- In caso di cambio avvenuto nei contratti, devo poter aggiornare i contatti --
+	-- nel caso in cui IdCliente è NULL, lancio la procedura di recupero dei contratti e recupero tutti i contatti che  --
+	-- potrebbero aver necessità di aggiornamento --
+	CREATE TABLE #tmpContratti
+	(
+		[ID_CONTRATTO] VARCHAR(20) NOT NULL,
+		[ID_AZIENDA] VARCHAR(10) NOT NULL, 
+		[ID_CLIENTE] VARCHAR(30) NOT NULL, 
+		[STATO] VARCHAR(10) NOT NULL, 
+		[DATA_INIZIO] DATETIME  NULL, 
+		[DATA_FINE] DATETIME  NULL, 
+		[DATA_CESSAZIONE] DATETIME NULL, 
+		[CONV_APPARTENENZA] VARCHAR(100) NULL, 
+		[ID_BU] VARCHAR(10) NULL, 
+		[DESCR_BU] VARCHAR(50) NULL, 
+		[ID_AREA] VARCHAR(10) NULL, 
+		[DESCR_AREA] VARCHAR(50) NULL, 
+		[ID_AGENTE] VARCHAR(10) NULL, 
+		[DESCR_AGENTE] VARCHAR(50) NULL, 
+		[CENTRO_DI_COSTO] VARCHAR(50) NULL, 
+		[ID_PAG_MOD] VARCHAR(10)  NULL, 
+		[DESCR_PAG_MOD] VARCHAR(50)  NULL, 
+		[CIG] VARCHAR(200) NULL, 
+		[CUP] VARCHAR(200) NULL, 
+		[ODA] VARCHAR(200) NULL,
+		IdTipoContratto VARCHAR(10) NULL,
+		DescrizioneTipoContratto VARCHAR(200) NULL,
+		IDAgenzia VARCHAR(10) NULL,
+		NomeAgenzia VARCHAR(200) NULL	
+	)	
+	
+	CREATE TABLE #tmpClientiContratti
+	(
+		ID_CLIENTE VARCHAR(30) NOT NULL
+	)
+	
+	IF @IdCliente IS NULL
+	BEGIN
+		INSERT INTO #tmpContratti
+			EXEC GALA_CB.CB_Sp_GetAnagraficaContratti
+				@DataDa,
+				@DataA,
+				@IdCliente		
+				
+		INSERT INTO #tmpClientiContratti
+			SELECT  DISTINCT ID_CLIENTE 		
+			FROM #tmpContratti 
+	END
+
+	select	ac.IDContatto as ID_Contatto,
+			a.IDAnagrafica as id_Cliente,
+			'IT10' as id_Azienda,
+			case when ac.TipoPersonaContatto='F' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Nome ELSE a.Nome END  else null end Nome,
+			case when ac.TipoPersonaContatto='F' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Cognome ELSE a.Cognome END  else null end Cognome,						
+			t.IDTipoContatto as ID_TIPOCONTATTO,
+			t.Descrizione TipoContatto,	
+			ac.CFisc as CODFISC,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.indirizzo ELSE a.Indirizzo END indirizzo,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.CAP ELSE a.CAP END CAP,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.Localita ELSE a.Localita END as COMUNE,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.Provincia ELSE a.Provincia END Provincia,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.Nazione ELSE a.Nazione END Nazione,		
+			ac.Fax Fax,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.EMail ELSE a.EMail END EMail,
+			isnull(ac.Telefono1, a.NumeroTelefonico) Telefono,
+			ac.Pec,
+			CASE WHEN t.IDTipoContatto = 6 THEN ac.Cellulare ELSE a.NumeroCellulare END Cellulare,
+			case when ac.TipoPersonaContatto='G' then CASE WHEN t.IDTipoContatto = 6 THEN ac.RagSoc ELSE a.RagSoc END  else null end RagioneSociale,
+			case when ac.TipoPersonaContatto='G' then CASE WHEN t.IDTipoContatto = 6 THEN ac.Piva ELSE a.Piva END  else null end PartitaIva	,
+			ac.TipoPersonaContatto as ID_Tipo_persona,
+			CASE WHEN ac.TipoPersonaContatto = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as Descrizione_tipo_persona		
+	from	dbo.AnaContatti ac
+	inner join dbo.Anagrafica a on ac.IDAnagrafica=a.IDAnagrafica
+	inner join dbo.AnaContattiTipoMatch m on ac.IDContatto=m.IDContatto
+	inner join dbo.AnaContattiTipo t on m.IDTipoCOntatto=t.IDTipoContatto
+	where	a.IDStatoAnagrafica=1
+			and t.IDTipoContatto IN (6, 1004)  -- NS Referente, Referente Aziendale
+			and a.IDAnagrafica!='100001'
+			and ((ac.DatUMO between @DataDa and @DataA	and ac.IDAnagrafica = ISNULL(@IdCliente, ac.IDAnagrafica))
+				OR (ac.IDAnagrafica in (SELECT ID_CLIENTE FROM #tmpClientiContratti)))
+			and exists(select 1
+				from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+				where c.IDContratto_Cnt=cr.IDContratto_Cnt
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDProdotto = gsc.IDProdotto
+				and gsc.[IdSegmentoCliente] = 1) --'PA'
+			and exists (select	1 
+						from	dbo.Contratti c
+						inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+						where	c.IDAnagrafica=a.IDAnagrafica
+								and cr.IDStatoRiga != 11)
+								--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))						
+	union all 
+	select	ac.IDContatto as ID_Contatto,
+			a.IDAnagrafica as id_Cliente,
+			'IT10' as idAzienda,
+			case when ac.TipoPersonaContatto='F' THEN ac.Nome else null end Nome,
+			case when ac.TipoPersonaContatto='F' THEN ac.Cognome else null end Cognome,	
+			t.IDTipoContatto as ID_TIPOCONTATTO,					
+			t.Descrizione TipoContatto,	
+			ac.CFisc  as CODFISC,
+			a.Indirizzo,
+			a.CAP,
+			a.Localita,
+			a.Provincia,
+			a.Nazione,		
+			ac.Fax Fax,
+			a.EMail,
+			isnull(ac.Telefono1, a.NumeroTelefonico) Telefono,
+			ac.Pec,
+			a.NumeroCellulare,
+			case when ac.TipoPersonaContatto='G' THEN a.RagSoc else null end RagioneSociale,
+			case when ac.TipoPersonaContatto='G' THEN a.Piva else null end PartitaIva,
+			ac.TipoPersonaContatto as ID_Tipo_persona,
+			CASE WHEN ac.TipoPersonaContatto = 'F' THEN 'FISICA'  ELSE 'GIURIDICA' END as Descrizione_tipo_persona		
+	from	dbo.AnaContatti ac
+	inner join dbo.Anagrafica a on ac.IDAnagrafica=a.IDAnagrafica
+	inner join dbo.AnaContattiTipoMatch m on ac.IDContatto=m.IDContatto
+	inner join dbo.AnaContattiTipo t on m.IDTipoCOntatto=t.IDTipoContatto
+	where	a.IDStatoAnagrafica=1
+			and t.IDTipoContatto = 5  -- Rappresentante Legale
+			and a.IDAnagrafica!='100001'
+			and ((ac.DatUMO between @DataDa and @DataA	and ac.IDAnagrafica = ISNULL(@IdCliente, ac.IDAnagrafica))
+				OR (ac.IDAnagrafica in (SELECT ID_CLIENTE FROM #tmpClientiContratti)))		
+			and not exists(select 1
+				from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+				where c.IDContratto_Cnt=cr.IDContratto_Cnt
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDProdotto = gsc.IDProdotto
+				and gsc.[IdSegmentoCliente] = 1) -- PA
+			and exists(select 1
+				from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.[GALA_SEGMENTAZIONE_CLIENTI] gsc
+				where c.IDContratto_Cnt=cr.IDContratto_Cnt
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDProdotto = gsc.IDProdotto
+				and gsc.[IdSegmentoCliente] = 2) -- NO PA			
+			and exists (select	1 
+						from	dbo.Contratti c
+						inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+						where	c.IDAnagrafica=a.IDAnagrafica
+								and cr.IDStatoRiga != 11)
+								--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))							
+	order by a.IDAnagrafica, ac.IDContatto		
+
+
+	drop table #tmpContratti
+	drop table #tmpClientiContratti
+
+END
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '10) Creazione Store Procedure CB_Sp_GetAnagraficaContratti'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetAnagraficaContratti')) 
+	DROP PROCEDURE GALA_CB.CB_Sp_GetAnagraficaContratti
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaContratti]
+	@DataDa Datetime,
+	@DataA  Datetime,
+	@IdCliente INT
+AS
+BEGIN
+
+select	c.IDContratto as ID_CONTRATTO,
+		'IT10' as id_Azienda,
+		c.IDAnagrafica Id_Cliente,
+		CASE 
+	    WHEN  
+			(select count(*) 
+			from dbo.Contratti c, dbo.ContrattiRighe cr		
+			where c.IDContratto_Cnt=cr.IDContratto_Cnt
+			and c.IDAnagrafica=a.IDAnagrafica
+			and cr.IDStatoRiga = 4) > 0   --Attivo
+			
+	    THEN 'ATTIVO'  
+	    
+	    ELSE  
+		CASE 
+			WHEN  
+				(select count(*) 
+				from dbo.Contratti c, dbo.ContrattiRighe cr		
+				where c.IDContratto_Cnt=cr.IDContratto_Cnt
+				and c.IDAnagrafica=a.IDAnagrafica
+				and cr.IDStatoRiga in (3000, 3001, 3002, 3003, 3004, 3005)  -- Cambio Piano, Voltura, Disdetta, Recesso, Morosità, Disalimentato
+				and cr.dataCessazione > getdate()-30 ) > 0
+				
+			THEN 'ATTIVO'  
+		    
+			ELSE  			
+			CASE 
+				WHEN  
+					(select count(*) 
+					from dbo.Contratti c, dbo.ContrattiRighe cr		
+					where c.IDContratto_Cnt=cr.IDContratto_Cnt
+					and c.IDAnagrafica=a.IDAnagrafica
+					and cr.IDStatoRiga in (3006, 3099) --Scaduto, Sfilato
+					and cr.dataCessazione > getdate()-30 
+					and cr.dataCessazione > cr.dataFineValidita) > 0
+					
+				THEN 'ATTIVO'  
+			    
+				ELSE  
+					CASE 
+						WHEN  
+							(select count(*) 
+							from dbo.Contratti c, dbo.ContrattiRighe cr		
+							where c.IDContratto_Cnt=cr.IDContratto_Cnt
+							and cr.IDStatoRiga != 11 -- StatoContratti - Annullato Non Attivo ID 11 (Usare in caso di inserimenti ERRATI su contratti ATTIVI)
+							and c.IDAnagrafica=a.IDAnagrafica) = 0  -- Se non sono presenti contratti
+							
+						THEN 'NON ATTIVO'  
+					    
+						ELSE  
+							'CESSATO' 
+					END							
+			END				
+		    
+		END	    
+	END Stato,	
+		null as Data_Inizio,
+		null as Data_Fine,
+		null as Data_Cessazione,
+		null as Conv_Appartenenza,
+		null ID_BU,
+		null DESCR_BU,
+		null ID_AREA,
+		null DESCR_AREA,		
+		c.IDAgente as ID_AGENTE,
+		ag.Nome Descr_Agente,
+		null as CENTRO_DI_COSTO,
+		null as id_Pag_Mod,
+		null as Descr_Pag_Mod,
+		null as CIG,
+		null as CUP,
+		null as ODA,
+		c.IDTipoContratto as IdTipoContratto,
+		t.Descrizione DescrizioneTipoContratto,
+		c.IDAgenzia as IDAgenzia,
+		ag1.Nome as NomeAgenzia
+from	dbo.Contratti c
+inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
+inner join [dbo].[TipoContratto] t on c.IDTipoContratto=t.IDTipoContratto
+left outer join dbo.AgentiAnagrafica ag on c.IDAgente=ag.IDAgente
+left outer join dbo.AgentiAnagrafica ag1 on c.IDAgenzia=ag1.IDAgente
+where	a.IDStatoAnagrafica=1
+		and a.IDAnagrafica!='100001'
+		and c.DatUMO between @DataDa and @DataA
+		and c.IDAnagrafica = ISNULL(@IdCliente, c.IDAnagrafica)	
+		/*and exists (select	1 
+					from	dbo.ContrattiRighe cr 
+					where	c.IDContratto_Cnt=cr.IDContratto_Cnt
+							and cr.IDStatoRiga != 11
+							and cr.IDMacroStatoRiga in (2, 3)
+							and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
+order by a.IDAnagrafica, c.IDContratto*/
+
+END
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '11) Creazione Store Procedure CB_Sp_GetGaranzieFactor'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetGaranzieFactor')) 
+	DROP PROCEDURE GALA_CB.CB_Sp_GetGaranzieFactor
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[CB_Sp_GetGaranzieFactor]
+	@DataDa Datetime,
+	@DataA  Datetime,
+	@IdCliente INT
+AS
+BEGIN
+
+select  'IT' as ID_COUNTRY,
+		'IT10' as ID_AZIENDA,
+		acc.IDAnagrafica as ID_CLIENTE,
+		acc.IDCreditCheck as ID_GARANZIA,
+		acc.IDIstituto as ID_GAR_ENTE,
+		ci.Descrizione as DESCR_GAR_ENTE,
+		ISNULL(acc.FidoAssegnato,0) as PLAFOND,
+		acc.DataInizioValidita as DATA_INIZIO,
+		acc.DataFineValidita as DATA_FINE,
+		cmc.Descrizione DESC_GAR_TIPO,
+		cmc.IDModalitaCopertura as ID_GAR_TIPO,
+		'N' as PERSONALE
+from AnaCreditCheck acc
+inner join CCheckIstituti ci on acc.IDIstituto = ci.IDIstituto
+inner join CCheckModalitaCopertura cmc on acc.IDModalitaCopertura = cmc.IDModalitaCopertura
+WHERE acc.DatUMO between @DataDa and @DataA
+and acc.IDAnagrafica = ISNULL(@IdCliente, acc.IDAnagrafica)	
+
+END
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '12) Creazione Store Procedure CB_Sp_GetPodPdr'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetPodPdr')) 
+	DROP PROCEDURE GALA_CB.CB_Sp_GetPodPdr
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE PROC [GALA_CB].[CB_Sp_GetPodPdr]
+	@DataDa Datetime,
+	@DataA  Datetime,
+	@IdCliente INT
+AS
+BEGIN
+
+CREATE TABLE #TempPODVolQta
+(
+	POD VARCHAR(100),
+	kWh_Fatturati_Ultimi_12_mesi DECIMAL(18,2)
+)
+
+CREATE TABLE #TempPDRVolQta
+(
+	PDR VARCHAR(100),
+	SMC_Fatturati_Ultimi_12_mesi DECIMAL(18,2)
+)
+
+
+INSERT INTO #TempPODVolQta
+exec [GALA_CB].[ConsumoEnergiaFatturataUltimoAnno] @IdCliente
+
+INSERT INTO #TempPDRVolQta
+exec [GALA_CB].[ConsumoGASFatturatoUltimoAnno] @IdCliente
+
+
+select  *		
+from (
+select	'IT10' id_Azienda,		
+		a.IDAnagrafica as Id_Cliente,
+		c.IDContratto as ID_CONTRATTO,
+		cr.IDRigaContratto as ID_RIGA_contratti,
+		ecs.POD as CODICE_DISPOSITIVO,
+		isnull(tvq.kWh_Fatturati_Ultimi_12_mesi,0) as VOL_QTA,
+		'EE' as COMMODITY, -- da capire dove recuperarlo
+		ans.Indirizzo as INDIRIZZO,
+		ans.CAP as CAP,
+		ans.Localita as COMUNE,
+		ans.Provincia as PROVINCIA,
+		ans.Nazione as NAZIONE,	
+		null as riferimento,
+		null as convenzione,
+		(SELECT			B.Valore AS CIG
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100208','100643','100723')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore) as CIG,
+		(SELECT			B.Valore AS IPA
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100714','100718','100722')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore) as CUP,
+		(SELECT			B.Valore AS ODA
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100640','100798')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore, A.IDRigaContratto)as ODA,
+		(SELECT			B.Valore AS CIGGara
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100931','100941')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore) as CIG_GARA,			
+		eot.nome + ' - ' + eot.Descrizione as COMPONENTE_TARIFFARIA, 	
+		cr.DataInizioValidita as DATA_INIZIO,
+		cr.DataFineValidita as DATA_FINE,
+		cr.DataCessazione as DATA_CESSAZIONE, 	
+		cr.IDTipoPagamento as  ID_PAG_MOD,
+		tp.Descrizione	as DESCR_PAG_MOD	
+from	dbo.Contratti c
+inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
+inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+left outer join dbo.eneClienteSedi ecs on cr.IDSede=ecs.IDSede
+inner join dbo.AnaSedi ans on cr.IDSede=ans.IDSede
+left outer join #TempPODVolQta tvq on ecs.POD = tvq.POD
+left outer join dbo.TipiPagamento tp on cr.IDTipoPagamento = tp.IDTipoPagamento
+left outer join dbo.eneOpzioniTariffarie eot on ecs.IDOpzTar = eot.idOpzioneTariffaria
+where	a.IDStatoAnagrafica=1
+		and a.IDAnagrafica!='100001'
+		and cr.IDStatoRiga != 11
+		and cr.IDMacroStatoRiga in (2, 3)
+		and ((cr.DatUMO between @DataDa and @DataA) or  (ans.DatUMO between @DataDa and @DataA) or (ecs.DatUMO between @DataDa and @DataA)) 
+		and c.IDAnagrafica = ISNULL(@IdCliente, c.IDAnagrafica)			
+		and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')
+		and getdate() between ecs.dtInizioVal and isnull(ecs.dtFineVal, '20501231')		
+union all 
+select	'IT10' idAzienda,		
+		a.IDAnagrafica as IdCliente,
+		c.IDContratto,
+		cr.IDRigaContratto,
+		gcs.CodPDR CodiceDispositivo,
+		isnull(tvq.SMC_Fatturati_Ultimi_12_mesi,0) as vol_qta, -- da capire meglio il calcolo del volume
+		'GAS' as commodity, -- da capire dove recuperarlo
+		ans.Indirizzo,
+		ans.CAP,
+		ans.Localita,
+		ans.Provincia,
+		ans.Nazione,	
+		null as riferimento,
+		null as convenzione,
+		(SELECT			B.Valore AS CIG
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100208','100643','100723')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore) as CIG,
+		(SELECT			B.Valore AS IPA
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100714','100718','100722')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore) as CUP,
+		(SELECT			B.Valore AS ODA
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100640','100798')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore, A.IDRigaContratto)as ODA,
+		(SELECT			B.Valore AS CIGGara
+			FROM		dbDatamaxGALA.dbo.ContrattiRighe A
+			LEFT JOIN	dbDatamaxGALA.dbo.ContrattiRigheVoci B		ON A.IDRigaContratto = B.IDRigaContratto
+			LEFT JOIN	dbDatamaxGALA.dbo.ProdottiVoci C			ON B.IDProdottiVoceCnt = C.IDProdottiVoceCnt
+			WHERE		C.IDProdottoVoce In ('100931','100941')
+			AND			B.Valore Is Not Null
+			AND			A.IDRigaContratto = cr.IDRigaContratto
+			GROUP BY	A.IDRigaContratto, B.Valore) as CIG_GARA,	
+		null as componenteTariffaria, -- non valorizzarla per il gas	
+		cr.DataInizioValidita as DataInizio,
+		cr.DataFineValidita as DataFine,
+		cr.DataCessazione as DataCessazione,
+		cr.IDTipoPagamento ID_Pag_Mod,
+		tp.Descrizione	
+from	dbo.Contratti c
+inner join dbo.Anagrafica a on c.IDAnagrafica=a.IDAnagrafica
+inner join dbo.ContrattiRighe cr on c.IDContratto_Cnt=cr.IDContratto_Cnt
+left outer join dbo.gasClienteSedi gcs on cr.IDSede=gcs.IDSede
+left outer join #TempPDRVolQta tvq on gcs.CodPDR = tvq.PDR
+inner join dbo.AnaSedi ans on cr.IDSede=ans.IDSede
+left outer join dbo.TipiPagamento tp on cr.IDTipoPagamento = tp.IDTipoPagamento
+where	a.IDStatoAnagrafica=1
+		and a.IDAnagrafica!='100001'
+		and cr.IDStatoRiga != 11
+		and cr.IDMacroStatoRiga in (2, 3)
+		and ((cr.DatUMO between @DataDa and @DataA) or  (ans.DatUMO between @DataDa and @DataA) or (gcs.DatUMO between @DataDa and @DataA)) 
+		and c.IDAnagrafica = ISNULL(@IdCliente, c.IDAnagrafica)			
+		and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231')
+		and getdate() between gcs.validoDal and isnull(gcs.validoAl, '20501231')
+) V
+order by Id_Cliente, ID_Contratto, ID_RIGA_contratti
+
+
+DROP TABLE #TempPODVolQta
+
+DROP TABLE #TempPDRVolQta
+
+END
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+PRINT '13) Creazione tabella ORIGINE_CLIENTI'
+GO
+
+IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.ORIGINE_CLIENTI')) 
+	DROP TABLE GALA_CB.ORIGINE_CLIENTI
+
+/* ISTRUZIONI SQL SENZA GO */
+CREATE TABLE GALA_CB.ORIGINE_CLIENTI
+(
+	IdProdotto int,
+	Origine VARCHAR(100)
+)
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+
+PRINT '14) Popolamento tabella ORIGINE_CLIENTI'
+GO
+
+/* ISTRUZIONI SQL SENZA GO */
+insert into GALA_CB.ORIGINE_CLIENTI values(100942,'Tradecom')
+insert into GALA_CB.ORIGINE_CLIENTI values(100943,'Tradecom')
+insert into GALA_CB.ORIGINE_CLIENTI values(100944,'Tradecom')
+insert into GALA_CB.ORIGINE_CLIENTI values(100945,'Tradecom')
+insert into GALA_CB.ORIGINE_CLIENTI values(100946,'Tradecom')
+insert into GALA_CB.ORIGINE_CLIENTI values(100947,'Tradecom')
+insert into GALA_CB.ORIGINE_CLIENTI values(100948,'Tradecom')
+
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 AND XACT_STATE() = -1 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0
+BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+GO
+
+--##########################################################################
+
+
+IF EXISTS (SELECT * FROM #tmpErrors) ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT>0 BEGIN
+PRINT '##############################################################################################'
+PRINT N' '
+PRINT N'THE DATABASE UPDATE SUCCEEDED'
+PRINT N' '
+PRINT '##############################################################################################'
+COMMIT TRANSACTION
+END
+ELSE
+BEGIN
+PRINT '##############################################################################################'
+PRINT N' '
+PRINT N'THE DATABASE UPDATE FAILED. NO OBJECTS OR ROWS UPDATED/CREATED!!!'
+PRINT N' '
+PRINT '##############################################################################################'
+END
+GO
+DROP TABLE #tmpErrors
+GO
