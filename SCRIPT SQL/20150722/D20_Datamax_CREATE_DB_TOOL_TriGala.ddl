@@ -120,6 +120,7 @@ INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDes
 INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (80, 1001, 'COGNOME', 'COGNOME', 'COGNOME', 0, 100, 20, 31, 1);
 INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (81, 1001, 'CLASSE_DI_RISCHIO', 'CLASSE_DI_RISCHIO', 'CLASSE DI RISCHIO', 0, 250, 20, 32, 1);
 INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (82, 1001, 'DESCRIZIONE_DEL_RISCHIO', 'DESCRIZIONE_DEL_RISCHIO', 'DESCRIZIONE DEL RISCHIO', 0, 250, 20, 33, 1);
+INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (82, 1001, 'ORIGINE_CLIENTE', 'ORIGINE_CLIENTE', 'ORIGINE DEL CLIENTE', 0, 100, 20, 34, 1);
 SET IDENTITY_INSERT GALA_CB.CB_EntitaCampi OFF;
 
 

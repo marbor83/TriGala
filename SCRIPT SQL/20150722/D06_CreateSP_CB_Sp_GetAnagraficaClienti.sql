@@ -1,4 +1,11 @@
-CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
+USE [dbDatamaxGALA]
+GO
+/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_GetAnagraficaClienti]    Script Date: 09/10/2015 17:03:04 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROC [GALA_CB].[CB_Sp_GetAnagraficaClienti]	
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT
@@ -185,11 +192,18 @@ BEGIN
 			ag1.Nome DESCR_AGENZIA,
 			case when perc995.IDAnagrafica is not null then 'Y' else 'N' end as TRATTENUTA_0_5,
 			null CONVENZIONE,
-			case when a.TipoPersona='G' then a.RagSoc else NULL end as FORMA_GIURIDICA,
+			af.Descrizione as FORMA_GIURIDICA,
+			--case when a.TipoPersona='G' then a.RagSoc else NULL end as FORMA_GIURIDICA,
 			case when a.TipoPersona='F' then a.Nome else null end as NOME,
 			case when a.TipoPersona='F' then a.Cognome else null end as COGNOME,
 			null as Classe_di_rischio,
-			null as Descrizione_del_rischio
+			null as Descrizione_del_rischio,
+			(SELECT distinct oc.Origine
+			 from dbo.Contratti c, dbo.ContrattiRighe cr, GALA_CB.ORIGINE_CLIENTI oc
+			 where c.IDContratto_Cnt=cr.IDContratto_Cnt
+			 and c.IDAnagrafica=a.IDAnagrafica
+			 and cr.IDProdotto = oc.IdProdotto
+			 and cr.IDStatoRiga != 11)	as ORIGINE_CLIENTE
 	from	dbo.Anagrafica a
 	left outer join dbo.AnaForme af on a.IDAnaForma=af.IDAnaForma
 	left outer join dbo.TipiCapogruppo cg on a.IDTipoCapogruppo=cg.IDTipoCapogruppo
