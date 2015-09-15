@@ -189,7 +189,7 @@ namespace TriGala
                                 {
                                     //Aggiorna l'esito dell'elaborazione con "Tabella piena"
                                     EsitoElab = Common.Esito_Elaborazione.TabellaPiena;
-                                    result = "Elaborazione annullata causa tabella piena";
+                                    result = "Elaborazione annullata causa tabella piena o flag non azzerato";
                                 }
                             }
                         }
@@ -297,6 +297,11 @@ namespace TriGala
                     //leggi entità da lavorare
                     cbe = ReadCBEntity();
 
+                    //Memorizza data lancio elaborazione
+                    DateTime DataElaborazione = DateTime.Now;
+                    //DateTime DataA = DateTime.Parse(DateTime.Now.ToShortDateString()).AddSeconds(-1);
+                    DateTime DataA = DataElaborazione;
+
                     foreach (CB_Entita entity in cbe)
                     {
                         logService.Info(String.Format("Inizio elaborazione entità: {0}", entity.Nome));
@@ -304,9 +309,6 @@ namespace TriGala
                         //Prende l'ultima data di elaborazione per l'entità
                         UltimaElaborazione = GetDateLastElaborazioneByEntity(entity);
 
-                        //Memorizza data lancio elaborazione
-                        DateTime DataElaborazione = DateTime.Now;
-                        DateTime DataA = DateTime.Parse(DateTime.Now.ToShortDateString()).AddSeconds(-1);
 
                         try
                         {
@@ -330,7 +332,7 @@ namespace TriGala
                                 {
                                     //Aggiorna l'esito dell'elaborazione con "Tabella piena"
                                     EsitoElab = Common.Esito_Elaborazione.TabellaPiena;
-                                    result = "Elaborazione annullata causa tabella piena";
+                                    result = "Elaborazione annullata causa tabella piena o flag non azzerato";
                                 }
                             }
                         }
@@ -1160,31 +1162,31 @@ namespace TriGala
                     switch (TableName)
                     {
                         case "GALA_ANAGRAFICA_CLIENTI":
-                            if (sge.GALA_ANAGRAFICA_CLIENTI.Count() == 0)
+                            if (sge.GALA_ANAGRAFICA_CLIENTI.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         case "GALA_ANAGRAFICA_CONTRATTI":
-                            if (sge.GALA_ANAGRAFICA_CONTRATTI.Count() == 0)
+                            if (sge.GALA_ANAGRAFICA_CONTRATTI.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         case "GALA_ANAGRAFICA_MOVIMENTI":
-                            if (sge.GALA_ANAGRAFICA_MOVIMENTI.Count() == 0)
+                            if (sge.GALA_ANAGRAFICA_MOVIMENTI.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         case "GALA_CONTATTI":
-                            if (sge.GALA_CONTATTI.Count() == 0)
+                            if (sge.GALA_CONTATTI.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         case "GALA_ESPOSIZIONE":
-                            if (sge.GALA_ESPOSIZIONE.Count() == 0)
+                            if (sge.GALA_ESPOSIZIONE.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         case "GALA_GARANZIE_FACTOR":
-                            if (sge.GALA_GARANZIE_FACTOR.Count() == 0)
+                            if (sge.GALA_GARANZIE_FACTOR.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         case "GALA_POD_PDR":
-                            if (sge.GALA_POD_PDR.Count() == 0)
+                            if (sge.GALA_POD_PDR.Count() == 0 && VerificaSemaforo(TableName))
                                 retValue = 1;
                             break;
                         default:
@@ -1200,6 +1202,37 @@ namespace TriGala
                 throw (ex);
             }
             return retValue;
+        }
+
+        private bool VerificaSemaforo(string NomeTabellaDestinazione)
+        {
+            try
+            {
+                using (SqlConnection mySQLConn = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString()))
+                {
+                    String mySQL = String.Format("Select Count(*) FROM GALA_CB_ELABORAZIONI  WHERE ENTITA = '{0}' AND FLAG = 0", NomeTabellaDestinazione);
+
+                    SqlCommand mySqlCommand = new SqlCommand();
+                    mySqlCommand.CommandText = mySQL;
+                    mySqlCommand.CommandType = CommandType.Text;
+                    mySqlCommand.Connection = mySQLConn;
+
+                    mySQLConn.Open();
+
+                    int res = (int) mySqlCommand.ExecuteScalar() ; 
+                    
+                    if (res > 0)
+                        return false;
+                    else
+                        return true;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.Error(String.Format("METODO: {0} ERRORE: {1}  STACK TRACE: {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message, ex.StackTrace));
+                throw (ex);
+            }
         }
 
 

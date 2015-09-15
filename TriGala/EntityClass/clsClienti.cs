@@ -34,12 +34,12 @@ namespace TriGala.EntityClass
                         return false;
                     }
 
-                    //Forma Giuridica per persona Giuridica
-                    if (myRow["FORMA_GIURIDICA"] == DBNull.Value)
-                    {
-                        sMessaggio = "FORMA GIURIDICA: campo obligatorio per persona Giuridica";
-                        return false;
-                    }
+                    ////Forma Giuridica per persona Giuridica
+                    //if (myRow["FORMA_GIURIDICA"] == DBNull.Value)
+                    //{
+                    //    sMessaggio = "FORMA GIURIDICA: campo obligatorio per persona Giuridica";
+                    //    return false;
+                    //}
                 }
 
                 if (myRow["ID_TIPO_PERSONA"].ToString() == Common.PERSONA_FISICA)

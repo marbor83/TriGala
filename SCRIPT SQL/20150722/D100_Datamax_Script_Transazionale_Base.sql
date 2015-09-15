@@ -1527,7 +1527,7 @@ IF EXISTS (SELECT * FROM sysobjects WHERE id=OBJECT_ID('GALA_CB.CB_Sp_GetAnagraf
 GO
 
 /* ISTRUZIONI SQL SENZA GO */
-CREATE PROC [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]
+CREATE PROCEDURE [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT
@@ -1584,7 +1584,10 @@ select 	m.idMovimento as Id_Record,
 							WHEN LEN(s.NumeroDoc) = 6 THEN '00'
 							WHEN LEN(s.NumeroDoc) = 7 THEN '0'
 							ELSE '' END) +	s.NumeroDoc + s.SiglaRegIVA + '.pdf') as URL,
-		doct.IDDocT as IDDocT	
+		doct.IDDocT as IDDocT,
+		m.IDStato as ID_STATO,
+		m.IDFattura as ID_FATTURA,
+		null as DATA_SCAD_RICALCOLATA
 from Tes.Movimenti m 
 inner join Scadenzario s  on m.IDAnagrafica = s.IDAnagrafica and m.IDFattura=s.IDFattura
 inner join dbo.Anagrafica a on m.IDAnagrafica=a.IDAnagrafica 
@@ -1633,7 +1636,10 @@ select 	m.IDAnagrafica as Id_Record,
 		null as Tipologia_fattura,		
 		'Partite da Riconciliare' as  Desscrizione_tipologia_fattura,
 		NULL as URL,
-		NULL as IDDocT	
+		NULL as IDDocT,
+		NULL as ID_STATO,
+		NULL as ID_FATTURA,
+		null as DATA_SCAD_RICALCOLATA
 from Tes.Movimenti m
 inner join dbo.Anagrafica a on m.IDAnagrafica=a.IDAnagrafica 
 where	a.IDStatoAnagrafica=1
@@ -1670,8 +1676,7 @@ AND idDOCT IS NOT NULL
 
 UPDATE #tmpMovimenti2 
 SET CODICE_PARTITA_STORNO = CODICE_PARTITA
-
-WHERE  STORNO=1 AND idDOCT IS NOT NULL AND CODICE_PARTITA_STORNO = NULL
+	WHERE  STORNO=1 AND idDOCT IS NOT NULL AND CODICE_PARTITA_STORNO = NULL
 
 
 SELECT Id_Record, id_Azienda, Id_Cliente, N_DOC,
@@ -1679,7 +1684,7 @@ SELECT Id_Record, id_Azienda, Id_Cliente, N_DOC,
 		Segno, Valuta, IMPORTO, IMPONIBILE,
 		ID_CAUSALE, DESCR_CAUSALE, ID_PAG_MOD, DESCR_PAG_MOD, ID_PAG_TER, DESCR_PAG_TER,
 		COMMODITY, ISNULL(CODICE_PARTITA_STORNO,CODICE_PARTITA) AS CODICE_PARTITA, Factor,
-		Tipologia_fattura, Desscrizione_tipologia_fattura, URL
+		Tipologia_fattura, Desscrizione_tipologia_fattura, URL, ID_STATO, ID_FATTURA, DATA_SCAD_RICALCOLATA
 FROM #tmpMovimenti2
 
 
@@ -1687,6 +1692,7 @@ FROM #tmpMovimenti2
 DROP TABLE #tmpMovimenti
 DROP TABLE #tmpMovimenti2
 
+END
 END
 
 
