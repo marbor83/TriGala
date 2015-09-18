@@ -1,18 +1,66 @@
 USE [dbDatamaxGALA]
 GO
-/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]    Script Date: 09/09/2015 12:18:21 ******/
+/****** Object:  StoredProcedure [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]    Script Date: 09/18/2015 10:34:28 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
-/* ISTRUZIONI SQL SENZA GO */
 ALTER PROC [GALA_CB].[CB_Sp_GetAnagraficaMovimenti]
 	@DataDa Datetime,
 	@DataA  Datetime,
 	@IdCliente INT
 AS
 BEGIN
+
+	DECLARE @DataDaExtraSaldo DATETIME
+	 Select @DataDaExtraSaldo =  CAST( 
+						cast(year(@DataA) as  varchar)+'/'+ 
+						cast(MONTH(@DataA) as  varchar)+ '/' + 
+						cast(day(@DataA) as  varchar) as datetime)
+
+
+
+	SELECT	A.IDTBilling,
+			A.IDFattura,
+			A.NumDocsuFatt AS 'Numero_Documento',
+			CONVERT(DATE,A.DataDoc) AS Emissione,
+			CONVERT(DATE,A.DataScad) AS Scadenza,
+			CONVERT(DATE,B.ScadenzaRicalcolata) AS 'Scadenza_Ricalcolata'
+	INTO		#FattureFEPA
+	FROM		dbDatamaxGALA.dbo.Scadenzario A
+	INNER JOIN	BillingTGALA.dbo.vw_FattPA_DataRicevutaConsegnaScadenza B		ON A.IDTBilling = B.idDocT
+	LEFT JOIN (	SELECT		IDDocT, 'SI' AS 'Split'
+				FROM		BillingTGALA.dbo.DocIVA
+				WHERE		IDCodiceIVA Like ('%D%')
+				GROUP BY	IDDocT) C											ON A.IDTBilling = C.IDDocT
+
+
+	SELECT  
+		A.IDTBilling, A.IDFattura, A.[Numero_Documento], A.Emissione, Scadenza, [Scadenza_Ricalcolata]
+		into #FattureFEPA_OK
+		FROM		#FattureFEPA as A
+		OUTER APPLY BillingTGALA.dbo.fnPA_GetStatoFattura_ext(A.IDTBilling) ES
+		WHERE		ES.MacroEsito = 'OK'
+		AND A.[Scadenza_Ricalcolata] Is Not Null
+
+
+	SELECT IDTBilling, IDFattura, [Numero_Documento], Emissione, Scadenza, [Scadenza_Ricalcolata] 
+	into #FattureFEPA_KO from (
+		SELECT	AA.IDTBilling, AA.IDFattura, AA.[Numero_Documento], AA.Emissione, Scadenza, [Scadenza_Ricalcolata]			
+		FROM		#FattureFEPA AA
+		OUTER APPLY BillingTGALA.dbo.fnPA_GetStatoFattura_ext(AA.IDTBilling) ES
+		WHERE		ES.MacroEsito = 'KO'
+		union
+		SELECT A.IDTBilling, A.IDFattura, A.[Numero_Documento], A.Emissione, Scadenza, [Scadenza_Ricalcolata]
+		FROM		#FattureFEPA A
+		OUTER APPLY BillingTGALA.dbo.fnPA_GetStatoFattura_ext(A.IDTBilling) ES
+		WHERE		ES.MacroEsito = 'OK'
+		AND A.[Scadenza_Ricalcolata] Is Null) fepaKO
+		
+
+
+
+
 
 Select * into #tmpMovimenti from(
 select 	m.idMovimento as Id_Record,
@@ -57,7 +105,10 @@ select 	m.idMovimento as Id_Record,
 							WHEN LEN(s.NumeroDoc) = 6 THEN '00'
 							WHEN LEN(s.NumeroDoc) = 7 THEN '0'
 							ELSE '' END) +	s.NumeroDoc + s.SiglaRegIVA + '.pdf') as URL,
-		doct.IDDocT as IDDocT	
+		doct.IDDocT as IDDocT,
+		m.IDStato as ID_STATO,
+		m.IDFattura as ID_FATTURA,
+		fepa.Scadenza_Ricalcolata as DATA_SCAD_RICALCOLATA
 from Tes.Movimenti m 
 inner join Scadenzario s  on m.IDAnagrafica = s.IDAnagrafica and m.IDFattura=s.IDFattura
 inner join dbo.Anagrafica a on m.IDAnagrafica=a.IDAnagrafica 
@@ -66,20 +117,20 @@ LEFT JOIN	BillingTGALA.dbo.DocT bill	ON s.IDTBilling = bill.IDDocT
 LEFT JOIN	dbo.DocT doct	ON s.IDTBilling = doct.IDDocT
 left join dbo.TipiPagamento tp on tp.IDTipoPagamento = doct.idMetodoPag
 left join GALA_CB.GALA_DESCRIZIONE_TIPO_FATTURA gdf on s.TipoDoc = gdf.IdTipoDOC
+left join #FattureFEPA_OK fepa on fepa.IDFattura = m.IDFattura 
 where	a.IDStatoAnagrafica=1
 		--and s.IDFattura is null
 		and m.IDAnagrafica!='100001'
-		and m.IDStato>=0
+		and (m.IDStato>=0 or (m.IDStato<0 and m.DATUMO between @DataDa and @DataA))
 		and isnull(bill.IDDocFlusso,0) not in (select A.IDDocFlusso FROM	dbDatamaxGALA.dbo.FlussoDaEscludereScadenzario A)
-		--and exists (select 1 idAnagrafica from GALA_CB.GALA_ANAGRAFICA_CLIENTI_EXP_ATTIVI ct where ct.ID_CLIENTE = m.IdAnagrafica)
 		and exists (select	1 
 					from	dbo.Contratti contr
 					inner join dbo.ContrattiRighe cr on contr.IDContratto_Cnt=cr.IDContratto_Cnt
 					where	contr.IDAnagrafica=m.IDAnagrafica
 							and cr.IDStatoRiga != 11)
-							--and getdate() between cr.DataInizioValidita and coalesce(cr.DataCessazione, cr.dataFineValidita, '20501231'))
-		AND m.DatPMO between @DataDa and @DataA
-		and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)		
+		and Not exists (select * from #FattureFEPA_KO fko where fko.idFattura = m.IDFattura)
+		AND (m.DatPMO between @DataDa and @DataA OR m.DATUMO between @DataDa and @DataA)
+		and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)
 union
 select 	m.IDAnagrafica as Id_Record,
 		'IT10' as id_Azienda,		
@@ -107,15 +158,19 @@ select 	m.IDAnagrafica as Id_Record,
 		null as Tipologia_fattura,		
 		'Partite da Riconciliare' as  Desscrizione_tipologia_fattura,
 		NULL as URL,
-		NULL as IDDocT	
+		NULL as IDDocT,
+		NULL as ID_STATO,
+		NULL as ID_FATTURA,
+		null as DATA_SCAD_RICALCOLATA
 from Tes.Movimenti m
 inner join dbo.Anagrafica a on m.IDAnagrafica=a.IDAnagrafica 
 where	a.IDStatoAnagrafica=1
 		and m.IDFattura is null
 		and m.IDAnagrafica!='100001'
 		and m.IDStato>=0
-		--and exists (select 1 idAnagrafica from GALA_CB.GALA_ANAGRAFICA_CLIENTI_EXP_ATTIVI ct where ct.ID_CLIENTE = m.IdAnagrafica)
-		and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)
+		--and m.DatPMO between @DataDaExtraSaldo and @DataA
+		and m.DatPMO between @DataDa and @DataA
+		and m.IDAnagrafica = ISNULL(@IdCliente, m.IDAnagrafica)		
 		) as temp
 
 
@@ -143,8 +198,7 @@ AND idDOCT IS NOT NULL
 
 UPDATE #tmpMovimenti2 
 SET CODICE_PARTITA_STORNO = CODICE_PARTITA
-
-WHERE  STORNO=1 AND idDOCT IS NOT NULL AND CODICE_PARTITA_STORNO = NULL
+	WHERE  STORNO=1 AND idDOCT IS NOT NULL AND CODICE_PARTITA_STORNO = NULL
 
 
 SELECT Id_Record, id_Azienda, Id_Cliente, N_DOC,
@@ -152,7 +206,7 @@ SELECT Id_Record, id_Azienda, Id_Cliente, N_DOC,
 		Segno, Valuta, IMPORTO, IMPONIBILE,
 		ID_CAUSALE, DESCR_CAUSALE, ID_PAG_MOD, DESCR_PAG_MOD, ID_PAG_TER, DESCR_PAG_TER,
 		COMMODITY, ISNULL(CODICE_PARTITA_STORNO,CODICE_PARTITA) AS CODICE_PARTITA, Factor,
-		Tipologia_fattura, Desscrizione_tipologia_fattura, URL
+		Tipologia_fattura, Desscrizione_tipologia_fattura, URL, ID_STATO, ID_FATTURA, DATA_SCAD_RICALCOLATA
 FROM #tmpMovimenti2
 
 
@@ -161,4 +215,3 @@ DROP TABLE #tmpMovimenti
 DROP TABLE #tmpMovimenti2
 
 END
-
