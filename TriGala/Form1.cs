@@ -339,6 +339,7 @@ namespace TriGala
                         catch (Exception ex)
                         {
                             EsitoElab = Common.Esito_Elaborazione.Errore;
+                            logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
                         }
 
                         //Aggiorna l'esito dell'elaborazione
@@ -346,7 +347,7 @@ namespace TriGala
 
                         dicEsiti.Add(entity.NomeTabellaDestinazione, result);
 
-                        if (Esito >= 0)
+                        if (Esito >= 0 & EsitoElab == Common.Esito_Elaborazione.OK)
                         {
                             AggiornaTabellaStorageElaborazioni(entity.NomeTabellaDestinazione);
                         }
@@ -375,7 +376,14 @@ namespace TriGala
 
         private Common.Esito_Elaborazione AvviaElaborazioneEntita(int idEntita, DateTime DataDa, DateTime DataA)
         {
-            return AvviaElaborazioneEntita(idEntita, DataDa, DataA, -1);
+            try
+            {
+                return AvviaElaborazioneEntita(idEntita, DataDa, DataA, -1);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         private Common.Esito_Elaborazione AvviaElaborazioneEntita(int idEntita, DateTime DataDa, DateTime DataA, int idCliente)

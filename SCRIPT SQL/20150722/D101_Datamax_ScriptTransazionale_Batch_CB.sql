@@ -229,6 +229,7 @@ INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstraz
 INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, OrdineElaborazione, Attivo) VALUES (1005, 'Anagrafica Contatti', 'GALA_CONTATTI', 'GALA_CB.CB_Sp_GetAnagraficaContatti', 3, 1);
 INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, OrdineElaborazione, Attivo) VALUES (1006, 'Garanzie Factor', 'GALA_GARANZIE_FACTOR', 'GALA_CB.CB_Sp_GetGaranzieFactor', 6, 1);
 INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, OrdineElaborazione, Attivo) VALUES (1007, 'Esposizione', 'GALA_ESPOSIZIONE', 'GALA_CB.CB_Sp_SetEsposizione', 7, 1);
+INSERT INTO GALA_CB.CB_Entita(id, Nome, NomeTabellaDestinazione, ProceduraEstrazione, OrdineElaborazione, Attivo) VALUES (1008, 'FATTURE_ESCLUSE', 'FATTURE_ESCLUSE', 'GALA_CB.CB_GetFatureEscluse', 8, 1);
 SET IDENTITY_INSERT GALA_CB.CB_Entita OFF;
 
 
@@ -422,6 +423,10 @@ INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDes
 INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (182,1007,'SALDO','SALDO','SALDO',1,20,40,3,1);
 INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (183,1007,'EXTRA_SALDO','EXTRA_SALDO','EXTRA_SALDO',1,20,40,4,1);
 INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (184,1007,'STATO_LAVORAZIONE','STATO_LAVORAZIONE','STATO_LAVORAZIONE',1,1,10,5,1);
+
+INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (200,1008,'Id_Fattura','Id_Fattura','Id_Fattura',1,20,10,1,1);
+INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (201,1008,'Id_Cliente','Id_Cliente','Id_Cliente',1,30,20,2,1);
+INSERT INTO GALA_CB.CB_EntitaCampi(id, id_Entita, NomeCampoOrigine, NomeCampoDestinazione, Descrizione, Obbligatorio, Lunghezza, id_TipoCampo, OrdineEstrazione, Attivo) VALUES (202,1008,'MOTIVAZIONE','MOTIVAZIONE','MOTIVAZIONE',1,50,20,3,1);
 SET IDENTITY_INSERT GALA_CB.CB_EntitaCampi OFF;
 
 
