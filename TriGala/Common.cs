@@ -34,7 +34,8 @@ namespace TriGala
             Anagrafica_Movimenti = 1004,
             Anagrafica_Contatti = 1005,
             Garanzie_Factor = 1006,
-            Esposizione = 1007
+            Esposizione = 1007,
+            Fatture_Escluse = 1008
         }
 
     }

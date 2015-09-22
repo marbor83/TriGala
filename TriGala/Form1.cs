@@ -828,6 +828,10 @@ namespace TriGala
                     case Common.Entita.Esposizione:
                         dtRigheOk = dtQueryResult.Copy();
                         break;
+                    // Fatture Escluse
+                    case Common.Entita.Fatture_Escluse:
+                        dtRigheOk = dtQueryResult.Copy();
+                        break;
                     default:
                         break;
                 }
@@ -1159,57 +1163,37 @@ namespace TriGala
 
         private int StorageTableIsEmpty(string TableName)
         {
-            int retValue = 0;
-
             logService.Info(String.Format("Verifica tabella di storage {0} vuota.", TableName));
 
             try
             {
-                using (StagingDBEntities sge = new StagingDBEntities())
+                using (SqlConnection mySQLConn = new SqlConnection(ConfigurationManager.ConnectionStrings["StagingGalaDB"].ToString()))
                 {
-                    switch (TableName)
-                    {
-                        case "GALA_ANAGRAFICA_CLIENTI":
-                            if (sge.GALA_ANAGRAFICA_CLIENTI.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        case "GALA_ANAGRAFICA_CONTRATTI":
-                            if (sge.GALA_ANAGRAFICA_CONTRATTI.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        case "GALA_ANAGRAFICA_MOVIMENTI":
-                            if (sge.GALA_ANAGRAFICA_MOVIMENTI.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        case "GALA_CONTATTI":
-                            if (sge.GALA_CONTATTI.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        case "GALA_ESPOSIZIONE":
-                            if (sge.GALA_ESPOSIZIONE.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        case "GALA_GARANZIE_FACTOR":
-                            if (sge.GALA_GARANZIE_FACTOR.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        case "GALA_POD_PDR":
-                            if (sge.GALA_POD_PDR.Count() == 0 && VerificaSemaforo(TableName))
-                                retValue = 1;
-                            break;
-                        default:
-                            retValue = -1;
-                            break;
-                    }
+                    String mySQL = String.Format("Select Count(*) FROM {0} ", TableName);
 
+                    SqlCommand mySqlCommand = new SqlCommand();
+                    mySqlCommand.CommandText = mySQL;
+                    mySqlCommand.CommandType = CommandType.Text;
+                    mySqlCommand.Connection = mySQLConn;
+
+                    mySQLConn.Open();
+
+                    int res = (int)mySqlCommand.ExecuteScalar();
+
+                    if (res > 0)
+                        return 0;
+                    else
+                        if (VerificaSemaforo(TableName))
+                            return 1;
+                        else
+                            return 0;
                 }
             }
             catch (Exception ex)
             {
                 logService.Error(String.Format("METODO: {0} ERRORE: {1}", System.Reflection.MethodBase.GetCurrentMethod().Name, ex.Message));
                 throw (ex);
-            }
-            return retValue;
+            }            
         }
 
         private bool VerificaSemaforo(string NomeTabellaDestinazione)
