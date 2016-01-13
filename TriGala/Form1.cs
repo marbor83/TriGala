@@ -204,7 +204,7 @@ namespace TriGala
 
                         dicEsiti.Add(entity.NomeTabellaDestinazione, result);
 
-                        if (Esito >= 0)
+                        if (EsitoElab >= 0)
                         {
                             AggiornaTabellaStorageElaborazioni(entity.NomeTabellaDestinazione);
                         }
@@ -428,7 +428,7 @@ namespace TriGala
                     else
                         retValue = Common.Esito_Elaborazione.OK;
 
-                    //Scive dati nella tabella di Storage
+                    //Scrive dati nella tabella di Storage
                     if (dtRigheOk.Rows.Count > 0)
                         retValue = InsertIntoStorage(idEntita, dtRigheOk);
 

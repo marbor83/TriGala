@@ -229,3 +229,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.csv
+CSV_Result/OK/GALA_ANAGRAFICA_CLIENTI/20150914205253402_Anagrafica Clienti_RigheOk.csv
